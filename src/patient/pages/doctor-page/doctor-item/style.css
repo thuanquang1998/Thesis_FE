@@ -1,0 +1,35 @@
+.doc-img {
+    width: 120px !important;
+    height: 120px !important;
+    margin: 0 auto;
+    border-radius: 150px !important;
+    border: 5px solid rgba(0, 150, 212, .08);
+    object-fit: contain !important;
+
+}
+.doc-img img {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+.profile-widget {
+    box-shadow: 0 2px 20px #CCD3E4;
+    border-radius: 15px !important;
+}
+.book-btn {
+    background-color: #20c0f3 !important;
+    /* background-color: red !; */
+}
+.chucDanh {
+    font-size: 13px !important;
+    font-style: italic;
+    /* font-weight: 600; */
+}
+.pro-content .tenBs {
+    font-weight: 600;
+    font-size: 18px !important;
+}
+.pro-content .title {
+    padding-top: 5px !important;
+    padding-bottom: 0px !important;
+}

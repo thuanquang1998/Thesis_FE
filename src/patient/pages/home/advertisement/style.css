@@ -1,0 +1,52 @@
+.section-adv {
+    background-color:#f3f7ff;
+}
+.section-header {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+.section-header h2 {
+    /* color: rgb(13, 224, 254); */
+    color: #272b41;
+}
+.section-header hr {
+    height: 10px !important;
+    border-top: 3px solid #f9a870;
+}
+
+.title_item h3{
+    margin-bottom: 10px;
+    font-size: 22px !important;
+    text-align: center;
+    /* color:  rgb(13, 224, 254); */
+}
+.title_item p {
+    font-size: 15px;
+    text-align: justify;
+}
+.advertisement {
+    padding-top: 25px !important;
+    width: 90%;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.chooseItem {
+    padding: 20px;
+    border:1px solid #ccc;
+    text-align: center;
+}
+.chooseItem .chooseLogo span {
+    font-size: 80px;
+    color: #f0ad4e;
+    padding-bottom: 25px;
+}
+.chooseItem .chooseTitle h4{
+    color: #006e6f;
+    font-weight: 600;
+    padding-bottom: 15px;
+}
+.chooseItem .chooseText p {
+    color: #777 !important;
+    font-size: 13px;
+}

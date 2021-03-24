@@ -1,0 +1,22 @@
+/* ádfasdf */
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .btn-primary {
+    border-radius: 20px;
+    padding: 0 15px;
+  }
+  .btn-primary:active {
+    outline: none;
+  }
+
+  
+  @media only screen and (max-width:992px) {
+    .container {
+      justify-content: space-around !important;
+    }
+  }
+  
+  

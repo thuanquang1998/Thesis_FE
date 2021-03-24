@@ -1,0 +1,55 @@
+
+.container {
+    padding-top: 50px;
+}
+.title {
+    color: #1890ff;
+    text-align: center !important;
+    font-size: 30px;
+    padding-top: 20px;
+    padding-bottom: 25px;
+}
+.login-barner {
+    width: 100%;
+    height: 100%;
+}
+.login-barner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.form {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+.ant-form-item {
+    width: 80%;
+    margin: 0 auto !important;
+}
+.ant-input {
+    height: 35px;
+    padding-top: 2px !important;
+}
+.text {
+    width: 80%;
+    margin: 0 auto !important;
+    padding-top: 20px;
+}
+.text p {
+    font-size: 16px;
+}
+.button {
+    text-align: center;
+    padding-bottom: 40px;
+}
+.login-form-button {
+    width: 100%;
+    height: 45px !important;
+    font-size: 20px !important;
+}
+.number_confirm {
+    height: 50px !important;
+}
+.directer_page {
+    text-align: center;
+    padding-bottom: 15px;
+}

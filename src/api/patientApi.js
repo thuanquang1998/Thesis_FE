@@ -1,0 +1,14 @@
+import http from './http-common'
+
+class patientAPI{
+    sign_in(data){
+        return http.post('users/sign-in-phone', data).then(res=> res.data).catch(err=> err.response.data)
+    }
+    get_current_user(token){
+        return http.get('users/get-user-data', { headers:{ 'x-access-token': token}}).then(res=>res.data).catch(err=>err.response.data)
+    }
+    make_appointment(data){
+        return http.post('appointment/add-appointment' , data).then(res=> res.data).catch(err => err.response.data)
+    }
+}
+export default new patientAPI

@@ -1,0 +1,12 @@
+.section-specialities {
+    padding-top: 25px !important;
+}
+.section-specialities .section-header {
+    padding-bottom: 40px !important;
+}
+.speicality-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 50%;
+}
