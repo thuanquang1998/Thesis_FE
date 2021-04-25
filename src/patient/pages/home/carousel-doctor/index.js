@@ -1,15 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
-import logo_female from '../../../assets/img/female_logo.png';
-import logo_male from '../../../assets/img/male_logo.png';
 import DoctorItem from '../../doctor-page/doctor-item'
 
 
 
-const HomeBookDoctor = ()  => {
-
-    const array = [1,2,3,4,5,6,1,2,3,4,5,6,8]
+const HomeBookDoctor = (props)  => {
+    const {data} = props;
     const settings = {
         width:400,
         dots:false,
@@ -86,13 +83,8 @@ const HomeBookDoctor = ()  => {
                         <div className="col-lg-8">
                             <div className="doctor-slider slider">
                                 <Slider {...settings}>
-                                    {array.map((index,item)=> {
-                                        if (item%2===0)
-                                        {
-                                        return (<DoctorItem key={index} img={logo_male}/>)
-                                    } else {
-                                        return <DoctorItem key={index} img={logo_female}/>
-                                    }  
+                                    {data && data.map((item,idx)=> {
+                                        return (<DoctorItem key={idx} data={item}/>)
                                     })}
                                 </Slider>   
                             </div>

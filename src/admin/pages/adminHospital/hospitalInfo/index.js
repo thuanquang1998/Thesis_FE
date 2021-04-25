@@ -8,6 +8,7 @@ import './style.css'
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css';
 import { get_hospital_byId } from '../../../../actions/adminActions'
+import { useHistory } from 'react-router'
 const HospitalInfo = () => {
 	const dispatch = useDispatch()
 	const hospital = useSelector(state=>state.admin.hospitalById)
@@ -15,6 +16,8 @@ const HospitalInfo = () => {
 	useEffect(()=> {
 		dispatch(get_hospital_byId('5ffa9e2e1c8cbb1f801e71c4'))
 	},[])
+	const history = useHistory();
+	console.log(history,"history");
   
 	const [showModal, setShowModal] = useState(false)
 	const [initialData, setInitialData] = useState(null)

@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
-import { get_curent_user } from "../../../../actions/patientActions";
+import { get_curent_user } from "../../../actions/patientActions";
 import Dropdown from "react-bootstrap/Dropdown";
-import avatar from '../../../assets/images/avatar-01.jpg'
-import logo1 from "../../../assets/img/bk-logo.png";
+import avatar from '../../assets/images/avatar-01.jpg'
+import logo1 from "../../assets/img/bk-logo.png";
 // import logo1 from "../../../assets/img/logo.jpg";
 
 const Header = (props) => {

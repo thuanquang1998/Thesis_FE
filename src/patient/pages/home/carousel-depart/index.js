@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 import './style.css';
 
@@ -49,10 +50,12 @@ const HomeDepart = (props) => {
                                 {specialities && specialities.map(item => (
                                     <div>
                                         <div className="speicality-item text-center">
-                                            <div className="speicality-img" style={{margin:"0 auto"}}>
-                                                <img src={item.image} className="img-fluid" alt="Speciality"/>
+                                            <div className="speicality-img" style={{margin:"0 auto", cursor:"pointer"}}>
+                                                <Link to="/linkck">
+                                                    <img src={item.image} className="img-fluid" alt="Speciality"/>
+                                                </Link>
                                             </div>
-                                            <p>{item.name}</p>
+                                            <Link to="/linkck">{item.name}</Link>
                                         </div>	
                                     </div>
                                 ))}

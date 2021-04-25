@@ -20,10 +20,6 @@ const DoctorPage = () => {
         dispatch(get_doctors_data(history))
         // get list docotrs
     },[])
-    // console.log(specialities,"0000000000000000");
-    // console.log(list_hospitals,"111111111111111111");
-    const array = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    
     return (
         <>
             <div className="breadcrumb-bar">
@@ -77,7 +73,7 @@ const DoctorPage = () => {
                                         </Row>
                                     </div>
                                     <Row gutter={[16, 16]} style={{paddingTop:"50px"}}>
-                                        {doctors.map(item=>(
+                                        {doctors && doctors.map(item=>(
                                             <Col xs={{span:24}} sm={{span:12}} md={{span:8}} xl={{span:6}}>
                                                 <Link to={{
                                                     pathname :`/patient/doctor-list/${item.id}`,

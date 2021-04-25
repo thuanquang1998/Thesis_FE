@@ -10,5 +10,12 @@ class patientAPI{
     make_appointment(data){
         return http.post('appointment/add-appointment' , data).then(res=> res.data).catch(err => err.response.data)
     }
+    // get time schedule
+    // get_time_works(){
+    //     return http.get('timeworks').then(res=> res.data).catch(err=> err.response.data)
+    // }
+    get_time_works(id){
+        return http.get(`doctors/${id}/timework`).then(res => res.data).catch(err=> err.response.data)
+    }
 }
 export default new patientAPI

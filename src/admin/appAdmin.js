@@ -15,7 +15,6 @@ import SpecialitiesHospital from './pages/adminHospital/specialitiesHospital'
 import ManageSchedule from './pages/adminHospital/manageSchedule'
 import Reviews from './pages/adminHospital/reviews'
 const Admin =({match})=>{
-    console.log(match,"admin")
     return(
         <>
             <Router>

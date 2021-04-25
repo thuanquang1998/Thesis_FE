@@ -46,6 +46,7 @@ const CardHospital = (props) => {
     )
 }
 const HomeHospital = (props) => {
+  console.log('props.data  ádfasdfsd:>> ', props.data);
     return (
         <section className="section section-features">
         <div className="container-fluid">

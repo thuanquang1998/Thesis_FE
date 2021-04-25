@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../../assets/img/bk-logo.png'
+import logo from '../../assets/img/bk-logo.png'
 import './style.css'
 const Footer = (props) => {
  	const exclusionArray = [
