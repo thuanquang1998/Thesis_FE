@@ -148,6 +148,7 @@ const PatientInfo = (props) => {
     const handleSubmit = () => {
         console.log(submitData,"0000")
         dispatch(make_appointment(submitData));
+        setShowModal(true)
     }
     
     return (

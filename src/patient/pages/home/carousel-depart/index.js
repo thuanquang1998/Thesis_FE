@@ -47,12 +47,12 @@ const HomeDepart = (props) => {
                     <div className="col-md-9">
                         <div className="specialities-slider slider">
                             <Slider {...settings}>
-                                {specialities && specialities.map(item => (
+                                {specialities && specialities.map((item,idx) => (
                                     <div>
                                         <div className="speicality-item text-center">
                                             <div className="speicality-img" style={{margin:"0 auto", cursor:"pointer"}}>
                                                 <Link to="/linkck">
-                                                    <img src={item.image} className="img-fluid" alt="Speciality"/>
+                                                    <img key={idx} src={item.image} className="img-fluid" alt="Speciality"/>
                                                 </Link>
                                             </div>
                                             <Link to="/linkck">{item.name}</Link>
