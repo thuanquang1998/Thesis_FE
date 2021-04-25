@@ -8,7 +8,7 @@ const HomeSearch = () => {
             <div className="container-fluid">
                 <div className="banner-wrapper">
                     <div className="banner-header text-center">
-                        <h1>BKCare, Ứng dụng đặt lịch khám hàng đầu Việt Nammmmm</h1>
+                        <h1>BKCare, Ứng dụng đặt lịch khám hàng đầu Việt Nam test</h1>
                         <h3>Tìm bác sĩ nhanh chóng, đặt lịch khám dễ dàng</h3>
                     </div>
             
