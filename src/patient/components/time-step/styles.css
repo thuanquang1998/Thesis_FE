@@ -1,0 +1,6 @@
+.radio-group .statusBooked_full{
+    background-color: red;
+}
+.radio-group .statusBooked_day {
+    background-color: yellow;
+}

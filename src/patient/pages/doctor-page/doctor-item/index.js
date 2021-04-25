@@ -10,7 +10,6 @@ import logo_male from '../../../assets/img/male_logo.png';
 import './style.css'
 const DoctorItem = (props) => {
     const {data} = props;
-    console.log('data :>> ', data);
     const img = data.sex==='male'? logo_male:logo_female;
     return (
         (data && 

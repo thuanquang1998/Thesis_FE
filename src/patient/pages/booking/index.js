@@ -13,70 +13,51 @@ import TimeStep from '../../components/time-step';
 import ConfirmBooking from './confirm-booking';
 import FormBooking from './form-booking';
 import patientAPI from '../../../api/patientApi';
-const timeShift=[
-        { 
-            time : 7,
-            count: 0,
-            defaultCount:5
+const INIT_DATA = {
+    doctorId:"", 
+    doctorName:"",
+    patientId:"",
+    representOption: {
+        status: false,
+        name_represent: "",
+        phone_represent: "",
+    },
+    patientInfo: {
+        name:"",
+        phone:"",
+        gender: "",
+        address: {
+            province:"",
+            district:"",
+            ward:"",
+            street: ""
         },
-        { 
-            time : 8,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 9,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 10,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 11,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 13,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 14,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 15,
-            count: 0,
-            defaultCount:5
-        },
-        { 
-            time : 16,
-            count: 0,
-            defaultCount:5
-        },
-    ]
-const today = new Date()
-let date = [moment(today).format('YYYY-MM-DD'), moment(moment(today, "YYYY-MM-DD").add(1, 'days')).format('YYYY-MM-DD'),moment(moment(today, "YYYY-MM-DD").add(2, 'days')).format('YYYY-MM-DD')]
+        birthday: null,
+    },
+    dateBooking: null,
+    timeBooking: null,
+}
+
 const PatientInfo = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
 
-    console.log('doctorID :>> ', doctorID);
-    console.log('doctorData :>> ', doctorData);
-
     const dispatch = useDispatch()
     const patient = useSelector(state => state.patient)   
-    
+    // console.log('patient :>> ', patient);
+
     //  handle show option choose schedule for dat dum 
-    const [option, setOption] = useState(false);
     const [showModal, setShowModal] = useState(false)
-    const [apptDate , setApptDate] = useState(date[0])
-    const [time, setTime] = useState(0)
+    const [timeWorkData, setTimeWorkData] = useState({
+        status: false,
+        listDate: [],
+    });
+    const [timeWorkDay, setTimeWorkDay] = useState(null);
+    const [submitData, setSubmitData] = useState({
+        ...INIT_DATA,
+        doctorId: doctorID,
+        doctorName: doctorData.name
+    })
     
 
     useEffect(()=> {
@@ -87,8 +68,33 @@ const PatientInfo = (props) => {
     const getTimeWorks = async () => {
         try {
             const res = await patientAPI.get_time_works(doctorID);
-
             console.log("res",res)
+            if(res.data.timeTable) {
+                const listTime = [...res.data.timeTable];
+                // filter day > current day : lay 3 ngay: sau nay so sanh vs today
+                const listTimeCurrent = listTime.filter(day=> {
+                    return moment(day.date).isSameOrAfter("2021-05-21T00:00:00.000Z",'day')
+                })
+                let listTimeShow = [];
+                if(listTimeCurrent.length < 4) {
+                    listTimeShow = [...listTimeCurrent];
+                } else {
+                    listTimeShow = listTimeCurrent.slice(0,3);
+                }
+                const _timeWorkData = {
+                    status: true,
+                    listDate: listTimeShow
+                }
+                setTimeWorkData(_timeWorkData);
+                setTimeWorkDay(_timeWorkData.listDate[0])
+                setSubmitData({...submitData, dateBooking:_timeWorkData.listDate[0]?.date})
+            } else {
+                setTimeWorkData({
+                    ...timeWorkData,
+                    status: false
+                })
+            }
+            
         } catch (error) {
             return {
                 status: "error",
@@ -96,43 +102,52 @@ const PatientInfo = (props) => {
             }
         }
     }
-
+    // for represent
     const onChange = e => {
-        setOption(e.target.value);
+        setSubmitData({
+            ...submitData,
+            representOption: {...submitData.representOption, status:e.target.value}
+        })
     };
     
     // get data inform and show modal
     const onFinish = (value) => {
+        const patientInfo = {...value};
+        setSubmitData({
+            ...submitData,
+            patientInfo, 
+            representOption: {...submitData.representOption, 
+                            name_represent: value.name_represent, 
+                            phone_represent: value.phone_represent,}
+        })
         setShowModal(true)
     }
 
+    const onReceiveTime = (data) => {
+        setSubmitData({
+            ...submitData,
+            timeBooking: data
+        })
+    }
+
     const handleChangeDate =(e)=>{
-        setApptDate(e)
+        const _data = timeWorkData.listDate.filter(item=>{
+            return item.date === e;
+        }) 
+        setSubmitData({
+            ...submitData,
+            dateBooking: _data[0].date
+        })
+        setTimeWorkDay(_data[0]);
     }
-    const handleSetTime=(item)=>{
-        setTime(item.time)
-    }
+    
     const handleReturn = () => {
         setShowModal(false)
     }
-    console.log(apptDate)
-    console.log(time)
-    console.log(`${apptDate} ${time}:00:00`)
 
     const handleSubmit = () => {
-        const date = `${apptDate}T${time<10 &&0}${time}:00:00`
-        const dateFM = moment(date).format('YYYY-MM-DD HH:mm:ss')
-        
-        const appointment ={
-            patientId : patient.data.id,
-            doctorId : props.match.params.doctorID,
-            appointmentTime : dateFM,
-            price : 300000,
-            sumary : 'this is sumary !',
-            bookingFor: "cho nguoi than",
-            forPatient : {}
-        }
-        dispatch(make_appointment(appointment)) 
+        console.log(submitData,"0000")
+        dispatch(make_appointment(submitData));
     }
     
     return (
@@ -194,26 +209,51 @@ const PatientInfo = (props) => {
                     <Card className="patient-info"> 
                         <h3 style={{textAlign:"center", color:"#1890ff", fontWeight:"600"}}>Thông tin lịch khám</h3>
                         <h4 style={{fontWeight:"600"}}>Chọn thời gian khám</h4>
-                        <Select 
-                            defaultValue={`${date[0]}`} 
-                            style={{ width: 200, border:"none" }} 
-                            className="chooseDay"
-                            onChange={(e)=>handleChangeDate(e)}
-                        >
-                            <Select.Option value={`${date[0]}`}>{date[0]}</Select.Option>
-                            <Select.Option value={`${date[1]}`}>{date[1]}</Select.Option>
-                            <Select.Option value={`${date[2]}`}>{date[2]}</Select.Option>
-                        </Select>
-                        <Row gutter={[8,8]} className="lich">
-                            {/* list time step */}
-                            
-                            {timeShift.map(item=>(
-                                <button onClick={()=>handleSetTime(item)} className="time-step">{`${item.time}:00 - ${item.time+1}:00`}</button>
-                            ))}
-                        </Row>
+                        {/* select day */}
+                        {!timeWorkData.status?(
+                            <div style={{margin:"0 auto"}}>
+                                <h3>Bác sĩ hiện không có lịch khám</h3>
+                            </div>
+                        ):
+                        (
+                            <>
+                            <Select 
+                                defaultValue={`Hôm nay, ${moment(timeWorkData.listDate[0].date).format('DD/MM')}`} 
+                                style={{ width: 200, border:"none" }} 
+                                className="chooseDay"
+                                onChange={(e)=>handleChangeDate(e)}
+                            >
+                                {timeWorkData.listDate.map((item, idx)=> {
+                                    let value = "";
+                                    switch (idx) {
+                                        case 0:
+                                            value = `Hôm nay, ${moment(item.date).format('DD/MM')}`;
+                                            break;
+                                        case 1:
+                                            value = `Ngày mai, ${moment(item.date).format('DD/MM')}`;
+                                            break;
+                                        case 2:
+                                            value = `Ngày kia, ${moment(item.date).format('DD/MM')}`;
+                                            break;
+                                        default:
+                                            value = "";
+                                            break;
+                                    }
+                                    return (<Select.Option key={idx} value={item.date}>{value}</Select.Option>)
+                                })}
+                                {/* <Select.Option value={`${date[0]}`}>{date[0]}</Select.Option>
+                                <Select.Option value={`${date[1]}`}>{date[1]}</Select.Option>
+                                <Select.Option value={`${date[2]}`}>{date[2]}</Select.Option> */}
+                            </Select>
+                            <Row gutter={[8,8]} className="lich">
+                                <TimeStep data={timeWorkDay} receiveTime={onReceiveTime}/>
+                            </Row>
+                            </>
+                        )}
+                        
                         <hr/>
                         <div className="option">
-                            <Radio.Group onChange={onChange} value={option}>
+                            <Radio.Group onChange={onChange} value={submitData.representOption.status}>
                                 <Radio value={false} style={{color:"#1890ff", fontWeight:"600"}}>Đặt cho bản thân</Radio>
                                 <Radio value={true} style={{color:"#1890ff", fontWeight:"600"}}>Đặt cho người thân</Radio>
                             </Radio.Group>
@@ -221,12 +261,13 @@ const PatientInfo = (props) => {
                         {/* form booking */}
                         <FormBooking
                             onFinish={onFinish}
-                            option={option}
+                            option={submitData.representOption.status}
                         />
                         
                         {/* Modal Confirm booking */}
                         <ConfirmBooking 
                             showModal = {showModal}
+                            data = {submitData}
                             handleSubmit = {handleSubmit}
                             handleReturn = {handleReturn}
                         />

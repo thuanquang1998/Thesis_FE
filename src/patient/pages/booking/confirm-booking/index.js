@@ -1,9 +1,10 @@
 import { Button, Card, Col, Row } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
+import moment from 'moment';
 
 function ConfirmBooking(props) {
-    const {handleSubmit, handleReturn, showModal} = props;
+    const {handleSubmit, handleReturn, showModal, data} = props;
     return (
         <Modal
             visible={showModal}
@@ -28,10 +29,10 @@ function ConfirmBooking(props) {
                         <p><b>Điện thoại:</b></p>
                     </Col>
                     <Col span={15}>
-                        <p>Lưu Quang Thuận</p>
-                        <p>02/01/1998</p>
-                        <p>Nam</p>
-                        <p>0974101702</p>
+                        <p>{data.patientInfo?.name}</p>
+                        <p>{moment(data.patientInfo?.birthday).format('DD/MM/YYYY')}</p>
+                        <p>{data.patientInfo?.gender==='male'?'Nam':"Nữ"}</p>
+                        <p>{data.patientInfo?.phone}</p>
                     </Col>
                 </Row>
             </Card>
@@ -45,10 +46,10 @@ function ConfirmBooking(props) {
                         <p><b>Giờ khám:</b></p>
                     </Col>
                     <Col span={15}>
-                        <p>Lưu Quang Thuận</p>
+                        <p>{data.doctorName}</p>
                         <p>54/19 đường số 7, KP3, Linh Trung, Thủ Đức</p>
-                        <p>19/12/2020</p>
-                        <p>8h30-9h00</p>
+                        <p>{moment(data.dateBooking).format('DD/MM/YYYY')}</p>
+                        <p>{data.timeBooking}</p>
                     </Col>
                 </Row>
             </Card>
