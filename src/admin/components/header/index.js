@@ -20,7 +20,7 @@ class Header extends Component {
 
 
     if(this.props.location.pathname.split("/")[1] === 'admin') {
-      require('../../assets/css/app.css')
+//       require('../../assets/css/app.css')
       require('../../assets/css/fontawesome.min.css')
     }
     
