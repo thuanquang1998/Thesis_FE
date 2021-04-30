@@ -20,7 +20,7 @@ class Header extends Component {
 
 
     if(this.props.location.pathname.split("/")[1] === 'admin') {
-//       require('../../assets/css/app.css')
+      require('../../assets/css/app.css')
       require('../../assets/css/fontawesome.min.css')
     }
     
@@ -46,7 +46,7 @@ class Header extends Component {
     }
     return (
       <div>
-        <div className="header">
+        <div className="header__admin">
           <div className="header-left">
             <Link to="/admin/dashboard" className="logo">
               <img src={bkLogo} alt="Logo" width="200" height="100%"/>

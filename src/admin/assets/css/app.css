@@ -1409,7 +1409,7 @@ button.bg-danger:hover {
 	8. Header
 -----------------------*/
 
-.header {
+.header__admin {
 	background: #fff;
 	border-bottom: 1px solid #f0f0f0;
 	left: 0;
@@ -1419,7 +1419,7 @@ button.bg-danger:hover {
 	z-index: 1001;
 	height: 80px;
 }
-.header .header-left {
+.header__admin .header-left {
 	float: left;
 	height: 80px;
 	padding: 0 20px;
@@ -1429,24 +1429,24 @@ button.bg-danger:hover {
 	z-index: 1;
 	transition: all 0.2s ease-in-out;
 }
-.header .header-left .logo {
+.header__admin .header-left .logo {
 	display: inline-block;
 	line-height: 80px;
 }
-.header .header-left .logo img {
+.header__admin .header-left .logo img {
     max-height: 75px;
     width: auto;
 }
-.header-left .logo.logo-small {
+.header__admin .header-left .logo.logo-small {
     display: none;
 }
-.header .dropdown-menu > li > a {
+.header__admin .dropdown-menu > li > a {
 	position: relative;
 }
-.header .dropdown-toggle:after {
+.header__admin .dropdown-toggle:after {
 	display: none;
 }
-.header .has-arrow .dropdown-toggle:after {
+.header__admin .has-arrow .dropdown-toggle:after {
 	border-top: 0;
 	border-left: 0;
 	border-bottom: 2px solid #333;
@@ -1466,120 +1466,120 @@ button.bg-danger:hover {
 	width: 8px;
 	vertical-align: 2px;
 }
-.header .has-arrow .dropdown-toggle[aria-expanded="true"]:after {
+.header__admin .has-arrow .dropdown-toggle[aria-expanded="true"]:after {
 	-webkit-transform: rotate(-135deg);
 	-ms-transform: rotate(-135deg);
 	transform: rotate(-135deg);
 }
-.user-menu {
+.header__admin .user-menu {
     float: right;
     margin: 0;
     position: relative;
     z-index: 99;
 }
-.user-menu.nav > li > a {
+.header__admin .user-menu.nav > li > a {
 	color: #333;
 	font-size: 14px;
 	line-height: 58px;
 	padding: 0 15px;
 	height: 60px;
 }
-.user-menu.nav > li > a:hover,
-.user-menu.nav > li > a:focus {
+.header__admin .user-menu.nav > li > a:hover,
+.header__admin .user-menu.nav > li > a:focus {
 	background-color: rgba(0, 0, 0, 0.2);
 }
-.user-menu.nav > li > a:hover i,
-.user-menu.nav > li > a:focus i {
+.header__admin .user-menu.nav > li > a:hover i,
+.header__admin .user-menu.nav > li > a:focus i {
 	color: #333;
 }
-.user-dropdown button, .user-dropdown button:active, .user-dropdown button:hover{background-color: inherit !important;border:none !important}
-.user-img {
+.header__admin .user-dropdown button, .user-dropdown button:active, .user-dropdown button:hover{background-color: inherit !important;border:none !important}
+.header__admin .user-img {
 	display: inline-block;
 	margin-right: 3px;
 	position: relative;
 	margin-top: 10px;
 }
-.no-padding{padding:0px !important}
-.user-menu.nav > li > a.mobile_btn {
+.header__admin .no-padding{padding:0px !important}
+.header__admin .user-menu.nav > li > a.mobile_btn {
 	border: 0;
 	position: relative;
 	padding: 0;
 	margin: 0;
 	cursor: pointer
 }
-.user-header{width:100%}
-.user-menu .dropdown-menu {
+.header__admin .user-header{width:100%}
+.header__admin .user-menu .dropdown-menu {
     min-width: 200px;
     padding: 0;
 }
-.notify .dropdown-toggle {margin-top: 10px;}
-.user-menu .dropdown-menu .dropdown-item {
+.header__admin .notify .dropdown-toggle {margin-top: 10px;}
+.header__admin .user-menu .dropdown-menu .dropdown-item {
     padding: 7px 15px;
 }
-.user-menu .dropdown-menu .dropdown-item {
+.header__admin .user-menu .dropdown-menu .dropdown-item {
     display: flex;
     align-items: center;
     border-top: 1px solid #e3e3e3;
     padding: 10px 15px;
 }
-.user-menu .dropdown-menu .dropdown-item:hover {
+.header__admin .user-menu .dropdown-menu .dropdown-item:hover {
 	color: #666;
     background: #f5f5f5
 }
 
-.btn-primary.active:not(:disabled):not(.disabled), .btn-primary:active:not(:disabled):not(.disabled), .show > .btn-primary.dropdown-toggle {
+.header__admin .btn-primary.active:not(:disabled):not(.disabled), .btn-primary:active:not(:disabled):not(.disabled), .show > .btn-primary.dropdown-toggle {
     background-color: #0ce0ff !important;
     border-color: #0ce0ff !important;
     color: #fff;
 }
 
-.submenu li a:hover{background:inherit !important;color:#0ce0ff !important}
-.menu-hasdropdown:hover .submenu li{background:inherit !important}
-.notification-time{    color: #666;}
-.header .dropdown-menu > li > a:focus,
-.header .dropdown-menu > li > a:hover {
+.header__admin .submenu li a:hover{background:inherit !important;color:#0ce0ff !important}
+.header__admin .menu-hasdropdown:hover .submenu li{background:inherit !important}
+.header__admin .notification-time{    color: #666;}
+.header__admin .dropdown-menu > li > a:focus,
+.header__admin .dropdown-menu > li > a:hover {
 	background-color: #00d0f1;
 	color: #fff;
 }
-.header .dropdown-menu > li > a:focus i,
-.header .dropdown-menu > li > a:hover i {
+.header__admin .dropdown-menu > li > a:focus i,
+.header__admin .dropdown-menu > li > a:hover i {
 	color: #fff;
 }
-.header .dropdown-menu > li > a {
+.header__admin .dropdown-menu > li > a {
 	padding: 10px 18px;
 }
-.header .dropdown-menu > li > a i {
+.header__admin .dropdown-menu > li > a i {
 	color: #00d0f1;
 	margin-right: 10px;
 	text-align: center;
 	width: 18px;
 }
-.header .user-menu .dropdown-menu > li > a i {
+.header__admin .user-menu .dropdown-menu > li > a i {
 	color: #00d0f1;
 	font-size: 16px;
 	margin-right: 10px;
 	min-width: 18px;
 	text-align: center;
 }
-.header .user-menu .dropdown-menu > li > a:focus i,
-.header .user-menu .dropdown-menu > li > a:hover i {
+.header__admin .user-menu .dropdown-menu > li > a:focus i,
+.header__admin .user-menu .dropdown-menu > li > a:hover i {
 	color: #fff;
 }
-.mobile_btn {
+.header__admin .mobile_btn {
 	display: none;
 	float: left;
 }
-.slide-nav .sidebar {
+.header__admin .slide-nav .sidebar {
 	margin-left: 0;
 }
-.app-dropdown .dropdown-menu {
+.header__admin .app-dropdown .dropdown-menu {
     padding: 0;
     width: 300px;
 }
-.app-dropdown-menu .app-list {
+.header__admin .app-dropdown-menu .app-list {
     padding: 15px;
 }
-.app-dropdown-menu .app-item {
+.header__admin .app-dropdown-menu .app-item {
     border: 1px solid transparent;
     border-radius: 3px;
     color: #737373;
@@ -1587,43 +1587,43 @@ button.bg-danger:hover {
     padding: 10px 0;
     text-align: center;
 }
-.app-dropdown-menu .app-item i {
+.header__admin .app-dropdown-menu .app-item i {
     font-size: 20px;
     height: 24px;
 }
-.app-dropdown-menu .app-item span {
+.header__admin .app-dropdown-menu .app-item span {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.app-dropdown-menu .app-item:hover,
-.app-dropdown-menu .app-item:focus,
-.app-dropdown-menu .app-item:active, 
-.app-dropdown-menu .app-item.active {
+.header__admin .app-dropdown-menu .app-item:hover,
+.header__admin .app-dropdown-menu .app-item:focus,
+.header__admin .app-dropdown-menu .app-item:active, 
+.header__admin .app-dropdown-menu .app-item.active {
 	background-color: #f9f9f9;
 	border-color: #e3e3e3;
 }
-.app-list > div + div {
+.header__admin .app-list > div + div {
 	margin-top: 5px;
 }
-.app-list > .row {
+.header__admin .app-list > .row {
 	margin-left: -5px;
 	margin-right: -5px;
 }
-.app-list > .row > .col {
+.header__admin .app-list > .row > .col {
 	padding-left: 5px;
 	padding-right: 5px;
 }
-.user-header {
+.header__admin .user-header {
     background-color: #f9f9f9;
     display: flex;
     padding: 10px 15px;
 }
-.user-header .user-text {
+.header__admin .user-header .user-text {
 	margin-left: 10px;
 }
-.user-header .user-text h6 {
+.header__admin .user-header .user-text h6 {
     margin-bottom: 2px;
 }
 .menu-title {
@@ -1633,7 +1633,7 @@ button.bg-danger:hover {
     margin-bottom: 5px;
     padding: 0 25px;
 }
-.sidebar-overlay {
+.header__admin .sidebar-overlay {
     background-color: rgba(0, 0, 0, 0.6);
     display: none;
     height: 100%;
