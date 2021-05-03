@@ -4,7 +4,7 @@ import {Card, Form, Button, Input, Modal, Select} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import logo from '../../assets/img/bk-logo.png'
 import './style.css'
-import { login, register } from '../../../actions/doctorActions'
+import { login, register } from '../../../redux/actions/doctorActions';
 
 const Login = () => {
     const dispatch = useDispatch()

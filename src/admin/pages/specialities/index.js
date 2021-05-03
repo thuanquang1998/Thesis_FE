@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SidebarNav from '../sidebar';
-import { get_specialities_system } from '../../../actions/adminActions';
+import { get_specialities_system } from '../../../redux/actions/adminActions';
 
 const Specialities = () => {
 	const dispatch = useDispatch()

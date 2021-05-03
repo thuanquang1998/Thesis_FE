@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row } from 'antd';
 import React, { useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {useHistory} from 'react-router-dom'
-import { getVerifyCode, getVerifySMS } from '../../../actions/patientActions';
+import { getVerifyCode, getVerifySMS } from '../../../redux/actions/patientActions';
 import loginBanner from '../../assets/images/login-banner.png';
 import {Link} from 'react-router-dom';
 import { SwalAlert } from '../../../utils/alert';
@@ -18,9 +18,6 @@ const LoginPatient = () => {
     const [phone, setPhone] = useState({});
     const [loadingLogin, setLoadingLogin] = useState(false);
 
-    
-
-    console.log(patient.isLoading, "at login page 111111111111111111")
     const handleInputPhoneNunber =(values)=>{
         const phone = values.phone;
         const _phone = (phone[0]==='0'?`+84${phone.slice(1,phone.length)}`:`+84${phone}`)

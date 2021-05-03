@@ -11,7 +11,7 @@ import IMG03 from '../../../assets/images/specialities-03.png';
 import IMG04 from '../../../assets/images/specialities-04.png';
 import IMG05 from '../../../assets/images/specialities-05.png';
 import { Card } from '@material-ui/core';
-import { get_hospital_byId } from '../../../../actions/adminActions'
+import { get_hospital_byId } from '../../../../redux/actions/adminActions'
 
 const SpecialitiesHospital = () => {
 	const [show, setShow] = useState(null)

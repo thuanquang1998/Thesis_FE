@@ -9,7 +9,7 @@ import Password from './pages/password';
 import ProfileSetting from './pages/profilesetting';
 import DoctorRegister from './pages/register';
 import ScheduleTiming from './pages/scheduletimings';
-import { check_doctor_login } from '../actions/doctorActions';
+// import { check_doctor_login } from '../redux/actions/doctorActions';
 import PatientProfile from './pages/patientprofile';
 import Header from './components/header'
 

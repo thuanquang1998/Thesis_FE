@@ -7,7 +7,7 @@ import img_background from '../../../assets/img/hospital_background.jpg'
 import './style.css'
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css';
-import { get_hospital_byId } from '../../../../actions/adminActions'
+import { get_hospital_byId } from '../../../../redux/actions/adminActions'
 import { useHistory } from 'react-router'
 const HospitalInfo = () => {
 	const dispatch = useDispatch()

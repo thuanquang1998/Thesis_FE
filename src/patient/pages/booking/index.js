@@ -8,7 +8,7 @@ import location from '../../assets/img/location.png'
 import price from '../../assets/img/price.png'
 import './style.css'
 import moment from 'moment'
-import { make_appointment } from '../../../actions/patientActions'
+import { make_appointment } from '../../../redux/actions/patientActions'
 import TimeStep from '../../components/time-step';
 import ConfirmBooking from './confirm-booking';
 import FormBooking from './form-booking';
@@ -41,6 +41,7 @@ const INIT_DATA = {
 const PatientInfo = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
+    console.log('doctorData :>> ', doctorData);
 
     const dispatch = useDispatch()
     const patient = useSelector(state => state.patient)   

@@ -11,33 +11,40 @@ import LoginPatient from './pages/login'
 import PatientInfo from './pages/booking'
 import PatientDashboard from './pages/patient-dashboard'
 import FeedBack from './pages/feedback'
+import {useDispatch , useSelector} from 'react-redux'
+import ModalBooking from './components/modal-booking'
+
 const AppPatient = function (props) {
+	const patient = useSelector(state=> state.patient)
+	console.log('patient AppPatient:>> ', patient.confirmBooking);
     return (
 			<Router>
 				<div>
 			    <Route render={(props)=> <Header {...props}/>} />
 				<Switch>
-					<Switch>
-						<Route exact path='/patient' component={Home}/>
-						<Route exact path='/patient/dsbacsi' component={DoctorPage}/>
-						<Route exact path='/patient/doctor-list/:doctorID' component={DoctorInfo}/>
-z						<Route exact path='/patient/cosoyte' component={HospitalPage}/>
-						{/* <Route exact path='/patient/doctor-profile' component={DoctorInfo}/> */}
-						<Route exact path='/patient/cosoyte/profile' component={HospitalProfile}/>
-						<Route exact path='/patient/login' component={LoginPatient}/>
-						<Route exact path='/patient/:doctorID/datlich' component={PatientInfo}/>
-						<Route exact path='/patient/quanlitaikhoan' component={PatientDashboard}/>
-						<Route exact path='/patient/gopy' component={FeedBack}/>
+					<Route exact path='/patient' component={Home}/>
+					<Route exact path='/patient/dsbacsi' component={DoctorPage}/>
+					<Route exact path='/patient/dsbacsi/:search' component={DoctorPage}/>
 
-						{/* id */}
-						{/* <Route exact path='/patient/:' component={FeedBack}/> */}
+					<Route exact path='/patient/doctor-list/:doctorID' component={DoctorInfo}/>
+					<Route exact path='/patient/cosoyte' component={HospitalPage}/>
+					{/* <Route exact path='/patient/doctor-profile' component={DoctorInfo}/> */}
+					<Route exact path='/patient/cosoyte/profile' component={HospitalProfile}/>
+					<Route exact path='/patient/login' component={LoginPatient}/>
+					<Route exact path='/patient/:doctorID/datlich/login' component={LoginPatient}/>
 
+					<Route exact path='/patient/:doctorID/datlich' component={PatientInfo}/>
+					<Route exact path='/patient/quanlitaikhoan' component={PatientDashboard}/>
+					<Route exact path='/patient/gopy' component={FeedBack}/>
 
-					</Switch>
+					{/* id */}
+					{/* <Route exact path='/patient/:' component={FeedBack}/> */}
 				</Switch>
+				
+				<Route render={() => <ModalBooking status = {patient.confirmBooking}/>}/>
 				<Route render={(props)=><Footer {...props}/>} />
 		       </div>
-			
+				
 			</Router>
     );
 }

@@ -1,9 +1,11 @@
 
 import { call, put, takeEvery } from 'redux-saga/effects'
-import { GET_DOCTORS_DATA, EMAIL_LOGIN, SET_DOCTORS_DATA, REGISTER } from '../actions/doctorActions'
-import doctorAPI from '../api/doctorAPI'
-import patientAPI from '../api/patientApi'
-import { SwalAlert } from '../utils/alert'
+import { GET_DOCTORS_DATA, EMAIL_LOGIN, SET_DOCTORS_DATA, REGISTER } from '../../redux/actions/doctorActions'
+
+import doctorAPI from '../../api/doctorAPI'
+import patientAPI from '../../api/patientApi';
+
+import { SwalAlert } from '../../utils/alert'
 
 export default function* watchAsyncDoctorActions(){
     yield takeEvery(GET_DOCTORS_DATA , get_doctors_data)

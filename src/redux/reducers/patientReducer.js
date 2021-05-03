@@ -1,14 +1,19 @@
 import { 
     IS_LOADING, IS_LOADED, IS_ERROR,
+    GET_ALL_DOCTORS,
     SET_CURRENT_USER, CLEAR_CURRENT_USER,
-} from "../actions/patientActions"
+    SET_CONFIRM_BOOKING
+} from '../actions/patientActions';
 
 
 const initialState={
     // login by phone number
+    listDoctor: [],
     currentUser: JSON.parse(localStorage.getItem('currentUser'))||{},
     isLoggedIn: localStorage.getItem('userToken')?true:false || false,
     isLoading: false,
+    confirmBooking: false,
+    directorUrl: '',
     error: '',
 }
 
@@ -30,7 +35,11 @@ export const patientReducer = (state = initialState , action) =>{
                 isLoading: false,
                 error: action.payload
             }
-
+        case GET_ALL_DOCTORS: 
+            return {
+                ...state,
+                listDoctor: action.payload
+            }
         case SET_CURRENT_USER:
             return {
                 ...state , 
@@ -45,6 +54,12 @@ export const patientReducer = (state = initialState , action) =>{
                 isLoggedIn: false,
                 currentUser : {},
                 isLoading: false,
+            }
+        case SET_CONFIRM_BOOKING:
+            return {
+                ...state,
+                confirmBooking: action.payload.confirmBooking,
+                directorUrl: action.payload.directorUrl,
             }
     
         

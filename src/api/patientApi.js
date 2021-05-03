@@ -1,6 +1,9 @@
 import http from './http-common'
 
 class patientAPI{
+    get_all_doctors(){
+        return http.get('doctors/all').then(res=> res.data).catch(err=> err.response.data)
+    }
     sign_in(data){
         return http.post('users/sign-in-phone', data).then(res=> res.data).catch(err=> err.response.data)
     }

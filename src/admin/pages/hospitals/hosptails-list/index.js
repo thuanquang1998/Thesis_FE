@@ -2,7 +2,7 @@ import { Badge, Button, Card, Modal, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { get_list_hospitals } from '../../../../actions/adminActions'
+import { get_list_hospitals } from '../../../../redux/actions/adminActions'
 import SidebarNav from '../../sidebar'
 const HospitalsList = () => {
     const dispatch = useDispatch()

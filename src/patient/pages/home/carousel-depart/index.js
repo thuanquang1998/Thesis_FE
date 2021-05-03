@@ -5,6 +5,7 @@ import './style.css';
 
 const HomeDepart = (props) => {
     const specialities = props.data;
+    console.log(`specialities`, specialities)
     const settings = {
         dots:true,
         infinite: true,
@@ -49,12 +50,22 @@ const HomeDepart = (props) => {
                                 {specialities && specialities.map((item,idx) => (
                                     <div>
                                         <div className="speicality-item text-center">
-                                            <div className="speicality-img" style={{margin:"0 auto", cursor:"pointer"}}>
-                                                <Link to="/linkck">
+                                            <div className="speicality-img" style={{margin:"0 auto", cursor:"pointer", marginBottom:"20px"}}>
+                                                {/* <Link to={`/dsbacsi?ck=${item.name}`}>
+                                                    <img key={idx} src={item.image} className="img-fluid" alt="Speciality"/>
+                                                </Link> */}
+                                                <Link
+                                                    to={{
+                                                        pathname: "/dsbacsi",
+                                                        search: "?sort=name",
+                                                        // hash: "#the-hash",
+                                                        // state: { fromDashboard: true }
+                                                      }}
+                                                >
                                                     <img key={idx} src={item.image} className="img-fluid" alt="Speciality"/>
                                                 </Link>
                                             </div>
-                                            <Link to="/linkck">{item.name}</Link>
+                                            <Link to="/linkck" style={{marginTop:"15px"}}>{item.name}</Link>
                                         </div>	
                                     </div>
                                 ))}

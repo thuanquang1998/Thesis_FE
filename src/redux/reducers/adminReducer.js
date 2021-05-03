@@ -1,8 +1,10 @@
-// import {  } from "../actions/patientActions"
+// import {  } from "../redux/actions/patientActions"
 
 import { data } from "jquery"
-import { SET_SPECIALITIES_SYSTEM, SET_LIST_HOSPITALS, SET_HOSPITAL_BYID } from "../actions/adminActions"
-import Specialities from "../admin/pages/specialities"
+import { SET_SPECIALITIES_SYSTEM, SET_LIST_HOSPITALS, SET_HOSPITAL_BYID } from '../../redux/actions/adminActions';
+
+import Specialities from '../../admin/pages/specialities';
+
 
 
 const initialState={

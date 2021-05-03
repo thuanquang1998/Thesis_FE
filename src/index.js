@@ -20,7 +20,7 @@ import "slick-carousel/slick/slick-theme.css";
 //style
 import './patient/assets/css/style.css';
 import { Provider } from 'react-redux';
-import store from './app/store';
+import store from './redux/store';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 
 

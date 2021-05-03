@@ -1,4 +1,4 @@
-import { SET_DOCTORS_DATA } from "../actions/doctorActions";
+import { SET_DOCTORS_DATA } from '../actions/doctorActions';
 
 const initialState ={
     loading : false , 

@@ -4,13 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState,useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
-import { logoutPatient } from "../../../actions/patientActions";
+import { logoutPatient } from "../../../redux/actions/patientActions";
 // import Dropdown from "react-bootstrap/Dropdown";
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import avatar from '../../assets/images/avatar-01.jpg'
 import logo1 from "../../assets/img/bk-logo.png";
-// import logo1 from "../../../assets/img/logo.jpg";
 
 const Header = (props) => {
   const dispatch = useDispatch()
@@ -18,18 +16,12 @@ const Header = (props) => {
   const url = window.location.pathname;
   
   const [userName, setUserName] = useState('');
-  console.log('patient :>> ', patient);
   useEffect(() => {
     if(patient.isLoggedIn) {
-      console.log('patient :>> ', patient);
       setUserName(patient.currentUser.patientInfo?patient.currentUser.patientInfo.fullName:'User');
     }
   }, [patient.isLoggedIn])
   const handleLogoutPatient = () => {
-    console.log("11111111111111111111111111");  
-    // localStorage.removeItem('userToken');
-    // localStorage.removeItem('currentUser');
-    // localStorage.clear();
     dispatch(logoutPatient());
   }
   const menu = (

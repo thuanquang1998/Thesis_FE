@@ -5,21 +5,28 @@ import {Link, useHistory} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import DoctorItem from '../doctor-item'
 import {SearchOutlined} from '@ant-design/icons'
-import { get_list_hospitals, get_specialities_system } from '../../../../actions/adminActions'
+import { get_list_hospitals, get_specialities_system } from '../../../../redux/actions/adminActions'
 import './style.css'
-import { get_doctors_data } from '../../../../actions/doctorActions'
+import { get_doctors_data } from '../../../../redux/actions/doctorActions'
+import StickyBox from "react-sticky-box";
+
+import SearchForm from '../search-form'
 const DoctorPage = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     const doctors = useSelector(state => state.doctor.doctor_data)
     const specialities = useSelector(state=>state.admin.specialities_system)
     const list_hospitals = useSelector(state=>state.admin.list_hospital)
+    
     useEffect(()=> {
         dispatch(get_specialities_system())
         dispatch(get_list_hospitals())
         dispatch(get_doctors_data(history))
         // get list docotrs
     },[])
+    const handleFilterData = (values) => {
+        console.log('values :>> ', values);
+    }
     return (
         <>
             <div className="breadcrumb-bar">
@@ -37,43 +44,47 @@ const DoctorPage = () => {
                     </div>
                 </div>
             </div>
-            
             <div className="content">
+					<div className="container-fluid">
+						<div className="row">
+							<div className="col-md-12 col-lg-4 col-xl-3">
+								<StickyBox offsetTop={20} offsetBottom={20}>
+									{/* <SearchFilter /> */}
+                                    <SearchForm onFilterData={handleFilterData}/>
+								</StickyBox>
+							</div>
+							<div className="col-md-12 col-lg-8 col-xl-9">
+								{/* <SearchList /> */}
+                                    <Row gutter={[16, 16]} style={{paddingTop:"0px"}}>
+                                        {doctors && doctors.map((item,idx)=>(
+                                            <Col xs={{span:24}} sm={{span:12}} md={{span:8}} xl={{span:6}}>
+                                                <Link to={{
+                                                    pathname :`/patient/doctor-list/${item.id}`,
+                                                    state:{data :item}                                        
+                                                 }}>
+                                                    <DoctorItem img={logoDoctor} data={item}/>
+                                                </Link>
+                                            </Col>
+                                        ))}
+                                    </Row>
+								<div className="load-more text-center">
+									<a href="#0" className="btn btn-primary btn-sm">Load More</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+            {/* <div className="content">
                 <div className="container-fluid">
                     <section className="section list-doctor">
                         <div className="container-fluid ">
                             <div className="row">
                                 <div className="container" style={{margin:"0 auto"}}>
-                                    <div className="search-list">
-                                        <h2 style={{color:"#0de0fe", fontWeight:"400"}}>Tìm kiếm bác sĩ của bạn</h2>
-                                        <Row gutter={[16,16]} className="row_search">
-                                            <Col xs={{span:24}} md={{span:24}} lg={{span:8}} className="col_hos">
-                                                <Select
-                                                    placeholder="Tìm theo bệnh viện"
-                                                >
-                                                    <Select.Option value="all_hos">Tất cả</Select.Option>
-                                                    {/* {list_hospitals && list_hospitals.map(item=>(
-                                                         <Select.Option key={list_hospitals.id} value={list_hospitals.name}>{list_hospitals.name}</Select.Option>
-                                                    ))} */}
-                                                </Select>
-                                            </Col>
-                                            <Col xs={{span:24}} md={{span:24}} lg={{span:8}} className="col_speci">
-                                                <Select
-                                                    placeholder="Tìm theo chuyên khoa"
-                                                >
-                                                    <Select.Option value="all_spec">Tất cả</Select.Option>
-                                                    {/* {specialities && specialities.map(item=>(
-                                                         <Select.Option value={specialities.name}>{specialities.name}</Select.Option>
-                                                    ))} */}
-                                                </Select>
-                                            </Col>
-                                            <Col xs={{span:24}} md={{span:24}} lg={{span:8}} className="col_name">
-                                                <Input placeholder="Tìm theo tên" suffix={<SearchOutlined />}/>
-                                            </Col>
-                                        </Row>
-                                    </div>
+                                    <SearchForm/>
                                     <Row gutter={[16, 16]} style={{paddingTop:"50px"}}>
-                                        {doctors && doctors.map(item=>(
+                                        {doctors && doctors.map((item,idx)=>(
                                             <Col xs={{span:24}} sm={{span:12}} md={{span:8}} xl={{span:6}}>
                                                 <Link to={{
                                                     pathname :`/patient/doctor-list/${item.id}`,
@@ -89,7 +100,7 @@ const DoctorPage = () => {
                         </div>
                     </section>
                 </div>
-            </div>
+            </div> */}
         </>
     )
 }

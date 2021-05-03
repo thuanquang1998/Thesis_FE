@@ -2,8 +2,8 @@ import React,{useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { Col, Row } from 'antd'
 import HospitalItem from '../hospital-item'
-// import { get_list_hospitals } from '../../../../actions/adminActions'
-import { get_list_hospitals} from '../../../../actions/adminActions'
+// import { get_list_hospitals } from '../../../../redux/actions/adminActions'
+import { get_list_hospitals} from '../../../../redux/actions/adminActions'
 const array = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
 const HospitalList = () => {
