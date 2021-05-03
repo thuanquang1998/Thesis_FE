@@ -7,12 +7,12 @@ const HomeSearch = () => {
         <section className="section section-search">
             <div className="container-fluid">
                 <div className="banner-wrapper">
-                    <div className="banner-header text-center">
-                        <h1>BKCare, Ứng dụng đặt lịch khám hàng đầu Việt Nam test 1</h1>
+                    <div className="banner-header text-center" style={{marginTop: "80px"}}>
+                        <h1>BKCare, Ứng dụng đặt lịch khám hàng đầu Việt Nam</h1>
                         <h3>Tìm bác sĩ nhanh chóng, đặt lịch khám dễ dàng</h3>
                     </div>
             
-                    <div className="search-box">
+                    {/* <div className="search-box">
                         <form action="/home">
                             <div className="form-group search-location">
                                 <input type="text" className="form-control" placeholder="Search Location" />
@@ -25,7 +25,7 @@ const HomeSearch = () => {
                             <button type="submit" className="btn btn-primary search-btn">  
                                 <FontAwesomeIcon icon={faSearch} /> <span>Search</span></button>
                         </form>
-                    </div>
+                    </div> */}
                     
                 </div>
             </div>

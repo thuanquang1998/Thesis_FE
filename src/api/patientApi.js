@@ -4,7 +4,11 @@ class patientAPI{
     sign_in(data){
         return http.post('users/sign-in-phone', data).then(res=> res.data).catch(err=> err.response.data)
     }
+    verifySMS(data){
+        return http.post('users/sign-in-phone/verify',data).then(res => res.data).catch(err => err.message)
+    }
     get_current_user(token){
+        console.log('get current user');
         return http.get('users/get-user-data', { headers:{ 'x-access-token': token}}).then(res=>res.data).catch(err=>err.response.data)
     }
     make_appointment(data){

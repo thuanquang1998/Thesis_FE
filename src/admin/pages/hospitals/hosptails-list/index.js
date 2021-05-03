@@ -21,7 +21,6 @@ const HospitalsList = () => {
           title: 'Địa chỉ',
           dataIndex: 'address',
           render: (text) => {
-            console.log(text,'1111111111111');
             return (
               <p>{text.number.toString() +' '+ text.street+' '+text.ward+' '+text.district+' '+text.city}</p>
             )

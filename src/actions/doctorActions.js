@@ -1,4 +1,4 @@
-import { LOGIN } from "./patientActions"
+// import { LOGIN } from "./patientActions"
 
 export const GET_DOCTORS_DATA = 'GET_DOCTORS_DATA'
 export const SET_DOCTORS_DATA = 'SET_DOCTORS_DATA'
@@ -12,7 +12,7 @@ export const  get_doctors_data =(history)=>{
 }
 export const login =(data)=>{
     return {
-        type : LOGIN,
+        type : EMAIL_LOGIN,
         payload: data
     }
 }

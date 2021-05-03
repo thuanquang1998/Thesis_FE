@@ -1,30 +1,48 @@
 //icon
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
-import { get_curent_user } from "../../../actions/patientActions";
-import Dropdown from "react-bootstrap/Dropdown";
+import { logoutPatient } from "../../../actions/patientActions";
+// import Dropdown from "react-bootstrap/Dropdown";
+import { Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import avatar from '../../assets/images/avatar-01.jpg'
 import logo1 from "../../assets/img/bk-logo.png";
 // import logo1 from "../../../assets/img/logo.jpg";
 
 const Header = (props) => {
-  const dispatch =useDispatch()
+  const dispatch = useDispatch()
   const patient = useSelector(state=> state.patient)
-  // const url = window.location.pathname.split("/").slice(0, -1).join("/");
   const url = window.location.pathname;
-  useEffect(()=>{
-      const token = localStorage.getItem('token')
-
-      console.log(token)
-      if(token){
-        dispatch(get_curent_user(token))
-      }
-  },[patient.data.phone])
+  
+  const [userName, setUserName] = useState('');
+  console.log('patient :>> ', patient);
+  useEffect(() => {
+    if(patient.isLoggedIn) {
+      console.log('patient :>> ', patient);
+      setUserName(patient.currentUser.patientInfo?patient.currentUser.patientInfo.fullName:'User');
+    }
+  }, [patient.isLoggedIn])
+  const handleLogoutPatient = () => {
+    console.log("11111111111111111111111111");  
+    // localStorage.removeItem('userToken');
+    // localStorage.removeItem('currentUser');
+    // localStorage.clear();
+    dispatch(logoutPatient());
+  }
+  const menu = (
+    <Menu>
+      {/* patient dashboard */}
+      <Menu.Item key="0">
+        <a href="https://www.antgroup.com">Tổng quan tài khoản</a> 
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={handleLogoutPatient} key="3">Đăng xuất</Menu.Item>
+    </Menu>
+  );
   return (
-    
     <header className="header">
       <nav className="navbar navbar-expand-lg header-nav">
 
@@ -79,6 +97,7 @@ const Header = (props) => {
             </li>
           </ul>
         </div>
+
         <ul className="nav header-navbar-rht">
           <li className="nav-item contact-item">
             <div className="header-contact-img">
@@ -89,86 +108,23 @@ const Header = (props) => {
               <p className="contact-info-header"> 1900 8168</p>
             </div>
           </li>
-
-            {/* <>
-              <Dropdown className="user-drop nav-item dropdown has-arrow logged-item">
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  <img
-                    className="rounded-circle"
-                    src={IMG01}
-                    width="31"
-                    alt="Darren Elder"
-                  />
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <div className="user-header">
-                    <div className="avatar avatar-sm">
-                      <img
-                        src={IMG01}
-                        alt="User"
-                        className="avatar-img rounded-circle"
-                      />
-                    </div>
-                    <div className="user-text">
-                      <h6>Darren Elder</h6>
-                      <p className="text-muted mb-0">Doctor</p>
-                    </div>
-                  </div>
-                  <Dropdown.Item href="/doctor/doctor-dashboard">
-                    Dashboard
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/doctor/profile-setting">
-                    Profile Settings
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/login">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </> */}
             <>
-              {!patient.login && <li className="nav-item">
+              {!patient.isLoggedIn && <li className="nav-item">
                 <Link to="/patient/login" className="nav-link header-login">
                   Đăng nhập{" "}
                 </Link>
               </li>}
-              {patient.login && <li className="nav-item dropdown has-arrow">
-              <Dropdown className="user-dropdown">
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  <span className="user-img">
-                    <img
-                      className="rounded-circle"
-                      src={avatar}
-                      width="31"
-                      alt="Ryan Taylor"
-                    />
-                  </span>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1" className="no-padding">
-                    <div className="user-header">
-                      <div className="avatar avatar-sm">
-                        <img
-                          src={avatar}
-                          alt="User"
-                          className="avatar-img rounded-circle"
-                        />
-                      </div>
-                      <div className="user-text">
-                        <h6>Ryan Taylor</h6>
-                        <p className="text-muted mb-0">Administrator</p>
-                      </div>
-                    </div>
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/admin/profile"> My Profile</Dropdown.Item>
-                  <Dropdown.Item href="/admin/settings">Settings</Dropdown.Item>
-                  <Dropdown.Item href="/admin">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </li>}
-              
+              {patient.isLoggedIn &&
+                <li className="nav-item">
+                  <Dropdown overlay={menu} trigger={['click']}>
+                    <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                      {userName} <DownOutlined />
+                    </a>
+                  </Dropdown>
+                </li>
+                
+              }
             </>
-          
         </ul>
       </nav>
     </header>

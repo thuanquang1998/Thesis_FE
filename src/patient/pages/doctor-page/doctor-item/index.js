@@ -23,8 +23,8 @@ const DoctorItem = (props) => {
                         <div className="pro-content">
                             <h3 className="title">
                             <Link to="/patient/doctor-profile">
-                                <p className="chucDanh">Phó Giáo sư, Tiến sĩ, Bác sĩ CKII</p>
-                                <p className="tenBs">{data.name}</p>
+                                <p className="chucDanh">{data.title}</p>
+                                <p className="tenBs">{data.fullName}</p>
                             </Link> 
                                 {/* <i className="fas fa-check-circle verified"></i> */}
                             </h3>
@@ -32,7 +32,7 @@ const DoctorItem = (props) => {
                             <ul className="available-info">
                                 <li>
                                     <span><img src={departLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                                    <span>{data.specialization.name}</span>
+                                    <span>{data.specialization?.name}</span>
                                 </li>
                                 <li>
                                     <span><img src={hospitalLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>

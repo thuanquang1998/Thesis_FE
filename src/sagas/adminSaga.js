@@ -1,6 +1,6 @@
 import {all, call , put, takeEvery, takeLatest} from 'redux-saga/effects'
 import {GET_HOSPITAL_BYID, GET_LIST_HOSPITALS, GET_SPECIALITIES_SYSTEM, SET_HOSPITAL_BYID, SET_LIST_HOSPITALS, SET_SPECIALITIES_SYSTEM } from '../actions/adminActions'
-import {LOGIN, LOGIN_SUCCESS} from '../actions/patientActions'
+// import {LOGIN, LOGIN_SUCCESS} from '../actions/patientActions'
 import adminAPI from '../api/adminAPI'
 import {SwalAlert} from '../utils/alert'
 

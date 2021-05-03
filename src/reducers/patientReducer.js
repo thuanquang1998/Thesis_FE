@@ -1,29 +1,53 @@
-import { GET_PATIENT_DATA, LOGIN_SUCCESS, SET_CURRENT_USER } from "../actions/patientActions"
+import { 
+    IS_LOADING, IS_LOADED, IS_ERROR,
+    SET_CURRENT_USER, CLEAR_CURRENT_USER,
+} from "../actions/patientActions"
 
 
 const initialState={
-    loading : false,
-    data :{},
-    error : false,
-    login:false,
-    errors:[]
+    // login by phone number
+    currentUser: JSON.parse(localStorage.getItem('currentUser'))||{},
+    isLoggedIn: localStorage.getItem('userToken')?true:false || false,
+    isLoading: false,
+    error: '',
 }
 
 export const patientReducer = (state = initialState , action) =>{
     switch (action.type) {
-        case GET_PATIENT_DATA:
-            return state
-        case LOGIN_SUCCESS:
+        case IS_LOADING: 
             return {
                 ...state,
-                loading :true
-            }    
+                isLoading: true
+            }
+        case IS_LOADED: 
+            return {
+                ...state,
+                isLoading: false
+            }
+        case IS_ERROR: 
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload
+            }
+
         case SET_CURRENT_USER:
             return {
                 ...state , 
                 login : true,
-                data : action.payload
+                data : action.payload,
+                isLoggedIn: true,
+                currentUser : action.payload,
             }
+        case CLEAR_CURRENT_USER:
+            return {
+                ...state,
+                isLoggedIn: false,
+                currentUser : {},
+                isLoading: false,
+            }
+    
+        
         default:
             return state
     }
