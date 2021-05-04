@@ -1,7 +1,7 @@
 import { Button, Card, Col, Rate, Row, Select, Tabs } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import React from 'react'
-import { Link , useLocation} from 'react-router-dom'
+import { Link , useLocation, useHistory} from 'react-router-dom'
 import logoDoctor from '../../../assets/img/bsnam.jpg'
 import departLogo from '../../../assets/img/depart.png'
 import hospitalLogo from '../../../assets/img/hospital.png'
@@ -10,7 +10,10 @@ import price from '../../../assets/img/price.png'
 import './style.css'
 const { TabPane } = Tabs;
 const DoctorInfo = (props) => {
-    console.log(props.match.params)
+    // console.log(props.match.params)
+    const history = useHistory();
+    const data = history.location.state.data;
+    console.log('data DoctorInfo:>> ', data.hopitaldetails);
     return (
         <div>
             {/* breadcrumb */}
@@ -21,11 +24,11 @@ const DoctorInfo = (props) => {
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/patient/home">Trang chủ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page"><Link to='/patient/doctor-list'>Danh sách bác sĩ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Bs. Tô Ngọc Bình</li>
+                                    <li className="breadcrumb-item active" aria-current="page"><Link to='/patient/dsbacsi'>Danh sách bác sĩ</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">{`${data.title} ${data.fullName}`}</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">Bs. Tô Ngọc Bình</h2>
+                            <h2 className="breadcrumb-title">{`${data.title} ${data.fullName}`}</h2>
                         </div>
                     </div>
                 </div>
@@ -42,25 +45,31 @@ const DoctorInfo = (props) => {
                             </Col>
                             <Col sm={{span:24}} md={{span:15}} className="infoDoctor">
                                 <h3 className="titlee">
-                                    Bs. Tô Ngọc Bình
+                                    {`${data.title} ${data.fullName}`}
                                 </h3>
                                 <Rate value={3} />
                                 <ul className="available-info">
                                     <li>
                                         <span><img src={departLogo} alt="Nội tiết"/></span>
-                                        <span>Nội tiết</span>
+                                        <span>{data.specialization.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                                        <span>Bv. Hùng vương</span>
+                                        <span>{data.hopitaldetails[0].name}</span>
                                     </li>
                                     <li>
                                         <span><img src={location} alt="Nội tiết"/></span>
-                                        <span>273 Lý Thường Kiệt, P5, Q8, TP.HCM</span>
+                                        <span>
+                                            {`${data.hopitaldetails[0].address.number}, 
+                                            ${data.hopitaldetails[0].address.street}, 
+                                            ${data.hopitaldetails[0].address.ward},
+                                            ${data.hopitaldetails[0].address.district},
+                                            ${data.hopitaldetails[0].address.city}`}
+                                    </span>
                                     </li>
                                     <li>
                                         <span><img src={price} alt="Nội tiết"/></span>
-                                        <span>300.000 VNĐ</span>
+                                        <span>{data.price}</span>
                                     </li>
                                 </ul>
                             </Col>

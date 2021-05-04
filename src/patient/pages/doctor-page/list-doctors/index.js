@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useState ,useEffect} from 'react'
 import { Col, Row, Select, Input } from 'antd'
 import logoDoctor from '../../../assets/img/bsnam.jpg'
 import {Link, useHistory} from 'react-router-dom'
@@ -17,13 +17,25 @@ const DoctorPage = () => {
     const doctors = useSelector(state => state.doctor.doctor_data)
     const specialities = useSelector(state=>state.admin.specialities_system)
     const list_hospitals = useSelector(state=>state.admin.list_hospital)
-    
+    const [query, setQuery] = useState('');
+    const [renderDataDoctor, setRenderDataDoctor] = useState({...doctors});
+    const [filters, setFilters] = useState({});
     useEffect(()=> {
         dispatch(get_specialities_system())
         dispatch(get_list_hospitals())
         dispatch(get_doctors_data(history))
-        // get list docotrs
+        setRenderDataDoctor(doctors);
     },[])
+    console.log('history DoctorPage:>> ', history.location.search);
+    useEffect(()=>{
+        // const params = new URLSearchParams();
+        // if (query) {
+        // params.append("name", query);
+        // } else {
+        // params.delete("name");
+        // }
+        // history.push({ search: params.toString() });
+    },[history,query])
     const handleFilterData = (values) => {
         console.log('values :>> ', values);
     }
@@ -35,8 +47,8 @@ const DoctorPage = () => {
                         <div className="col-md-12 col-12">
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Danh sách bác sĩ</li>
+                                    <li className="breadcrumb-item"><Link to="/patient">Trang chủ</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page"><Link to="/patient/dsbacsi">Danh sách bác sĩ</Link></li>
                                 </ol>
                             </nav>
                             <h2 className="breadcrumb-title">Danh sách bác sĩ</h2>
@@ -57,18 +69,18 @@ const DoctorPage = () => {
 								{/* <SearchList /> */}
                                     <Row gutter={[16, 16]} style={{paddingTop:"0px"}}>
                                         {doctors && doctors.map((item,idx)=>(
-                                            <Col xs={{span:24}} sm={{span:12}} md={{span:8}} xl={{span:6}}>
-                                                <Link to={{
+                                            <Col key={idx} xs={{span:24}} sm={{span:12}} md={{span:8}} xl={{span:6}}>
+                                                {/* <Link to={{
                                                     pathname :`/patient/doctor-list/${item.id}`,
                                                     state:{data :item}                                        
-                                                 }}>
-                                                    <DoctorItem img={logoDoctor} data={item}/>
-                                                </Link>
+                                                 }}> */}
+                                                    <DoctorItem key={idx} img={logoDoctor} data={item}/>
+                                                {/* </Link> */}
                                             </Col>
                                         ))}
                                     </Row>
 								<div className="load-more text-center">
-									<a href="#0" className="btn btn-primary btn-sm">Load More</a>
+									<a href="#0" className="btn btn-primary btn-sm">Xem thêm</a>
 								</div>
 							</div>
 						</div>

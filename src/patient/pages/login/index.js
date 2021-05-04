@@ -17,7 +17,13 @@ const LoginPatient = () => {
     const [statePageLogin, setStatePageLogin] = useState("status1");
     const [phone, setPhone] = useState({});
     const [loadingLogin, setLoadingLogin] = useState(false);
-
+    
+    console.log('history LoginPatient:>> ', history);
+    // history.location.pathname==="/patient/login" (dang nhap lan dau), then => history.push('/patient)
+    // else then => history.push({
+            //     pathname: `/patient/${props.data?.id}/datlich`,
+            //     state: {history.location.state.data}
+            // })
     const handleInputPhoneNunber =(values)=>{
         const phone = values.phone;
         const _phone = (phone[0]==='0'?`+84${phone.slice(1,phone.length)}`:`+84${phone}`)
@@ -29,7 +35,15 @@ const LoginPatient = () => {
     }
     useEffect(() => {
         if(patient.isLoggedIn) {
-            history.push('/patient')
+            // history.push('/patient')
+            if (history.location.pathname==="/patient/login") {
+                history.push('/patient')
+            } else {
+                history.push({
+                    pathname: `/patient/${history.location.state.data?.id}/datlich`,
+                    state: {...history.location.state}
+                })
+            }
         }
     }, [patient.isLoggedIn])
 

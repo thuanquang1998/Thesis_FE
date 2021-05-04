@@ -23,8 +23,8 @@ function SearchForm(props) {
     const [form] = Form.useForm();
     const specialities = useSelector(state=>state.admin.specialities_system)
     const list_hospitals = useSelector(state=>state.admin.list_hospital)
-    console.log('specialities :>> ', specialities);
-    console.log('list_hospitals :>> ', list_hospitals);
+    // console.log('specialities :>> ', specialities);
+    // console.log('list_hospitals :>> ', list_hospitals);
     
     const handleOnFinish = (values) => {
         // send data to list doctors
@@ -58,7 +58,7 @@ function SearchForm(props) {
                             >
                                 <Option value="all_hos">Tất cả</Option>
                                 {list_hospitals && list_hospitals.map(item=>(
-                                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                                    <Option key={item.id} value={item.name}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -68,7 +68,7 @@ function SearchForm(props) {
                             >
                                 <Option value="all_spec">Tất cả</Option>
                                 {specialities && specialities.map(item=>(
-                                    <Option key={item.name} value={item.name}>{item.name}</Option>
+                                    <Option key={item.key} value={item.key}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>

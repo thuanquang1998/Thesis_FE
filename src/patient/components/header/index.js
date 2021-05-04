@@ -3,7 +3,8 @@ import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState,useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom'
 import { logoutPatient } from "../../../redux/actions/patientActions";
 // import Dropdown from "react-bootstrap/Dropdown";
 import { Menu, Dropdown } from 'antd';
@@ -11,8 +12,9 @@ import { DownOutlined } from '@ant-design/icons';
 import logo1 from "../../assets/img/bk-logo.png";
 
 const Header = (props) => {
-  const dispatch = useDispatch()
-  const patient = useSelector(state=> state.patient)
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const patient = useSelector(state=> state.patient);
   const url = window.location.pathname;
   
   const [userName, setUserName] = useState('');
@@ -23,6 +25,7 @@ const Header = (props) => {
   }, [patient.isLoggedIn])
   const handleLogoutPatient = () => {
     dispatch(logoutPatient());
+    history.push('/patient');
   }
   const menu = (
     <Menu>

@@ -1,7 +1,7 @@
 import { Button, Card, Col, DatePicker, Form, Input, Radio, Rate, Row, Select } from 'antd'
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import {useDispatch , useSelector} from 'react-redux'
+import { Link, useHistory } from 'react-router-dom'
+import {useDispatch , useSelector} from 'react-redux';
 import departLogo from '../../assets/img/depart.png'
 import hospitalLogo from '../../assets/img/hospital.png'
 import location from '../../assets/img/location.png'
@@ -41,11 +41,11 @@ const INIT_DATA = {
 const PatientInfo = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
-    console.log('doctorData :>> ', doctorData);
+    const history = useHistory();
 
     const dispatch = useDispatch()
     const patient = useSelector(state => state.patient)   
-    // console.log('patient :>> ', patient);
+    console.log('patient :>> ', patient);
 
     //  handle show option choose schedule for dat dum 
     const [showModal, setShowModal] = useState(false)
@@ -57,6 +57,7 @@ const PatientInfo = (props) => {
     const [submitData, setSubmitData] = useState({
         ...INIT_DATA,
         doctorId: doctorID,
+        patientId: patient.currentUser.patientInfo.id,
         doctorName: doctorData.name
     })
     
@@ -163,10 +164,11 @@ const PatientInfo = (props) => {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/patient/home">Trang chủ</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page"><Link to='/patient/doctor-list'>Danh sách bác sĩ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Bs. {doctorData.name}</li>
+                                    <li className="breadcrumb-item active" aria-current="page">Bs. {doctorData.fullName}</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">Bs. {doctorData.name}</h2>
+                            
+                            <h2 className="breadcrumb-title">Bs. {doctorData.fullName}</h2>
                         </div>
                     </div>
                 </div>
@@ -184,7 +186,9 @@ const PatientInfo = (props) => {
                             </Col>
                             <Col span={14} className="infoDoctor">
                                 <div className="header-info">
-                                <h3>Tiến sĩ, Bác sĩ Chuyên Khoa II {doctorData.name}</h3>
+                                    <h4 className="chucDanh">{doctorData.title}</h4>
+                                    <h3 className="tenBs">{doctorData.fullName}</h3>
+                                {/* <h3>Tiến sĩ, Bác sĩ Chuyên Khoa II {doctorData.name}</h3> */}
                                 
                                 <ul className="available-info">
                                     <li>
@@ -193,11 +197,17 @@ const PatientInfo = (props) => {
                                     </li>
                                     <li>
                                         <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                                        <span>{doctorData.hospitalId}</span>
+                                        <span>{doctorData.hopitaldetails[0].name}</span>
                                     </li>
                                     <li>
                                         <span><img src={location} alt="Nội tiết"/></span>
-                                        <span>273 Lý Thường Kiệt, P5, Q8, TP.HCM</span>
+                                        <span>
+                                            {`${doctorData.hopitaldetails[0].address.number}, 
+                                            ${doctorData.hopitaldetails[0].address.street}, 
+                                            ${doctorData.hopitaldetails[0].address.ward},
+                                            ${doctorData.hopitaldetails[0].address.district},
+                                            ${doctorData.hopitaldetails[0].address.city}`}
+                                        </span>
                                     </li>
                                     <li>
                                         <span><img src={price} alt="Nội tiết"/></span>

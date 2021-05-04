@@ -9,6 +9,7 @@ import logo_female from '../../../assets/img/female_logo.png';
 import logo_male from '../../../assets/img/male_logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_confirm_booking } from "../../../../redux/actions/patientActions";
+import Swal from 'sweetalert2'
 
 import './style.css'
 const DoctorItem = (props) => {
@@ -17,33 +18,40 @@ const DoctorItem = (props) => {
     const patient = useSelector(state=> state.patient);
     const history = useHistory();
     const dispatch = useDispatch();
-    
-    // console.log(' directorURL:>> ', directorURL);
     const handleBooking = () => {
-        // let directorURL="";
         if (patient.isLoggedIn === true) {
-        console.log('handleBooking true');
-
-            // setDirectorURL('/patient/login')
-            // directorURL = '/patient/login';
-            const data = {
-                confirmBooking: false,
-                directorUrl: '/patient/login',
-            }
-            // dispatch(set_confirm_booking(data))
+            history.push(`/patient/${props.data?.id}/datlich`)
+            history.push({
+                pathname: `/patient/${props.data?.id}/datlich`,
+                state: {data}
+            })
         } else {
-        console.log('handleBooking false');
-
-            // setDirectorURL(`/patient/${props.data?.id}/datlich/login`)
-            // directorURL = `/patient/${props.data?.id}/datlich/login`
-            const data = {
-                confirmBooking: false,
-                directorUrl: `/patient/${props.data?.id}/datlich/login`,
-            }
-            // dispatch(set_confirm_booking(data))
+            Swal.fire({
+                title: "Thông báo",
+                text: "Bạn muốn đặt khám",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Đăng nhập",
+                cancelButtonText: "Hủy"
+              })
+            .then((result) => {
+                if (result.value) {
+                    history.push({
+                    pathname: `/patient/${props.data?.id}/datlich/login`,
+                    state: {data},
+                })
+                } 
+            })
+            .catch((error) => {
+                Swal.fire({
+                icon: "error",
+                title: "Opps...",
+                text: `Something went wrong!, ${error.message}`
+                });
+            });
         }
-        // console.log('directorURL :>> ', directorURL);
-        // history.push('/patient/login')
     }
     return (
         (data && 
@@ -89,10 +97,15 @@ const DoctorItem = (props) => {
                     </ul>
                     <div className="row row-sm">
                         <div className="col-6">
-                            <Link to="/patient/doctor-profile" className="btn view-btn">Xem thông tin</Link>
+                            <Link 
+                                to={{
+                                    pathname:`/patient/doctor-list/${data.id}`,
+                                    state: {data}
+                                }}
+                                className="btn view-btn">Xem thông tin</Link>
                         </div>
                         <div className="col-6">
-                            <Button onClick={handleBooking} className="btn book-btn">Đặt lịch</Button>
+                            <Button onClick={handleBooking} className="btn book-btn">Đặt lịch1</Button>
                             {/* {props.data? 
                                 // <Link to={`/patient/${props.data.id}/datlich`, {params:"aaa"}} className="btn book-btn">Đặt lịch</Link> :
                                 <Link to={{
