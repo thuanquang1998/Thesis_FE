@@ -77,7 +77,7 @@ const HomeBookDoctor = (props)  => {
                             </div>
                             <div className="about-content">
                                 <p>Đội ngũ Bác sĩ ưu tú với thâm niên trung bình 10 năm kinh nghiệm hiện công tác tại các Bệnh viện hàng đầu Việt Nam, thăm khám trên nhiều chuyên khoa đa dạng, tận tâm chăm sóc bạn cùng gia đình.</p>
-                                <Link to="/patient/doctor-list" >Xem thêm...</Link>
+                                <Link to="/patient/dsbacsi" >Xem thêm...</Link>
                             </div>
                         </div>
                         <div className="col-lg-8">

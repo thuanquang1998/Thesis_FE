@@ -12,7 +12,9 @@ const initialState={
     data :{},
     error : false,
     login:false,
-    errors:[]
+    errors:[],
+    loadingHospital: false,
+    // loadingSpe
 }
 
 export const adminReducer = (state = initialState , action) =>{

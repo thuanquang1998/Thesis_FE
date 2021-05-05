@@ -65,7 +65,15 @@ const HomeDepart = (props) => {
                                                     <img key={idx} src={item.image} className="img-fluid" alt="Speciality"/>
                                                 </Link>
                                             </div>
-                                            <Link to="/linkck" style={{marginTop:"15px"}}>{item.name}</Link>
+                                            <Link 
+                                                to={{
+                                                    pathname: "/patient/dsbacsi",
+                                                    search: `?ck=${item.key}`,
+                                                    // hash: "#the-hash",
+                                                    // state: { fromDashboard: true }
+                                                }} 
+                                                style={{marginTop:"15px"}}>{item.name}
+                                            </Link>
                                         </div>	
                                     </div>
                                 ))}

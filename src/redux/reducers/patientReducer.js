@@ -15,6 +15,7 @@ const initialState={
     confirmBooking: false,
     directorUrl: '',
     error: '',
+    
 }
 
 export const patientReducer = (state = initialState , action) =>{

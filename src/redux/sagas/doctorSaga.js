@@ -1,6 +1,7 @@
 
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { GET_DOCTORS_DATA, EMAIL_LOGIN, SET_DOCTORS_DATA, REGISTER } from '../../redux/actions/doctorActions'
+import { LOADING_DATA, LOADING_DATA_SUCCESS, LOADING_DATA_FAILED, ALL_DOCTORS, ALL_HOSPITAL, ALL_SPECIAL  } from '../actions/loadingActions';
 
 import doctorAPI from '../../api/doctorAPI'
 import patientAPI from '../../api/patientApi';
@@ -15,7 +16,7 @@ export default function* watchAsyncDoctorActions(){
 
 
 function* get_doctors_data({payload}){
-    console.log('saga')
+    yield put({type : LOADING_DATA});
     try{
         const response = yield call(doctorAPI.get_doctors, payload)
         if (response.error){
@@ -24,6 +25,8 @@ function* get_doctors_data({payload}){
         }
         else {
             yield put({type : SET_DOCTORS_DATA, payload : response.data})
+            yield put({type : LOADING_DATA_SUCCESS});
+            yield put({type : ALL_DOCTORS, payload : response.data});
         }
     }
     catch(err){

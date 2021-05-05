@@ -1,26 +1,22 @@
-import React,{useState, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
 import { Col, Row } from 'antd'
+import React from 'react'
 import HospitalItem from '../hospital-item'
-// import { get_list_hospitals } from '../../../../redux/actions/adminActions'
-import { get_list_hospitals} from '../../../../redux/actions/adminActions'
-const array = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
-const HospitalList = () => {
-    const dispatch = useDispatch()
-    const list_hospitals = useSelector(state=>state.admin.list_hospital)
-    useEffect(()=> {
-      dispatch(get_list_hospitals())
-    },[])
+const HospitalList = (props) => {
+    const listAllHospitals = props.data; 
     return (
         <div className="container" style={{margin: "0 auto", paddingBottom:"50px"}}>
+             {listAllHospitals.length === 0?
+            <h2>Không tìm thấy Cơ sở y tế</h2>
+            :
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    {list_hospitals && list_hospitals.map(item=> (
-                        <HospitalItem data = {item}/>
+                    {listAllHospitals.map((item,idx)=> (
+                        <HospitalItem key={idx} data = {item}/>
                     ))}
                 </Col>
             </Row>
+        }
         </div>
     )
 }

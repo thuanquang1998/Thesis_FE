@@ -38,7 +38,7 @@ const INIT_DATA = {
     timeBooking: null,
 }
 
-const PatientInfo = (props) => {
+const BookingPage = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
     const history = useHistory();
@@ -88,8 +88,8 @@ const PatientInfo = (props) => {
                     listDate: listTimeShow
                 }
                 setTimeWorkData(_timeWorkData);
-                setTimeWorkDay(_timeWorkData.listDate[0])
-                setSubmitData({...submitData, dateBooking:_timeWorkData.listDate[0]?.date})
+                setTimeWorkDay(_timeWorkData.listDate[0]);
+                setSubmitData({...submitData, dateBooking:_timeWorkData.listDate[0]?.date});
             } else {
                 setTimeWorkData({
                     ...timeWorkData,
@@ -290,5 +290,5 @@ const PatientInfo = (props) => {
     )
 }
 
-export default PatientInfo
+export default BookingPage
 

@@ -35,6 +35,10 @@
 
 .info {
     height: 70px;
+    margin-top:30px
+}
+.intro {
+    margin-top: 30px !important;
 }
 .ant-row .title {
     color: #1890ff;

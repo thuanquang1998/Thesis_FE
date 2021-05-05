@@ -31,7 +31,7 @@ const Header = (props) => {
     <Menu>
       {/* patient dashboard */}
       <Menu.Item key="0">
-        <a href="https://www.antgroup.com">Tổng quan tài khoản</a> 
+        <a href="/patient/quanlitaikhoan">Tổng quan tài khoản</a> 
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item onClick={handleLogoutPatient} key="3">Đăng xuất</Menu.Item>

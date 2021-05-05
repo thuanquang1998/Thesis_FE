@@ -1,33 +1,16 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Col, Input, Row, Select, Form, Button } from 'antd';
+import { Button, Col, Form, Input, Select } from 'antd';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import { useSelector } from 'react-redux';
 import './style.css';
 const { Option } = Select;
-const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
+
   
 function SearchForm(props) {
     const [form] = Form.useForm();
-    const specialities = useSelector(state=>state.admin.specialities_system)
-    const list_hospitals = useSelector(state=>state.admin.list_hospital)
-    // console.log('specialities :>> ', specialities);
-    // console.log('list_hospitals :>> ', list_hospitals);
-    
+    const appState = useSelector(state=>state.app);
+    const loadingData = appState.loadingData;
     const handleOnFinish = (values) => {
-        // send data to list doctors
         props.onFilterData(values)
     }   
     return (
@@ -49,28 +32,41 @@ function SearchForm(props) {
                     onFinish={handleOnFinish}
                 >   
                     <Col xs={{span:24}} sm={{span:24}} md={{span:24}} className="col_hos"> 
-                        <Form.Item name="filterName" label="Tìm theo tên:" className="search__form--item">
+                        <Form.Item name="tenBs" label="Tìm theo tên:" className="search__form--item">
                             <Input placeholder="Tìm theo tên" suffix={<SearchOutlined />}/>
                         </Form.Item>
-                        <Form.Item name="filterHospital" label="Tìm theo bệnh viện:" className="search__form--item">
-                            <Select
-                                placeholder="Tìm theo bệnh viện"
-                            >
-                                <Option value="all_hos">Tất cả</Option>
-                                {list_hospitals && list_hospitals.map(item=>(
-                                    <Option key={item.id} value={item.name}>{item.name}</Option>
-                                ))}
-                            </Select>
+                        <Form.Item name="bv" label="Tìm theo bệnh viện:" className="search__form--item">
+                            {loadingData?
+                                <Select
+                                    placeholder="Tìm theo bệnh viện"
+                                >
+                                    <Option value="all-bv">Tất cả</Option>
+                                </Select>
+                                :<Select
+                                    placeholder="Tìm theo bệnh viện"
+                                >
+                                    <Option value="all-bv">Tất cả</Option>
+                                    {appState.listAllHospitals.map(item=>(
+                                        <Option key={item.id} value={item.id}>{item.name}</Option>
+                                    ))}
+                                </Select>}
                         </Form.Item>
-                        <Form.Item name="filterSpecialities" label="Tìm theo chuyên khoa:" className="search__form--item">
-                            <Select
-                                placeholder="Tìm theo chuyên khoa"
-                            >
-                                <Option value="all_spec">Tất cả</Option>
-                                {specialities && specialities.map(item=>(
-                                    <Option key={item.key} value={item.key}>{item.name}</Option>
-                                ))}
-                            </Select>
+                        <Form.Item name="ck" label="Tìm theo chuyên khoa:" className="search__form--item">
+                            {loadingData?
+                                <Select
+                                    placeholder="Tìm theo chuyên khoa"
+                                >
+                                    <Option value="all-ck">Tất cả</Option>
+                                </Select>
+                                :<Select
+                                    placeholder="Tìm theo chuyên khoa"
+                                >
+                                    <Option value="all-ck">Tất cả</Option>
+                                    {appState.listAllSpecials.map(item=>(
+                                        <Option key={item.key} value={item.key}>{item.name}</Option>
+                                    ))}
+                                </Select>
+                            }
                         </Form.Item>
                         <Form.Item>
                             <Button
@@ -91,35 +87,6 @@ function SearchForm(props) {
                 </Form>
             </div>
         </div>
-        // <div className="search-list">
-        //     <h2 style={{color:"#0de0fe", fontWeight:"400"}}>Tìm kiếm bác sĩ của bạn</h2>
-        //     <Row gutter={[16,16]} className="row_search">
-        //         <Col xs={{span:24}} md={{span:24}} lg={{span:8}} className="col_hos">
-        //             <Select
-        //                 placeholder="Tìm theo bệnh viện"
-        //             >
-        //                 <Option value="all_hos">Tất cả</Option>
-        //                 {list_hospitals && list_hospitals.map(item=>(
-        //                     <Option key={item.id} value={item.id}>{item.name}</Option>
-        //                 ))}
-        //             </Select>
-        //         </Col>
-        //         <Col xs={{span:24}} md={{span:24}} lg={{span:8}} className="col_speci">
-        //             <Select
-        //                 placeholder="Tìm theo chuyên khoa"
-        //             >
-        //                 <Option value="all_spec">Tất cả</Option>
-        //                 {specialities && specialities.map(item=>(
-        //                     <Option key={item.name} value={item.name}>{item.name}</Option>
-        //                 ))}
-                       
-        //             </Select>
-        //         </Col>
-        //         <Col xs={{span:24}} md={{span:24}} lg={{span:8}} className="col_name">
-        //             <Input placeholder="Tìm theo tên" suffix={<SearchOutlined />}/>
-        //         </Col>
-        //     </Row>
-        // </div>
     );
 }
 

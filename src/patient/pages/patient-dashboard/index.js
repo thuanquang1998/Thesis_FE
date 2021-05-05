@@ -3,6 +3,7 @@ import './style.css'
 import {Link} from 'react-router-dom'
 import { Card, Table } from 'antd'
 import { data } from 'jquery'
+import PatientSidebar from '../patient-dashboard/patient-sidebar';
 const PatientDashboard = () => {
     const [show, setShow] = useState(null)
     const columns = [
@@ -82,24 +83,50 @@ const PatientDashboard = () => {
             
             <div className="content">
                 <div className="container-fluid">
-                    <section className="section list-doctor">
-                        <Card 
-                            // title={<>Danh sách chuyên khoa <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
-                            // extra={
-                            // <a href="/admin/cosoyte/them-ck">
-                            //     <Button type="primary">Tạo mới chuyên khoa</Button>
-                            // </a>}
-                        >
-                            <Table className="table-striped"
-                                columns={columns}                 
-                                dataSource={data}
-                                ascend={true}
-                                style = {{overflowX : 'auto'}}
-                                rowKey={record => record.id}
-                                showSizeChanger={true} 
-                            />
-                        </Card>
-                    </section>
+                    <div className="col-md-5 col-lg-4 col-xl-3">
+                        <PatientSidebar />
+                    </div>
+                    <div className="col-md-7 col-lg-8 col-xl-9">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <Card 
+                                    // title={<>Danh sách chuyên khoa <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
+                                    // extra={
+                                    // <a href="/admin/cosoyte/them-ck">
+                                    //     <Button type="primary">Tạo mới chuyên khoa</Button>
+                                    // </a>}
+                                >
+                                    <Table className="table-striped"
+                                        columns={columns}                 
+                                        dataSource={data}
+                                        ascend={true}
+                                        style = {{overflowX : 'auto'}}
+                                        rowKey={record => record.id}
+                                        showSizeChanger={true} 
+                                    />
+                                </Card>
+                            </div>
+                        </div>
+                        {/* <section className="section list-doctor">
+                            <Card 
+                                // title={<>Danh sách chuyên khoa <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
+                                // extra={
+                                // <a href="/admin/cosoyte/them-ck">
+                                //     <Button type="primary">Tạo mới chuyên khoa</Button>
+                                // </a>}
+                            >
+                                <Table className="table-striped"
+                                    columns={columns}                 
+                                    dataSource={data}
+                                    ascend={true}
+                                    style = {{overflowX : 'auto'}}
+                                    rowKey={record => record.id}
+                                    showSizeChanger={true} 
+                                />
+                            </Card>
+                        </section> */}
+                    </div>
+                    
                 </div>
             </div>
         </>
