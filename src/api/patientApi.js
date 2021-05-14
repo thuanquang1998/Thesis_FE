@@ -17,6 +17,10 @@ class patientAPI{
     make_appointment(data){
         return http.post('appointment/add-appointment' , data).then(res=> res.data).catch(err => err.response.data)
     }
+    get_schedule(id) {
+        const token = localStorage.getItem('userToken');
+        return http.get(`patient/${id}/get_appointment`,{ headers:{ 'x-access-token': token}}).then(res=> res.data).catch(err => err.response.data)
+    }
     // get time schedule
     // get_time_works(){
     //     return http.get('timeworks').then(res=> res.data).catch(err=> err.response.data)

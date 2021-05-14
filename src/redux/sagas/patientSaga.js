@@ -4,7 +4,8 @@ import {
     GET_ALL_DOCTORS,
     GET_VERIFY_CODE, GET_VERIFY_SMS,
     LOGOUT_PATIENT, SET_CURRENT_USER, CLEAR_CURRENT_USER, 
-    SET_CONFIRM_BOOKING, MAKING_APPOINTMENT
+    SET_CONFIRM_BOOKING, MAKING_APPOINTMENT,
+    GET_SCHEDULE_PATIENT
 } from '../actions/patientActions';
 import Swal from 'sweetalert2';
 
@@ -18,6 +19,8 @@ export default function* watchAsyncPatientActions(){
     yield takeEvery ( LOGOUT_PATIENT, logoutPatient )
     yield takeEvery ( SET_CONFIRM_BOOKING, confirmBooking )
     yield takeEvery ( MAKING_APPOINTMENT, make_appointment )
+    yield takeEvery ( GET_SCHEDULE_PATIENT, get_schedule_patient )
+
 }
 function*  getAllDoctors(){
     yield put({ type: IS_LOADING }) 
@@ -113,6 +116,22 @@ function* make_appointment({payload}){
         }
         else {
             SwalAlert('Success', 'Making appointment success','success')
+        }
+    }
+    catch(err){
+        console.log(err)    
+    }
+}
+function* get_schedule_patient({payload}){
+    try{
+        const response = yield call(patientAPI.get_schedule, payload.id)
+        if (response.error){
+            SwalAlert('Error', 'Server disconected','error')
+        }
+        else {
+            console.log('response :>> ', response);
+            // SwalAlert('Success', 'get_schedule_patient','success')
+            yield put({type: GET_SCHEDULE_PATIENT, payload:response.data});
         }
     }
     catch(err){

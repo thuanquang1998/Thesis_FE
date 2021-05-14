@@ -1,21 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect } from 'react'
+import MessengerCustomerChat from 'react-messenger-customer-chat'
+import { useDispatch } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { get_list_hospitals, get_specialities_system } from '../redux/actions/adminActions'
+import { get_doctors_data } from '../redux/actions/doctorActions'
+import FeedBack from './components/feedback'
 import Footer from './components/footer'
 import Header from './components/header'
-import DoctorPage from './pages/doctor-page'
-import DoctorInfo from './pages/doctor-page/doctor-profile'
-import Home from './pages/home'
-import HospitalPage from './pages/hospitals'
-import HospitalProfile from './pages/hospitals/hospital-profile'
-import LoginPatient from './pages/login'
-import BookingPage from './pages/booking'
-import PatientDashboard from './pages/patient-dashboard'
-import PatientInfo from './pages/patient-dashboard/patient-info';
-import FeedBack from './pages/feedback'
-import {useDispatch , useSelector} from 'react-redux'
-import { get_list_hospitals, get_specialities_system } from '../redux/actions/adminActions';
-import { get_doctors_data } from '../redux/actions/doctorActions';
-
+import LoginPatient from './features/auth/pages/Login'
+import BookingPage from './features/BookSchedule/pages/BookingPage'
+import DetailDoctorPage from './features/doctor/pages/DetailDoctorPage'
+import ListDoctorPage from './features/doctor/pages/ListDoctorPage'
+import Home from './features/home'
+import DetailHospitalPage from './features/hospital/pages/DetailHospitalPage'
+import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
+import ManagePatient from './features/ManagePatient'
 const AppPatient = function (props) {
 	console.log('getAllData');
     const dispatch = useDispatch()
@@ -29,23 +28,39 @@ const AppPatient = function (props) {
 			<div>
 				<Route render={(props)=> <Header {...props}/>} />
 					<Switch>
-						<Route exact path='/patient' component={Home}/>
-						<Route exact path='/patient/dsbacsi' component={DoctorPage}/>
+						<Route exact path="(/|/trang-chu)" component={Home}/>
+						
+						<Route exact path='/danh-sach-bac-si' component={ListDoctorPage}/>
+						<Route exact path='/danh-sach-bac-si/:doctorID' component={DetailDoctorPage}/>
+						<Route exact path='/danh-sach-benh-vien' component={ListHospitalPage}/>
+						<Route exact path='/chi-tiet-benh-vien/:hospitalId' component={DetailHospitalPage}/>
 
-						<Route exact path='/patient/doctor-list/:doctorID' component={DoctorInfo}/>
-						<Route exact path='/patient/cosoyte' component={HospitalPage}/>
-						{/* <Route exact path='/patient/doctor-profile' component={DoctorInfo}/> */}
-						<Route exact path='/patient/cosoyte/profile' component={HospitalProfile}/>
-						<Route exact path='/patient/login' component={LoginPatient}/>
-						<Route exact path='/patient/:doctorID/datlich/login' component={LoginPatient}/>
 
-						<Route exact path='/patient/:doctorID/datlich' component={BookingPage}/>
-						<Route exact path='/patient/quanlitaikhoan' component={PatientInfo}/>
+
+						{/* <Route exact path='/danh-sach-bac-si' component={DoctorPage}/> */}
+						{/* <Route exact path='/danh-sach-bac-si/:doctorID' component={DoctorInfo}/> */}
+
+						{/* <Route exact path='/danh-sach-benh-vien' component={HospitalPage}/> */}
+						{/* <Route exact path='/chi-tiet-benh-vien/:hospitalId' component={HospitalProfile}/> */}
+
+						<Route exact path='/dang-nhap' component={LoginPatient}/>
+						<Route exact path='/dat-kham/:doctorID/dang-nhap' component={LoginPatient}/>
+						<Route exact path='/dat-kham/:doctorID' component={BookingPage}/>
+						<Route exact path='/quan-li-tai-khoan' component={ManagePatient}/>
+						
+
+						{/* <Route exact path='/quan-li-tai-khoan/thong-tin' component={PatientInfo}/>
+						<Route exact path='/quan-li-tai-khoan/lich-kham' component={PatientSchedule}/> */}
 						<Route exact path='/patient/gopy' component={FeedBack}/>
 
 						{/* id */}
 						{/* <Route exact path='/patient/:' component={FeedBack}/> */}
 					</Switch>
+					<MessengerCustomerChat
+						pageId="105374011705694"
+						appId="1164522647358198"
+						// htmlRef="<REF_STRING>"
+					/>
 				<Route render={(props)=><Footer {...props}/>} />
 			</div>
 		</Router>

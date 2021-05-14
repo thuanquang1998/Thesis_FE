@@ -10,27 +10,20 @@ const AppContainer = function (props) {
     const url = props.location.pathname.split("/")[1];
     return (
       <Router>
-        { url ==='admin' &&  
+        { url === 'admin' ? 
+          (
             <>
               <Switch>
                 <Route path="/admin" component={Admin} />
               </Switch>
             </>
-        }
-        { url ==='doctor' &&  
+          )
+          :
+          (
             <>
-              <Switch>
-                <Route  path="/doctor" component={AppDoctor} />
-              </Switch>
+              <AppPatient/>
             </>
-        }
-        {/* routes for client */}
-        { url ==='patient' &&  
-            <>
-              <Switch>
-                <Route path="/patient" component={AppPatient} />
-              </Switch>
-            </>
+          )
         }
       </Router>
     )
@@ -39,3 +32,27 @@ const AppContainer = function (props) {
 }
 
 export default AppContainer;
+
+
+// { url ==='admin' &&  
+// <>
+//   <Switch>
+//     <Route path="/admin" component={Admin} />
+//   </Switch>
+// </>
+// }
+// { url ==='doctor' &&  
+// <>
+//   <Switch>
+//     <Route  path="/doctor" component={AppDoctor} />
+//   </Switch>
+// </>
+// }
+// {/* routes for client */}
+// { url ==='patient' &&  
+// <>
+//   <Switch>
+//     <Route path="/patient" component={AppPatient} />
+//   </Switch>
+// </>
+// }

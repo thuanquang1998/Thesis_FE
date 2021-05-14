@@ -8,12 +8,10 @@ const AppRouter = (props) => {
     console.log('props', props.location);
     return(
         <>
-        <Router  history={history}>
-             <Route render={(props)=> <AppContainer {...props}/>} />
-        </Router>
-        
-        
-    </>
+            <Router  history={history}>
+                <Route render={(props)=> <AppContainer {...props}/>} />
+            </Router>
+        </>
     );
     
 }

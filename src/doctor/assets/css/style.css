@@ -2260,7 +2260,7 @@ html.menu-opened body {
 .section-search { 
 background: #f9f9f9 url("../images/search-bg.png") no-repeat bottom center;
     min-height: 450px;
-    background-size: 100% auto;
+    background-size: cover;
     position: relative;
     background-blend-mode: Darken;
     padding: 80px 0;

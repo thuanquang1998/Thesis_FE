@@ -14,6 +14,7 @@ export const SET_CONFIRM_BOOKING = 'SET_CONFIRM_BOOKING';
 export const UPDATE_CONFIRM_BOOKING = 'UPDATE_CONFIRM_BOOKING';
 
 export const MAKING_APPOINTMENT = 'MAKING_APPOINTMENT' 
+export const GET_SCHEDULE_PATIENT = 'GET_SCHEDULE_PATIENT'
 
 export const getAllDoctors = () => {
     return {
@@ -50,5 +51,12 @@ export const make_appointment = (data) => {
     return{
         type: MAKING_APPOINTMENT,
         payload: data
+    }
+}
+
+export const get_schedule_patient = (id) => {
+    return {
+        type: GET_SCHEDULE_PATIENT,
+        payload: id
     }
 }

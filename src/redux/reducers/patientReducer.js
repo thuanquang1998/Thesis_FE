@@ -2,12 +2,14 @@ import {
     IS_LOADING, IS_LOADED, IS_ERROR,
     GET_ALL_DOCTORS,
     SET_CURRENT_USER, CLEAR_CURRENT_USER,
-    SET_CONFIRM_BOOKING
+    SET_CONFIRM_BOOKING,
+    GET_SCHEDULE_PATIENT,
 } from '../actions/patientActions';
 
 
 const initialState={
     // login by phone number
+    schedulePatient:[],
     listDoctor: [],
     currentUser: JSON.parse(localStorage.getItem('currentUser'))||{},
     isLoggedIn: localStorage.getItem('userToken')?true:false || false,
@@ -62,7 +64,12 @@ export const patientReducer = (state = initialState , action) =>{
                 confirmBooking: action.payload.confirmBooking,
                 directorUrl: action.payload.directorUrl,
             }
-    
+        case GET_SCHEDULE_PATIENT:
+            return {
+                ...state,
+                schedulePatient: action.payload
+            }
+            
         
         default:
             return state

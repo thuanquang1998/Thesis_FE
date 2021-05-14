@@ -25,13 +25,13 @@ const Header = (props) => {
   }, [patient.isLoggedIn])
   const handleLogoutPatient = () => {
     dispatch(logoutPatient());
-    history.push('/patient');
+    history.push('/');
   }
   const menu = (
     <Menu>
       {/* patient dashboard */}
       <Menu.Item key="0">
-        <a href="/patient/quanlitaikhoan">Tổng quan tài khoản</a> 
+        <a href="/quan-li-tai-khoan">Tổng quan tài khoản</a> 
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item onClick={handleLogoutPatient} key="3">Đăng xuất</Menu.Item>
@@ -50,14 +50,14 @@ const Header = (props) => {
               <span></span>
             </span>
           </a>
-          <Link to="/patient" className="navbar-brand logo">
+          <Link to="/" className="navbar-brand logo">
             <img src={logo1} className="img-fluid" alt="Logo" />
           </Link>
         </div>
 
         <div className="main-menu-wrapper">
           <div className="menu-header">
-            <Link to="/patient" className="menu-logo">
+            <Link to="/" className="menu-logo">
               <img src={logo1} className="img-fluid" alt="Logo" />
             </Link>
             <a href="#0" id="menu_close" className="menu-close">
@@ -67,18 +67,18 @@ const Header = (props) => {
 
           {/* main menu */}
           <ul className="main-nav">
-            <li className={`has-submenu ${url === "/patient" ? "active" : ""}`}>
-              <NavLink to="/patient" activeClassName="active">
+            <li className={`has-submenu ${url === "/" ? "active" : ""}`}>
+              <NavLink to="/" activeClassName="active">
                 Trang chủ
               </NavLink>
             </li>
-            <li className={`has-submenu ${url === "/patient/dsbacsi" ? "active" : ""}`}>
-              <NavLink to="/patient/dsbacsi" activeClassName="active">
+            <li className={`has-submenu ${url === "/danh-sach-bac-si" ? "active" : ""}`}>
+              <NavLink to="/danh-sach-bac-si" activeClassName="active">
                 Bác sĩ
               </NavLink>
             </li>
-            <li className={`has-submenu ${url === "/patient/cosoyte" ? "active" : ""}`}>
-              <NavLink to="/patient/cosoyte" activeClassName="active">
+            <li className={`has-submenu ${url === "/danh-sach-benh-vien" ? "active" : ""}`}>
+              <NavLink to="/danh-sach-benh-vien" activeClassName="active">
                 Cơ sở y tế
               </NavLink>
             </li>
@@ -105,7 +105,7 @@ const Header = (props) => {
           </li>
             <>
               {!patient.isLoggedIn && <li className="nav-item">
-                <Link to="/patient/login" className="nav-link header-login">
+                <Link to="/dang-nhap" className="nav-link header-login">
                   Đăng nhập{" "}
                 </Link>
               </li>}
