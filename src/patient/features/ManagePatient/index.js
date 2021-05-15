@@ -6,7 +6,6 @@ import PatientSchedule from './pages/PatientSchedule';
 
 function ManagePatient(props) {
     const match = useRouteMatch();
-    console.log('match :>> ', match);
     return (
         <Box pt={4}>
             <Switch>

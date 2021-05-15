@@ -56,7 +56,6 @@ const BookingPage = (props) => {
 
     const dispatch = useDispatch()
     const patient = useSelector(state => state.patient)   
-    console.log('patient :>> ', patient);
 
     //  handle show option choose schedule for dat dum 
     const [showModal, setShowModal] = useState(false)
@@ -169,7 +168,6 @@ const BookingPage = (props) => {
     }
 
     const handleSubmit = () => {
-        console.log(submitData,"0000")
         dispatch(make_appointment(submitData));
         setShowModal(false);
         history.push('/')

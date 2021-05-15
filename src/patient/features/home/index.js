@@ -17,6 +17,7 @@ const Home = () => {
             <div className="main-wrapper">
                 <LoadingTop/>
                 <HomeSearch/>
+                <div style={{height:"100 vh"}}></div>
                 <Advertisement/>
                 <HomeBlog/>
             </div>

@@ -9,7 +9,6 @@ function PatientSchedule(props) {
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
     
-    console.log('patientSchedule :>> ', patient.schedulePatient);
     useEffect(() => {
         dispatch(get_schedule_patient(patientInfo))
     }, [])

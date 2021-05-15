@@ -5,7 +5,6 @@ import './style.css';
 
 const HomeDepart = (props) => {
     const specialities = props.data;
-    console.log(`specialities`, specialities)
     const settings = {
         dots:true,
         infinite: true,

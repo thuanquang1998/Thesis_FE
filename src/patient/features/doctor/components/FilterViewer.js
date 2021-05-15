@@ -37,8 +37,6 @@ function FilterViewer({ data ,filters = {}, onChange = null }) {
     
     useEffect(()=> {
         if(listAllHospitals.length!==0 && listAllSpecials.length!==0 ) {
-            console.log('listAllHospitals :>> ', listAllHospitals);
-            console.log('listAllSpecials :>> ', listAllSpecials);
             const listBv = listAllHospitals.filter(x=>x.id===filters.bv);
             if (listBv.length!==0) {
                 setNameBv(listBv[0].name)

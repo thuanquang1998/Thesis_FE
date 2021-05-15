@@ -5,7 +5,6 @@ import {createBrowserHistory} from 'history'
 const  history= createBrowserHistory()
 const AppRouter = (props) => {
 
-    console.log('props', props.location);
     return(
         <>
             <Router  history={history}>

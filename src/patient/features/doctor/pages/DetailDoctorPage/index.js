@@ -10,10 +10,8 @@ import price from '../../../../assets/img/price.png'
 import './style.css'
 const { TabPane } = Tabs;
 const DetailDoctorPage = (props) => {
-    // console.log(props.match.params)
     const history = useHistory();
     const data = history.location.state.data;
-    console.log('data DoctorInfo:>> ', data.hopitaldetails);
     return (
         <div>
             {/* breadcrumb */}
