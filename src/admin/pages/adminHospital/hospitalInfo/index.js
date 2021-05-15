@@ -95,7 +95,6 @@ const HospitalInfo = () => {
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ:</div>
-										{/* <div className="col-sm-8">{hospital.address.number.toString()+', '+hospital.address.street+', '+hospital.address.ward+', '+hospital.address.district+', '+hospital.address.city}</div> */}
 										<div className="col-sm-8">{hospital.address}</div>
 									</div>
 									<div className="row">
