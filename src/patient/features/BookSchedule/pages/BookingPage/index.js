@@ -10,6 +10,7 @@ import './style.css'
 import moment from 'moment'
 import { make_appointment } from '../../../../../redux/actions/patientActions'
 
+
 import TimeStep from '../../../../components/time-step';
 // import ConfirmBooking from './confirm-booking';
 // import FormBooking from './form-booking';
@@ -51,11 +52,18 @@ const INIT_DATA = {
 
 const BookingPage = (props) => {
     const {doctorID} = props.match.params;
+    // console.log('doctorID :>> ', doctorID);
     const doctorData = props.location.state.data;
+    // console.log('doctorData :>> ', doctorData);
     const history = useHistory();
 
     const dispatch = useDispatch()
     const patient = useSelector(state => state.patient)   
+
+    // currentDay and currentTime
+    const currentTimeNumber = new Date().getTime();
+    // console.log('currentTime :>> ', currentTime);
+    const currentDate = moment().format()
 
     //  handle show option choose schedule for dat dum 
     const [showModal, setShowModal] = useState(false)
@@ -73,7 +81,9 @@ const BookingPage = (props) => {
     
 
     useEffect(()=> {
-        getTimeWorks();
+        if(!doctorData.timeWorkIsNull) {
+            getTimeWorks();
+        }
     },[])
 
     // get time working
@@ -81,31 +91,51 @@ const BookingPage = (props) => {
         try {
             const res = await patientAPI.get_time_works(doctorID);
             console.log("res",res)
-            if(res.data.timeTable) {
-                const listTime = [...res.data.timeTable];
-                // filter day > current day : lay 3 ngay: sau nay so sanh vs today
-                const listTimeCurrent = listTime.filter(day=> {
-                    return moment(day.date).isSameOrAfter("2021-05-21T00:00:00.000Z",'day')
+            const abc = new Date(res.data[0].date);
+            const current = new Date();
+            console.log('aaaaaaaaaaaaaaa :>> ', abc.getTime()-current.getTime());
+
+            if(!res.error) {
+                const _listDateWork = res.data;
+                const _listDateWorkValid = _listDateWork.filter(x=>{
+                    const itemTimeNumber =  new Date(x.date);
+                    const _itemTimeNumber = itemTimeNumber.getTime();
+                    const diff = _itemTimeNumber*1 - currentTimeNumber*1;
+                    return diff>0;
                 })
-                let listTimeShow = [];
-                if(listTimeCurrent.length < 4) {
-                    listTimeShow = [...listTimeCurrent];
-                } else {
-                    listTimeShow = listTimeCurrent.slice(0,3);
-                }
+                console.log('_listDateWorkValid :>> ', _listDateWorkValid);
                 const _timeWorkData = {
                     status: true,
-                    listDate: listTimeShow
+                    listDate: _listDateWorkValid
                 }
                 setTimeWorkData(_timeWorkData);
-                setTimeWorkDay(_timeWorkData.listDate[0]);
-                setSubmitData({
-                    ...submitData, 
-                    dateBooking:_timeWorkData.listDate[0]?.date,
-                    appointmentInfo: {...submitData.appointmentInfo,
-                        time: {date:_timeWorkData.listDate[0]?.date}
-                    }
-                });
+            }
+
+            if(res.data.timeTable) {
+                // const listTime = [...res.data.timeTable];
+                // // filter day > current day : lay 3 ngay: sau nay so sanh vs today
+                // const listTimeCurrent = listTime.filter(day=> {
+                //     return moment(day.date).isSameOrAfter("2021-05-21T00:00:00.000Z",'day')
+                // })
+                // let listTimeShow = [];
+                // if(listTimeCurrent.length < 4) {
+                //     listTimeShow = [...listTimeCurrent];
+                // } else {
+                //     listTimeShow = listTimeCurrent.slice(0,3);
+                // }
+                // const _timeWorkData = {
+                //     status: true,
+                //     listDate: listTimeShow
+                // }
+                // setTimeWorkData(_timeWorkData);
+                // setTimeWorkDay(_timeWorkData.listDate[0]);
+                // setSubmitData({
+                //     ...submitData, 
+                //     dateBooking:_timeWorkData.listDate[0]?.date,
+                //     appointmentInfo: {...submitData.appointmentInfo,
+                //         time: {date:_timeWorkData.listDate[0]?.date}
+                //     }
+                // });
             } else {
                 setTimeWorkData({
                     ...timeWorkData,
@@ -162,6 +192,7 @@ const BookingPage = (props) => {
         })
         setTimeWorkDay(_data[0]);
     }
+
     
     const handleReturn = () => {
         setShowModal(false)

@@ -21,8 +21,10 @@ const HospitalsList = () => {
           title: 'Địa chỉ',
           dataIndex: 'address',
           render: (text) => {
+            console.log('text :>> ', text);
             return (
-              <p>{text.number.toString() +' '+ text.street+' '+text.ward+' '+text.district+' '+text.city}</p>
+              // <p>{text.number.toString() +' '+ text.street+' '+text.ward+' '+text.district+' '+text.city}</p>
+              <p>54/19 Linh Trung, Thu duc</p>
             )
             }, 
         },

@@ -53,6 +53,7 @@ const DoctorItem = (props) => {
             });
         }
     }
+    
     return (
         (data && 
         <div>
