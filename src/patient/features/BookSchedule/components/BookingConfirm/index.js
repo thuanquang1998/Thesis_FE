@@ -47,9 +47,9 @@ function BookingConfirm(props) {
                     </Col>
                     <Col span={15}>
                         <p>{data.doctorName}</p>
-                        <p>54/19 đường số 7, KP3, Linh Trung, Thủ Đức</p>
-                        <p>{moment(data.dateBooking).format('DD/MM/YYYY')}</p>
-                        <p>{data.timeBooking}</p>
+                        <p>{data.patientInfo.address}</p>
+                        <p>{moment(data.date).format('DD/MM/YYYY')}</p>
+                        <p>{data.time}</p>
                     </Col>
                 </Row>
             </Card>

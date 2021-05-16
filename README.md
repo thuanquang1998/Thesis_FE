@@ -28,3 +28,13 @@ Client
    |__quan-ly/admin
    |
    |__quan-ly/bac-si
+
+
+Booking Page
+
+|__BreadCrumb
+|__ProfileHeader
+|__Form
+|  |__TimeSelected
+|  |__BookingForm
+|  |__BookingModalConfirm

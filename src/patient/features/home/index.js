@@ -10,7 +10,7 @@ import LoadingTop from '../../components/loadingTop';
 const Home = () => {
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
-   
+    
     return(
         <div>
             {loadingData?

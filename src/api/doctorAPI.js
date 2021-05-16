@@ -2,7 +2,7 @@ import http from './http-common'
 
 class doctorsAPI{
     get_doctors(){
-        return http.get('doctors/').then(res=> res.data).catch(err=> err.response.data)
+        return http.get('doctors/all').then(res=> res.data).catch(err=> err.response.data)
     }
     login(data){
         return http.post('users/sign-in', data).them(res=>res.data).catch(err=>err.response.data)
