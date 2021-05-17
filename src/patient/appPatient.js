@@ -14,7 +14,9 @@ import ListDoctorPage from './features/doctor/pages/ListDoctorPage'
 import Home from './features/home'
 import DetailHospitalPage from './features/hospital/pages/DetailHospitalPage'
 import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
-import ManagePatient from './features/ManagePatient'
+import ManagePatient from './features/ManagePatient';
+
+import AppDoctor from '../doctor/appDoctor';
 const AppPatient = function (props) {
 	console.log('getAllData');
     const dispatch = useDispatch()
@@ -55,6 +57,9 @@ const AppPatient = function (props) {
 
 						{/* id */}
 						{/* <Route exact path='/patient/:' component={FeedBack}/> */}
+
+
+						<Route exact path='/bac-si/quan-li' component={FeedBack}/>
 					</Switch>
 					<MessengerCustomerChat
 						pageId="105374011705694"

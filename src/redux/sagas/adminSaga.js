@@ -1,16 +1,35 @@
 import {all, call , put, takeEvery, takeLatest} from 'redux-saga/effects'
-import {GET_HOSPITAL_BYID, GET_LIST_HOSPITALS, GET_SPECIALITIES_SYSTEM, SET_HOSPITAL_BYID, SET_LIST_HOSPITALS, SET_SPECIALITIES_SYSTEM } from '../actions/adminActions'
+import { 
+    GET_HOSPITAL_BYID, 
+    GET_LIST_HOSPITALS, 
+    GET_SPECIALITIES_SYSTEM, 
+    SET_HOSPITAL_BYID, 
+    SET_LIST_HOSPITALS, 
+    SET_SPECIALITIES_SYSTEM,
+    LOGIN_BY_EMAIL,
+    LOGOUT_MANAGER,
+} from '../actions/adminActions'
 // import {LOGIN, LOGIN_SUCCESS} from '../redux/actions/patientActions'
-import { LOADING_DATA, LOADING_DATA_SUCCESS, LOADING_DATA_FAILED, ALL_DOCTORS, ALL_HOSPITAL, ALL_SPECIAL  } from '../actions/loadingActions';
+import { 
+    LOADING_DATA, 
+    LOADING_DATA_SUCCESS, 
+    LOADING_DATA_FAILED, 
+    ALL_DOCTORS, 
+    ALL_HOSPITAL, 
+    ALL_SPECIAL  
+} from '../actions/loadingActions';
 
 import adminAPI from '../../api/adminAPI';
 import {SwalAlert} from '../../utils/alert'
+import Swal from 'sweetalert2';
 
+// login_for_manager
 
 export default function* watchAsyncAdminActions(){
     yield takeEvery( GET_SPECIALITIES_SYSTEM , get_specialities_system)
     yield takeEvery( GET_LIST_HOSPITALS , get_list_hospitals)
     yield takeEvery( GET_HOSPITAL_BYID , get_hospital_byId )
+    yield takeEvery( LOGIN_BY_EMAIL, login_by_email )
 }
 
 //get specialities system
@@ -61,6 +80,25 @@ function* get_hospital_byId({payload}){
         }
         else {
             yield put({type : SET_HOSPITAL_BYID, payload : response.data})
+        }
+    }
+    catch(err){
+        console.log(err)    
+    }
+}
+
+function* login_by_email({payload}){
+    console.log('login by email');
+    console.log('payload :>> ', payload);
+    try{
+        const response = yield call( adminAPI.login , payload)
+        if (response.error){
+            SwalAlert('Error', 'Tên đăng nhập không đúng', 'error')
+            console.log("Error");
+        }
+        else {
+            // yield put({type : SET_HOSPITAL_BYID, payload : response.data})
+            console.log('response :>> ', response);
         }
     }
     catch(err){

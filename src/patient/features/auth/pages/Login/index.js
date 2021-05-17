@@ -115,7 +115,7 @@ const LoginPatient = () => {
                                 </Button>
                             </Form>
                             <div className="directer_page">
-                                <a href="/admin" className="link_directer">Trang quản lí dành cho bác sĩ/ Phòng khám</a>
+                                <a href="/admin/dang-nhap" className="link_directer">Trang quản lí dành cho bác sĩ/ Phòng khám</a>
                             </div>
                         </div>}
                         {/* form nhap code */}

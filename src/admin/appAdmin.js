@@ -23,6 +23,8 @@ const Admin =({match})=>{
                     <Route render={(props)=> <Header {...props}/>} />
                     <Switch>
                         <Route exact path='/admin' component={Login}/>
+                        <Route exact path='/admin/dang-nhap' component={Login}/>
+
                         <Route exact path='/admin/dashboard' component={Dashboard}/>
                         {/* <Route exact path='/admin/login' component={Login}/> */}
                         <Route exact path='/admin/chuyen-khoa' component={Specialities}/>
