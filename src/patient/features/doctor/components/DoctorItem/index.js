@@ -14,6 +14,7 @@ import Swal from 'sweetalert2'
 import './style.css'
 const DoctorItem = (props) => {
     const data = props.data;
+    console.log('data :>> ', data);
     const img = data.sex==='male'? logo_male:logo_female;
     const patient = useSelector(state=> state.patient);
     const history = useHistory();
@@ -79,16 +80,11 @@ const DoctorItem = (props) => {
                         </li>
                         <li>
                             <span><img src={hospitalLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span>{data.hopitaldetails[0].name}</span>
+                            <span>{data.hopitaldetails[0]?.name}</span>
                         </li>
                         <li>
                             <span><img src={location} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span>
-                                {`${data.hopitaldetails[0].address.number}, 
-                                    ${data.hopitaldetails[0].address.street}, 
-                                    ${data.hopitaldetails[0].address.ward},
-                                    ${data.hopitaldetails[0].address.district},
-                                    ${data.hopitaldetails[0].address.city}`}
+                            <span> {data.hopitaldetails[0]?.address}
                             </span>
                         </li>
                         {/* <li>

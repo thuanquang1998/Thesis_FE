@@ -12,6 +12,7 @@ const PatientSidebar = () => {
     const url = location.pathname;
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
+    console.log('url :>> ', url);
     return(
         <div className="profile-sidebar">
             <div className="widget-profile pro-widget-content">
@@ -44,7 +45,8 @@ const PatientSidebar = () => {
                                 <span>Thông tin tài khoản</span>
                         </NavLink> 
                     </Nav.Item> 
-                        <Nav.Item className={`nav-item ${url==='/quan-li-tai-khoan/lich-kham'?'active-nav':''}`}> 
+                    
+                    <Nav.Item className={`nav-item ${url==='/quan-li-tai-khoan/lich-kham'?'active-nav':''}`}> 
                         <NavLink to='/quan-li-tai-khoan/lich-kham'>
                             <i className="fas fa-calendar-check"></i>
                                 <span>Quản lí lịch khám</span> 

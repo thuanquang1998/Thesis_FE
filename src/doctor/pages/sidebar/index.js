@@ -26,45 +26,45 @@ class DoctorSidebar extends Component{
                     <Nav className="dashboard-menu">
 
                         <Nav.Item> 
-                             <NavLink to="/doctor/dashboard"> 
+                             <NavLink to="/bac-si/dashboard"> 
                                 <i className="fas fa-columns"></i>
                                     <span>Dashboard</span>
                              </NavLink>
                          </Nav.Item>
                          
                          <Nav.Item> 
-                            <NavLink to="/doctor/appointments"  activeClassName="active">
+                            <NavLink to="/bac-si/appointments"  activeClassName="active">
                              <i className="fas fa-calendar-check"></i>
                                     <span>Lịch khám</span> 
                             </NavLink>
                         </Nav.Item> 
 
                         <Nav.Item> 
-                            <NavLink to="/doctor/my-patients">
+                            <NavLink to="/bac-si/my-patients">
                             <i className="fas fa-user-injured"></i>
                                     <span>Bệnh nhân</span>
                             </NavLink>
                         </Nav.Item> 
                         <Nav.Item> 
-                            <NavLink to="/doctor/schedule-timing">
+                            <NavLink to="/bac-si/schedule-timing">
                             <i className="fas fa-hourglass-start"></i>
                                     <span>Đăng kí lịch khám</span>
                             </NavLink>
                             </Nav.Item> 
                         <Nav.Item> 
-                        <NavLink to="/doctor/profile-setting">
+                        <NavLink to="/bac-si/profile-setting">
                             <i className="fas fa-user-cog"></i>
                                 <span>Thông tin tài khoản</span>
                         </NavLink> 
                         </Nav.Item> 
                         <Nav.Item> 
-                        <NavLink to="/doctor/change-passwword">
+                        <NavLink to="/bac-si/change-passwword">
                                 <i className="fas fa-lock"></i>
                                 <span>Đổi mật khẩu</span>
                         </NavLink>
                         </Nav.Item> 
                         <Nav.Item> 
-                        <NavLink to="/doctor" activeClassName="active">
+                        <NavLink to="/bac-si" activeClassName="active">
                             <i className="fas fa-sign-out-alt"></i>
                             <span>Đăng xuất</span>
                         </NavLink>

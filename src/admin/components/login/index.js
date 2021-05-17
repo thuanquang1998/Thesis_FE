@@ -38,15 +38,15 @@ const Login = () => {
                 }
             } else {
                 console.log(`response`, response)
-                // localStorage.setItem('currentUser',response.data)
+                localStorage.setItem('currentAdmin',response.data)
                 // check type Account
-                if (response.data.accountType==='doctor') {
-                    history.push('/danh-sach-bac-si');
-                    console.log("111111111111111111111");
-                } else {
-                    history.push('/admin/dashboard')
-                    console.log("22222222222222222");
-                }
+                // if (response.data.accountType==='doctor') {
+                //     history.push('/danh-sach-bac-si');
+                //     console.log("111111111111111111111");
+                // } else {
+                //     history.push('/admin/dashboard')
+                //     console.log("22222222222222222");
+                // }
             }
         } catch (error) {
             

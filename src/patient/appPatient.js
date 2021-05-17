@@ -15,6 +15,7 @@ import Home from './features/home'
 import DetailHospitalPage from './features/hospital/pages/DetailHospitalPage'
 import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
 import ManagePatient from './features/ManagePatient';
+import LoginManager from './features/auth/pages/LoginManager';
 
 import AppDoctor from '../doctor/appDoctor';
 const AppPatient = function (props) {
@@ -60,6 +61,9 @@ const AppPatient = function (props) {
 
 
 						<Route exact path='/bac-si/quan-li' component={FeedBack}/>
+						<Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
+
+						
 					</Switch>
 					<MessengerCustomerChat
 						pageId="105374011705694"

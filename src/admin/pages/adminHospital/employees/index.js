@@ -132,14 +132,14 @@ const Employees = () => {
 						title={<>Danh sách nhân viên <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
 					>
 						<Table
-						bordered={true}
-						columns={new_columns}
-						dataSource={data_nhanvien} 
-						/>
-						<br />
-						<div className="d-flex flex-row-reverse">
-						</div>
-						<br />
+							bordered={true}
+							columns={new_columns}
+							dataSource={data_nhanvien} 
+							/>
+							<br />
+							<div className="d-flex flex-row-reverse">
+							</div>
+							<br />
 					</Card>
 
                 </div>

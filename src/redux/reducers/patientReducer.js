@@ -10,6 +10,7 @@ import {
 const initialState={
     // login by phone number
     schedulePatient:[],
+    loadingSchedule: true,
     listDoctor: [],
     currentUser: JSON.parse(localStorage.getItem('currentUser'))||{},
     isLoggedIn: localStorage.getItem('userToken')?true:false || false,

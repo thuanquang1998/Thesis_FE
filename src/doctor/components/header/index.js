@@ -16,7 +16,7 @@ const Header = (props) => {
     <header className="header">
       <nav className="navbar navbar-expand-lg header-nav">
         <div className="navbar-header">
-          <Link to="/doctor" className="navbar-brand logo">
+          <Link to="/bac-si" className="navbar-brand logo">
             <img src={logo} className="img-fluid" alt="Logo"/>
           </Link>
         </div>
@@ -53,10 +53,10 @@ const Header = (props) => {
                       {/* <p className="text-muted mb-0">Doctor</p> */}
                     </div>
                   </div>
-                  <Dropdown.Item href="/doctor/doctor-dashboard">
+                  <Dropdown.Item href="/bac-si/doctor-dashboard">
                     Dashboard
                   </Dropdown.Item>
-                  <Dropdown.Item href="/doctor/profile-setting">
+                  <Dropdown.Item href="/bac-si/profile-setting">
                     Profile Settings
                   </Dropdown.Item>
                   <Dropdown.Item href="/login">Logout</Dropdown.Item>

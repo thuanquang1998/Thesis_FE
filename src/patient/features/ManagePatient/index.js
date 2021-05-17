@@ -9,8 +9,8 @@ function ManagePatient(props) {
     return (
         <Box pt={4}>
             <Switch>
-                <Route path={match.url} component={PatientInfo} exact></Route>
-                <Route path={`${match.url}/lich-kham`} component={PatientSchedule}></Route>
+                <Route path={match.url} component={PatientSchedule} exact></Route>
+                <Route path={`${match.url}/lich-kham`} component={PatientSchedule} exact></Route>
             </Switch>
         </Box>
     );

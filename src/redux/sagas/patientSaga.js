@@ -84,7 +84,9 @@ function* getVerifySMS ({payload}) {
 
 function* logoutPatient() {
     yield put({ type: IS_LOADING }) 
-    localStorage.clear();
+    localStorage.removeItem('code');
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('currentUser');
     yield put({type: CLEAR_CURRENT_USER});
 } 
 

@@ -19,11 +19,19 @@ const AppContainer = function (props) {
             </>
           )
           :
-          (
+          (  url === 'bac-si'? 
             <>
+              <Switch>
+                <Route path="/bac-si" component={AppDoctor} />
+              </Switch>
+            </>
+            :<>
               <AppPatient/>
             </>
           )
+          // :(
+            
+          // )
         }
       </Router>
     )

@@ -1,31 +1,69 @@
-import { Badge, Card, Col, Row, Table } from 'antd';
-import React, { useEffect } from 'react';
+import { Badge, Card, Col, Row, Table, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { get_schedule_patient } from '../../../../../redux/actions/patientActions';
+// import { get_schedule_patient } from '../../../../../redux/actions/patientActions';
 import PatientSidebar from '../../components/PatientSideBar';
+import patientAPI from '../../../../../api/patientApi';
+import moment from 'moment';
 function PatientSchedule(props) {
     const dispatch = useDispatch();
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
-    
+    const [listSchedule, setListSchedule] = useState([]);
+    const [loadingSchedule, setLoadingSchedule] = useState(true);
     useEffect(() => {
-        dispatch(get_schedule_patient(patientInfo))
+        console.log("1111111111111111111111");
+        // dispatch(get_schedule_patient(patientInfo))
+        setLoadingSchedule(true);
+        get_schedule_patient(patientInfo);
     }, [])
-   
+    const get_schedule_patient = async (patientInfo) => {
+        try {
+            const response = await patientAPI.get_schedule(patientInfo.id);
+            console.log('response :>> ', response);
+            if(!response.error) {
+                // convert data
+                const _data = response.data.map(x=>{
+                    const { appointmentInfo, patientInfo} = x;
+                    const obj = {
+                        id: x.id,
+                        patient: patientInfo.name,
+                        doctor: appointmentInfo.doctorName,
+                        speciality: 'Tiêu hóa',
+                        address: `${appointmentInfo.location.room} ${appointmentInfo.location.hospitalName}`,
+                        date: moment(appointmentInfo.date).format('DD/MM/YYYY'),
+                        time: appointmentInfo.time,
+                    }
+                    return obj
+                })
+                console.log('_data :>> ', _data);
+                setListSchedule(_data);
+            } else {
 
-    const defaultValue = {
-        name: patientInfo.fullName,
-        phone: patientInfo.fullName
+            }
+            setLoadingSchedule(false)
+        } catch (error) {
+            
+        }
     }
+   
     const columns = [
-		{
-			title: 'Tên bác sĩ',
-			// dataIndex: 'doctor_name',
-            dataIndex: 'doctorId',
+        {
+			title: 'Bệnh nhân',
+            dataIndex: 'patient',
 			render: (text, record) => (            
 			  <div className="table-avatar">
-				<span className="avatar avatar-sm mr-2"><img src='http://localhost:3002/images/avatar/user.png' className="avatar-img" alt=""  /></span>
+				<span>{text}</span>
+			  </div>
+			), 
+			sorter: (a, b) => a.specialities.length - b.specialities.length,
+		},
+		{
+			title: 'Tên bác sĩ',
+            dataIndex: 'doctor',
+			render: (text, record) => (            
+			  <div className="table-avatar">
 				<span>{text}</span>
 			  </div>
 			), 
@@ -33,45 +71,29 @@ function PatientSchedule(props) {
 		},
 		{
 			title:'Chuyên khoa',
-			dataIndex: 'specialities',
+			dataIndex: 'speciality',
 		},
-		{
-			title:'Tên bệnh nhân',
-			dataIndex:'patient_name',
+        {
+			title:'Ngày khám',
+			dataIndex:'date',
 		},
-		{
-			title:'Thời gian khám',
+        {
+			title:'Giờ khám',
 			dataIndex:'time',
-			render: (text, record) => (            
-				<div className="table-avatar">
-					<p>5 Nov 2020</p>
-					<p>11.00 AM - 11.35 AM</p>
-				</div>
-			), 
 		},
 		{
-		title: 'Sự kiện',
-		render: (text, record) => (
-			<div className="actions">
-				<a href="#0" className="btn btn-sm bg-success-light"><i className="fe fe-pencil"></i>Đổi lịch khám</a>
-				<a href="#0" className="btn btn-sm bg-danger-light"><i className="fe fe-trash"></i>Hủy lịch khám</a>
-			</div>
-		),
+            title: 'Sự kiện',
+            render: (text, record) => (
+                <div className="actions">
+                    <Button onClick={()=>console.log(record.id)} type="primary" style={{marginRight:"5px"}}>
+                        Đổi lịch
+                    </Button>
+                    <Button onClick={()=>console.log(record.id)} type="danger">
+                        Hủy lịch
+                    </Button>
+                </div>
+            ),
 		},		
-	]
-    const data = [
-		{
-			doctor_name: 'Tô Ngọc Bình',
-			specialities: 'Tiêu hóa',
-			patient_name: 'Nguyễn Văn Khánh',
-			time: "aaaaaaaaa"
-		},
-		{
-			doctor_name: 'Tô Ngọc Bình',
-			specialities: 'Tiêu hóa',
-			patient_name: 'Nguyễn Văn Khánh',
-			time: "aaaaaaaaa"
-		},
 	]
     return (
         <>
@@ -102,11 +124,12 @@ function PatientSchedule(props) {
                             >
                                 <Table className="table-striped"
                                     columns={columns}                 
-                                    dataSource={data}
+                                    dataSource={listSchedule}
                                     ascend={true}
                                     style = {{overflowX : 'auto'}}
                                     rowKey={record => record.id}
                                     showSizeChanger={true} 
+                                    loading={loadingSchedule}
                                 />
                             </Card>
                         </Col>

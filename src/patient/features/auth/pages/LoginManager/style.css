@@ -1,0 +1,39 @@
+.loginPage {
+    margin-top: 200px;
+}
+.login {
+    width: 500px;
+    margin: 0 auto;
+    padding: 0;
+}
+.logoTittle {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.logo {
+    height: 80px;
+}
+.logo img {
+    height: 100%;
+}
+.login input {
+    font-size: 16px !important;
+}
+.button_login {
+    text-align: center;
+}
+.login-form-button {
+    background: #20c0f3 !important;
+    width:50% !important;
+    border-radius: 20px !important;
+}
+.admin_signup {
+    text-align: center;
+}
+.admin_signup .admin__signup--button {
+    cursor: pointer;
+    font-style: italic;
+    color: #20c0f3;
+    padding-top: 15px;
+}
