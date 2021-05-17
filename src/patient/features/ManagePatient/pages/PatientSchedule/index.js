@@ -12,12 +12,14 @@ function PatientSchedule(props) {
     const patientInfo = patient.currentUser.patientInfo;
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
+
     useEffect(() => {
         console.log("1111111111111111111111");
         // dispatch(get_schedule_patient(patientInfo))
         setLoadingSchedule(true);
         get_schedule_patient(patientInfo);
     }, [])
+
     const get_schedule_patient = async (patientInfo) => {
         try {
             const response = await patientAPI.get_schedule(patientInfo.id);
@@ -34,10 +36,10 @@ function PatientSchedule(props) {
                         address: `${appointmentInfo.location.room} ${appointmentInfo.location.hospitalName}`,
                         date: moment(appointmentInfo.date).format('DD/MM/YYYY'),
                         time: appointmentInfo.time,
+                        status: x.status
                     }
                     return obj
                 })
-                console.log('_data :>> ', _data);
                 setListSchedule(_data);
             } else {
 
@@ -81,6 +83,13 @@ function PatientSchedule(props) {
 			title:'Giờ khám',
 			dataIndex:'time',
 		},
+        {
+			title:'Trạng thái',
+			dataIndex:'status',
+            render: (text, record) => (
+                <Badge style={{ backgroundColor: '#52c41a' }}>{record.status?'Chưa khám':'Đã khám'}</Badge>
+            )
+		},
 		{
             title: 'Sự kiện',
             render: (text, record) => (
@@ -120,7 +129,7 @@ function PatientSchedule(props) {
                         </Col>
                         <Col md={{span:14}} lg={{span:16}} xl={{span:18}}>
                             <Card 
-                                title={<>Danh sách lịch khám <Badge count="2" style={{ backgroundColor: '#52c41a' }} /></>}
+                                title={<>Danh sách lịch khám <Badge count={listSchedule.length} style={{ backgroundColor: '#52c41a' }} /></>}
                             >
                                 <Table className="table-striped"
                                     columns={columns}                 

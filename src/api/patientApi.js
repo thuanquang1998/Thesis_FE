@@ -21,10 +21,10 @@ class patientAPI{
         const token = localStorage.getItem('userToken');
         return http.get(`patient/${id}/get_appointment`,{ headers:{ 'x-access-token': token}}).then(res=> res.data).catch(err => err.response.data)
     }
-    // get time schedule
-    // get_time_works(){
-    //     return http.get('timeworks').then(res=> res.data).catch(err=> err.response.data)
-    // }
+    // huy lich
+
+    // doi lich
+   
     get_time_works(id){
         return http.get(`doctors/${id}/timework`).then(res => res.data).catch(err=> err.response.data)
     }
