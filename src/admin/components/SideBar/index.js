@@ -6,9 +6,11 @@ import { useSelector } from 'react-redux';
 const SidebarNav = (props) => {
   const location = useLocation();
   let pathname = location.pathname
-  console.log(pathname,"000000000");
+  const admin = useSelector(state=>state.admin)
+  const {currentAdmin, isAdminLoggedIn} = admin; 
+  const { accountType } = currentAdmin;
 
-  
+
   return (
     <div className="sidebar" id="sidebar">
       <div className="primary-nav">
@@ -27,17 +29,26 @@ const SidebarNav = (props) => {
             <div className="overflow-container">
               <ul className="menu-dropdown">
                 <li className="menu-title"><span></span></li>
-                <h4 style={{textAlign:"center", color:"white"}}>Admin hệ thống</h4>
-                <li className={`${'/admin/dashboard' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/dashboard"><i className="fa fa-home"></i>Dashboard</Link>
-                </li>
-                <li className={`${'/admin/cosoyte' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/cosoyte"><i className="fa fa-hospital"></i>Cơ sở y tế</Link>
-                </li>
-                <li className={`${'/admin/chuyen-khoa' === pathname ? 'active' : '' }`}>
-                   <Link to="/admin/chuyen-khoa"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
-                </li>
-                <hr style={{borderTop:"2px solid #ddd"}}/>
+                
+                { accountType === 'system-admin' && (
+                  <>
+                    <h4 style={{textAlign:"center", color:"white"}}>Quản lí hệ thống</h4>
+                    <li className={`${'/admin/root' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/root"><i className="fa fa-home"></i>Dashboard</Link>
+                    </li>
+                    <li className={`${'/admin/root/benh-vien' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/root/benh-vien"><i className="fa fa-hospital"></i>Cơ sở y tế</Link>
+                    </li>
+                    <li className={`${'/admin/root/chuyen-khoa' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/root/chuyen-khoa"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
+                    </li>
+                  </>
+                )}
+               
+
+
+
+                {/* <hr style={{borderTop:"2px solid #ddd"}}/>
                 <h4 style={{textAlign:"center", color:"white"}}>Admin bệnh viện</h4>
                 <li className={`${'/admin/dashboard-bv' === pathname ? 'active' : '' }`}>
                   <Link to="/admin/dashboard-bv"><i className="fa fa-home"></i>Dashboard Bệnh viện</Link>
@@ -67,7 +78,7 @@ const SidebarNav = (props) => {
                 </li>
                 <li className={`${'/admin/benhviena/thongtin' === pathname ? 'active' : '' }`}>
                   <Link to="/admin/benhviena/thongtin"><i className="fa fa-hospital"></i>Thông tin bệnh viện</Link>
-                </li>
+                </li> */}
               </ul>
             </div>
           </Scrollbars>

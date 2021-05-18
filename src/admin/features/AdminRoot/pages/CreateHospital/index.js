@@ -1,15 +1,14 @@
 import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select, Steps } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import districtData from '../../../assets/data/district'
-// import data for address
-import provinceData from '../../../assets/data/province'
-import wardData from '../../../assets/data/ward'
-import SidebarNav from '../../sidebar'
+import districtData from '../../../../assets/data/district'
+import provinceData from '../../../../assets/data/province'
+import wardData from '../../../../assets/data/ward'
+import SidebarNav from '../../../../components/SideBar'
 const { Step } = Steps;
 
 
-const HospitalCreate = () => {
+const CreateHospital = () => {
     const [current, setCurrent] = useState(0);
     const [province, setProvince]= useState("")
     const [district, setDistrict] = useState("")
@@ -254,4 +253,4 @@ const HospitalCreate = () => {
     )
 }
 
-export default HospitalCreate
+export default CreateHospital

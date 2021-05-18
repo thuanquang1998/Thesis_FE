@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import SidebarNav from '../sidebar';
-import { get_specialities_system } from '../../../redux/actions/adminActions';
+import SidebarNav from '../../../../components/SideBar';
+import { get_specialities_system } from '../../../../../redux/actions/adminActions';
 
-const Specialities = () => {
+const SpecialitiesRoot = () => {
 	const dispatch = useDispatch()
 	const [show, setShow] = useState(null)
 	const specialities = useSelector(state=>state.admin.specialities_system)
@@ -167,4 +167,4 @@ const Specialities = () => {
 	)
 }
   
-export default Specialities; 
+export default SpecialitiesRoot; 

@@ -16,10 +16,6 @@ import {
     LOADING_PAGE,
 } from '../../redux/actions/adminActions';
 
-import Specialities from '../../admin/pages/specialities';
-
-
-
 const initialState={
     currentAdmin: JSON.parse(localStorage.getItem('currentAdmin'))||{},
     isAdminLoggedIn: localStorage.getItem('currentAdmin')?true:false || false,

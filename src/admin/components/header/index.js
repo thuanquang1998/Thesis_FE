@@ -36,7 +36,6 @@ const Header = (props) => {
           setUserName('User')
           break;
       }
-      history.push('/admin')
     }
   },[admin])
 

@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
         position:'fixed',
         top: '0',
         width:"100%",
-        // zIndex:"999"
+        zIndex:"999999"
     }
 }))
 function LoadingTop(props) {

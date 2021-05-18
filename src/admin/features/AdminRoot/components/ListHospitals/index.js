@@ -2,10 +2,10 @@ import { Badge, Button, Card, Modal, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { get_list_hospitals } from '../../../../redux/actions/adminActions'
-// import SidebarNav from '../../sidebar'
-import SidebarNav from '../../../components/SideBar'
-const HospitalsList = () => {
+import { get_list_hospitals } from '../../../../../redux/actions/adminActions'
+import SidebarNav from '../../../../components/SideBar'
+
+const ListHospitals = () => {
     const dispatch = useDispatch()
     const list_hospitals = useSelector(state=>state.admin.list_hospital)
     useEffect(()=> {
@@ -207,7 +207,7 @@ const HospitalsList = () => {
                 <Card 
                     title={<>Danh sách bệnh viện <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
                     extra={
-                    <a href="/admin/cosoyte/them-bv">
+                    <a href="/admin/root/benh-vien/them-benh-vien">
                         <Button type="primary">Tạo mới bệnh viện</Button>
                     </a>
                     }>
@@ -235,4 +235,4 @@ const HospitalsList = () => {
         </>
     )
 }
-export default HospitalsList
+export default ListHospitals

@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
+import ListHospitals from '../../components/ListHospitals'
 
-function HospitalsPage(props) {
+const HospitalsPage = () => {
     return (
         <div>
-            {/* list */}
-            HospitalsPage
+            <ListHospitals/>
         </div>
-    );
+    )
 }
 
-export default HospitalsPage;
+export default HospitalsPage
