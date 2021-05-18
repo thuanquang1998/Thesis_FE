@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
-import {useDispatch} from 'react-redux'
 import {Card, Form, Button, Input, Modal, Select} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import logo from '../../assets/img/bk-logo.png'
 import {useHistory} from 'react-router-dom'
+import {useDispatch, useSelector} from 'react-redux'
+
 import './style.css'
 // import { login, register } from '../../../redux/actions/doctorActions';
 import { login_by_email } from '../../../redux/actions/adminActions'
@@ -13,6 +14,8 @@ import adminAPI from '../../../api/adminAPI';
 const Login = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const admin = useSelector(state=>state.admin)
+    console.log('admin :>> ', admin);
     // get list hospital
     const [loginError, setLoginError] = useState({
         email:"",
@@ -21,9 +24,11 @@ const Login = () => {
 
     const onHandleLogin = (values) => {
         console.log('values :>> ', values);
-        // dispatch(login_by_email(values))
-        loginByEmail(values);
+        dispatch(login_by_email(values));
+
+        // loginByEmail(values);
     }
+
     const loginByEmail = async (data) => {
         try {
             const response = await adminAPI.login(data);
@@ -39,6 +44,7 @@ const Login = () => {
             } else {
                 console.log(`response`, response)
                 localStorage.setItem('currentAdmin',response.data)
+
                 // check type Account
                 // if (response.data.accountType==='doctor') {
                 //     history.push('/danh-sach-bac-si');

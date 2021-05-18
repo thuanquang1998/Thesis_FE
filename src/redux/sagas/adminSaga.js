@@ -6,7 +6,11 @@ import {
     SET_HOSPITAL_BYID, 
     SET_LIST_HOSPITALS, 
     SET_SPECIALITIES_SYSTEM,
+
     LOGIN_BY_EMAIL,
+    LOADING_LOGIN,
+    LOGIN_SUCCESS,
+    LOGIN_FAILED,
     LOGOUT_MANAGER,
 } from '../actions/adminActions'
 // import {LOGIN, LOGIN_SUCCESS} from '../redux/actions/patientActions'
@@ -79,6 +83,7 @@ function* get_hospital_byId({payload}){
             console.log("Error");
         }
         else {
+
             yield put({type : SET_HOSPITAL_BYID, payload : response.data})
         }
     }
@@ -89,16 +94,17 @@ function* get_hospital_byId({payload}){
 
 function* login_by_email({payload}){
     console.log('login by email');
-    console.log('payload :>> ', payload);
+    yield put({type : LOADING_LOGIN});
     try{
         const response = yield call( adminAPI.login , payload)
         if (response.error){
             SwalAlert('Error', 'Tên đăng nhập không đúng', 'error')
             console.log("Error");
+            yield put({type : LOGIN_FAILED});
         }
         else {
-            // yield put({type : SET_HOSPITAL_BYID, payload : response.data})
-            console.log('response :>> ', response);
+            localStorage.setItem('currentAdmin', JSON.stringify(response.data));
+            yield put({type : LOGIN_SUCCESS, payload : response.data});
         }
     }
     catch(err){

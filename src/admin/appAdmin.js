@@ -14,22 +14,36 @@ import Employees from './pages/adminHospital/employees'
 import SpecialitiesHospital from './pages/adminHospital/specialitiesHospital'
 import ManageSchedule from './pages/adminHospital/manageSchedule'
 import Reviews from './pages/adminHospital/reviews'
+import {useDispatch, useSelector} from 'react-redux'
 
 
 import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index';
 const Admin =({match})=>{
+    const admin = useSelector(state=>state.admin);
+    
+    
+
     return(
         <>
             <Router>
                 <div className="main-wrapper">
                     <Route render={(props)=> <Header {...props}/>} />
                     <Switch>
-                        <Route exact path='/admin' render={()=>{
-                            console.log('localStorage.getItem("currentAdmin") :>> ', localStorage.getItem('currentAdmin'));
-                            return localStorage.getItem('currentAdmin')?<Dashboard/>: <Login/>
-                        }}/>
+                        {/* check login - protected route */}
 
-                        <Route exact path='/admin' component={Login}/>
+                        {/* /login/admin => public */}
+
+                        {/* if (isLoggedIn) {
+                            switch (action.type) {
+                                case: 'system':
+                                    return 
+                            }
+                        } */}
+                        {/* <Route exact path='/admin' render={()=>{
+                            return localStorage.getItem('currentAdmin')?<Dashboard/>: <Login/>
+                        }}/> */}
+
+                        <Route exact path='/admin' component={DashboardSystem}/>
                         <Route exact path='/admin/dang-nhap' component={Login}/>
 
                         <Route exact path='/admin/dashboard' component={Dashboard}/>

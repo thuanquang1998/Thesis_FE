@@ -63,7 +63,9 @@ const AppPatient = function (props) {
 						<Route exact path='/bac-si/quan-li' component={FeedBack}/>
 						<Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
 
-						
+						<Route path="*">
+							<div>404 Not Found</div>
+						</Route>
 					</Switch>
 					<MessengerCustomerChat
 						pageId="105374011705694"
