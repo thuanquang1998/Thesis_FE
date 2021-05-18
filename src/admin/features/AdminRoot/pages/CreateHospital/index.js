@@ -1,17 +1,109 @@
 import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select, Steps } from 'antd'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import districtData from '../../../../assets/data/district'
 import provinceData from '../../../../assets/data/province'
 import wardData from '../../../../assets/data/ward'
 import SidebarNav from '../../../../components/SideBar'
+import moment from 'moment';
+import adminAPI from '../../../../../api/adminAPI';
+import LoadingTop from '../../../../components/loadingTop';
+
 const { Step } = Steps;
 
 
+
+const INIT_DATA = {
+    name: "",
+    phone:"",
+    email:"",
+    address: "",
+    about:"Đội ngũ bác sĩ chuyên nghiệp, tận tình, chu đáo!...",
+    dateStart: "",
+    contractType: "",
+    scale: "",
+    adminPhone: "",
+    adminEmail:""
+}
+
 const CreateHospital = () => {
+    /* goi api lay danh sach benh vien, loc ra ten, email, sdt
+        gop chung 3 form lam 1
+    */
     const [current, setCurrent] = useState(0);
     const [province, setProvince]= useState("")
     const [district, setDistrict] = useState("")
+    const [ loadingPage, setLoadingPage ] = useState(false);
+    const [ listHospital, setListHospital ] = useState([]);
+
+    const [ submitData, setSubmitData ] = useState({...INIT_DATA})
+
+    useEffect(()=> {
+        setLoadingPage(true);
+        // call api 
+        (async ()=>{
+            try {
+                const response = await adminAPI.get_list_hospitals();
+                console.log('response :>> ', response);
+                const _list = response.data.map((item,index)=>{
+                    const _data = {
+                        hospitalName: item.name,
+                        hospitalEmail: item.email,
+                        hospitalPhone: item.phone,
+                    }
+                    return _data
+                })
+                setListHospital([..._list]);
+            } catch (error) {
+                console.log('error.message :>> ', error.message);
+            }
+            setLoadingPage(false)
+        })()
+    },[])
+    
+
+    const onFinishBasicInfo = (data) => {
+         const _district = data.address.district.split(" ");
+        const _province = data.address.province.split(" ");
+        _district.splice(0,1);
+        _province.splice(0,1);
+        const _data = {
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            address: `${data.address.street}, ${data.address.ward}, ${_district.join(" ")}, ${_province.join(" ")}`,
+        }
+        setSubmitData({...submitData, ..._data});
+        next()
+    }
+    const onFinishContract = (data) => {
+        const _data = {
+            dateStart: moment(data.dateStart).format(),
+            contractType: data.contract.contractType,
+            scale: data.scale,
+        }
+        setSubmitData({...submitData, ..._data});
+        next()
+    }
+    const onFinishAdmin = (data) => {
+        const _data = {
+            ...submitData,
+            adminPhone: data.adminPhone||"",
+            adminEmail: data.adminEmail
+        }
+        console.log('_data to submit :>> ', _data );
+        create_hos(_data);
+        
+    }
+    const create_hos = async (data) => {
+        try {
+            const response = await adminAPI.create_hospital(data);
+            console.log('response :>> ', response);
+        } catch (error) {
+            console.log('error.message :>> ', error.message);
+        }
+    }
+    
     // handle next page
     const next = () => {
         setCurrent(current + 1);
@@ -19,23 +111,6 @@ const CreateHospital = () => {
     const prev = () => {
         setCurrent(current - 1);
     };
-
-    // handle form
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-    const onFinishBasicInfo = (values) => {
-        console.log('BasicInfo', values)
-        next()
-    }
-    const onFinishContract = (values) => {
-        console.log('Contract', values)
-        next()
-    }
-    const onFinishAdmin = (values) => {
-        console.log("Account Admin", values)
-    }
-
     // handle address
     const onChangeProvince = (value) => {
         setProvince(value)
@@ -43,14 +118,11 @@ const CreateHospital = () => {
     const onChangeDistrict = (value) => {
         setDistrict(value)
     }
-    
-    // handle submit step by step
-    const step1 = () => {
-        onFinishBasicInfo();
-    }
+   
     return (
         <>
           <SidebarNav/>
+          {loadingPage && <LoadingTop/>}
             <div className="page-wrapper">
               <div className="content container-fluid">
                 <div className="page-header">
@@ -89,13 +161,13 @@ const CreateHospital = () => {
                             <div className="info-benhnhan">                     
                                 <Row gutter={[8,8]}>
                                     <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-                                        <Form.Item name="hospitalName" label="Tên bệnh viện:" rules={[{required: true, message: 'Nhập tên bệnh viện!'}]}>
+                                        <Form.Item name="name" label="Tên bệnh viện:" rules={[{required: true, message: 'Nhập tên bệnh viện!'}]}>
                                             <Input className="input" placeholder="Vd: Bệnh viện/Phòng khám A"/>
                                         </Form.Item>
-                                        <Form.Item name="hospitalPhone" label="Số điện thoại:">
+                                        <Form.Item name="phone" label="Số điện thoại:">
                                             <Input className="input" placeholder="Số điện thoại liện hệ"/>
                                         </Form.Item>
-                                        <Form.Item name="hospitalEmail" label="Email:">
+                                        <Form.Item name="email" label="Email:">
                                             <Input className="input" placeholder="Email"/>
                                         </Form.Item>
                                     </Col>
@@ -176,7 +248,7 @@ const CreateHospital = () => {
                             </Form.Item>
                             <Form.Item
                               label="Ngày bắt đầu"
-                              name={['contract', 'timeStart']}
+                              name={['contract', 'dateStart']}
                               rules={[
                                 {
                                   required: true,
@@ -188,7 +260,7 @@ const CreateHospital = () => {
                             </Form.Item>
                             <Form.Item
                               label="Quy mô cơ sở y tế"
-                              name={['contract', 'size']}
+                              name={['contract', 'scale']}
                               rules={[
                                 {
                                   required: true,
@@ -197,9 +269,9 @@ const CreateHospital = () => {
                               ]}
                             >
                                 <Select className="province" placeholder="Loại hợp đồng" onChange={onChangeDistrict}>
-                                    <Select.Option value="sizeA">Loại A</Select.Option>
-                                    <Select.Option value="sizeB">Loại B</Select.Option>
-                                    <Select.Option value="sizeC">Loại C</Select.Option>
+                                    <Select.Option value="A">Loại A</Select.Option>
+                                    <Select.Option value="B">Loại B</Select.Option>
+                                    <Select.Option value="C">Loại C</Select.Option>
                                 </Select>
                             </Form.Item>
                             <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
@@ -225,14 +297,20 @@ const CreateHospital = () => {
                                 onFinish={onFinishAdmin}
                             >
                                 <Form.Item
-                                label="Tên đăng nhập"
-                                name="adminUsername"
-                                rules={[
-                                    {
-                                    required: true,
-                                    message: 'Nhập đầy đủ thông tin!',
-                                    },
-                                ]}
+                                    label="Tên đăng nhập (email)"
+                                    name="adminEmail"
+                                    rules={[
+                                        {
+                                        required: true,
+                                        message: 'Nhập đầy đủ thông tin!',
+                                        },
+                                    ]}
+                                >
+                                    <Input/>
+                                </Form.Item>
+                                <Form.Item
+                                    label="Số điện thoại"
+                                    name="adminPhone"
                                 >
                                     <Input/>
                                 </Form.Item>

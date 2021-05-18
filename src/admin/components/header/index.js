@@ -89,7 +89,7 @@ const Header = (props) => {
           </div>
 
           <a href="#0" id="toggle_bttn" onClick={handlesidebar}>
-					  <i class="fe fe-text-align-left"></i>
+					  <i className="fe fe-text-align-left"></i>
 				  </a>
           <a href="#0" className="mobile_btn" id="mobile_btn">
             <i className="fa fa-bars"></i>
