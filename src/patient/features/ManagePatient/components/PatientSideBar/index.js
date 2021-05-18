@@ -17,14 +17,11 @@ const PatientSidebar = () => {
         <div className="profile-sidebar">
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
-                    <Link href="#" className="booking-doc-img">
+                    <Link to="#" className="booking-doc-img">
                         <img src={`http://localhost:3002/images/avatar/user.png`||IMG01} alt="User" />
                     </Link>
                     <div className="profile-det-info">
                         <h3 style={{fontWeight:"bold"}}>{patientInfo.fullName}</h3>
-                        {/* <div className="patient-details">
-                            <h5 className="mb-0">Bệnh viện Hùng Vương</h5>
-                        </div> */}
                     </div>
                 </div>
             </div>

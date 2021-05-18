@@ -1,51 +1,84 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-// import logo from "../../assets/images/logo.png";
+import { faHospital } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom'
+import { logoutManager } from "../../../redux/actions/adminActions";
+import { Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import LoadingTop from '../../components/loadingTop';
 import bkLogo from '../../assets/img/bk-logo.png'
-import logoicon from "../../assets/images/logo-small.png";
-import avatar from "../../assets/images/avatar-01.jpg";
-import Dropdown from "react-bootstrap/Dropdown";
-import IMG01 from "../../assets/images/doctor-thumb-01.jpg";
-import IMG02 from "../../assets/images/doctor-thumb-02.jpg";
-import IMG03 from "../../assets/images/doctor-thumb-03.jpg";
+import './style.css'
 
 
-class Header extends Component {
-  // eslint-disable-next-line no-useless-constructor
-  constructor(props) {
-    super(props);
-  }
+const Header = (props) => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const admin = useSelector(state=> state.admin);
+  const {currentAdmin, loadingLogin, isAdminLoggedIn, loadingLogout, loadingPage} = admin;
+  const url = window.location.pathname;
+  
+  const [userName, setUserName] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  componentDidMount(){
+  useEffect(()=> {
+    if(!loadingLogin && isAdminLoggedIn) {
+      switch (currentAdmin.accountType) {
+        case 'system-admin':
+          setUserName('Admin System');
+          break;
+        case 'hospital-admin':
+          setUserName('Admin Hospital');
+          break;
+        default:
+          setUserName('User')
+          break;
+      }
+      history.push('/admin')
+    }
+  },[admin])
 
-
-    if(this.props.location.pathname.split("/")[1] === 'admin') {
+  useEffect(()=> {
+    if(location.pathname.split("/")[1] === 'admin') {
       require('../../assets/css/app.css')
       require('../../assets/css/fontawesome.min.css')
     }
-    
+  },[])
+
+  useEffect(()=> {
+    if(!loadingPage && !isAdminLoggedIn) {
+      setTimeout(() => {
+        setLoading(false);
+        history.push('/admin/dang-nhap');
+      }, 500);
+    }
+  },[loadingPage, isAdminLoggedIn])
+
+
+
+  const handleLogoutManager = () => {
+    setLoading(true)
+    dispatch(logoutManager());
   }
 
-  handlesidebar=()=>{
+  const handlesidebar=()=>{
     console.log('d');
     document.body.classList.toggle('mini-sidebar');
   }
 
-  render() {
-    const exclusionArray = [
-      "/admin",
-      "/admin/login",
-      "/admin/register",
-      "/admin/forgotPassword",
-      "/admin/lockscreen",
-      "/admin/404",
-      "/admin/500",
-    ];
-    if (exclusionArray.indexOf(this.props.location.pathname) >= 0) {
-      return "";
-    }
-    return (
-      <div>
+  const menu = (
+    <Menu>
+      <Menu.Item key="0">
+        <a href="/quan-li-tai-khoan">Tổng quan tài khoản</a> 
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={handleLogoutManager} key="3">Đăng xuất</Menu.Item>
+    </Menu>
+  );
+  return (
+    <div>
         <div className="header__admin">
           <div className="header-left">
             <Link to="/admin/dashboard" className="logo">
@@ -56,142 +89,44 @@ class Header extends Component {
             </Link>
           </div>
 
-          <a href="#0" id="toggle_bttn" onClick={this.handlesidebar}>
+          <a href="#0" id="toggle_bttn" onClick={handlesidebar}>
 					  <i class="fe fe-text-align-left"></i>
 				  </a>
           <a href="#0" className="mobile_btn" id="mobile_btn">
             <i className="fa fa-bars"></i>
           </a>
 
-          <ul className="nav user-menu">
-            <li className="nav-item dropdown noti-dropdown">
-              <Dropdown className="notify">
-                <Dropdown.Toggle
-                  className="dropdown-toggle nav-link"
-                  id="dropdown-basic"
-                >
-                  <i className="fa fa-bell"></i>{" "}
-                  <span className="badge badge-pill">3</span>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu className="notification-list">
-                  <Dropdown.Item
-                    href="#/action-1"
-                    className="notification-message"
-                  >
-                    <div className="media">
-                      <span className="avatar avatar-sm">
-                        <img
-                          className="avatar-img rounded-circle"
-                          alt="User"
-                          src={IMG01}
-                        />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Dr. Ruby Perrin</span>{" "}
-                          Schedule{" "}
-                          <span className="noti-title">her appointment</span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">4 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">
-                    <div className="media">
-                      <span className="avatar avatar-sm">
-                        <img
-                          className="avatar-img rounded-circle"
-                          alt="User"
-                          src={IMG02}
-                        />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Charlene Reed</span> has
-                          booked her appointment to{" "}
-                          <span className="noti-title">Dr. Ruby Perrin</span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">6 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    <div className="media">
-                      <span className="avatar avatar-sm">
-                        <img
-                          className="avatar-img rounded-circle"
-                          alt="User"
-                          src={IMG03}
-                        />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Travis Trimble</span>{" "}
-                          sent a amount of $210 for his{" "}
-                          <span className="noti-title">appointment</span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">8 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    href="#/action-1"
-                    className="notification-message text-center"
-                  >
-                    <span className="text-center">View all</span>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+          <ul className="nav header-navbar-rht">
+            <li className="nav-item contact-item">
+              <div className="header-contact-img">
+                <FontAwesomeIcon icon={faHospital} />
+              </div>
+              <div className="header-contact-detail">
+                <p className="contact-header">Liên hệ</p>
+                <p className="contact-info-header"> 1900 8168</p>
+              </div>
             </li>
-
-            <li className="nav-item dropdown has-arrow">
-              <Dropdown className="user-dropdown">
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  <span className="user-img">
-                    <img
-                      className="rounded-circle"
-                      src={avatar}
-                      width="31"
-                      alt="Ryan Taylor"
-                    />
-                  </span>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1" className="no-padding">
-                    <div className="user-header">
-                      <div className="avatar avatar-sm">
-                        <img
-                          src={avatar}
-                          alt="User"
-                          className="avatar-img rounded-circle"
-                        />
-                      </div>
-                      <div className="user-text">
-                        <h6>Ryan Taylor</h6>
-                        <p className="text-muted mb-0">Administrator</p>
-                      </div>
-                    </div>
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/admin/profile"> Quản lí tài khoản</Dropdown.Item>
-                  <Dropdown.Item href="/admin/settings">Settings</Dropdown.Item>
-                  <Dropdown.Item href="/admin">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </li>
+              <>
+                {!isAdminLoggedIn && <li className="nav-item">
+                  <Link to="/admin/dang-nhap" className="nav-link header-login">
+                    Đăng nhập{" "}
+                  </Link>
+                </li>}
+                {isAdminLoggedIn &&
+                  <li className="nav-item">
+                    <Dropdown overlay={menu} trigger={['click']}>
+                      <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <h4>{userName}<DownOutlined style={{marginBottom:0}}/></h4> 
+                      </a>
+                    </Dropdown>
+                  </li>
+                }
+              </>
           </ul>
 
         </div>
       </div>
-    );
-  }
-}
+  )}
 
 export default Header;
+

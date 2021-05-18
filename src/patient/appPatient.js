@@ -16,8 +16,9 @@ import DetailHospitalPage from './features/hospital/pages/DetailHospitalPage'
 import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
 import ManagePatient from './features/ManagePatient';
 import LoginManager from './features/auth/pages/LoginManager';
+import PrivateRoute from './components/Route/PrivateRoute';
 
-import AppDoctor from '../doctor/appDoctor';
+
 const AppPatient = function (props) {
 	console.log('getAllData');
     const dispatch = useDispatch()
@@ -31,36 +32,20 @@ const AppPatient = function (props) {
 			<div>
 				<Route render={(props)=> <Header {...props}/>} />
 					<Switch>
+						{/* public route */}
 						<Route exact path="(/|/trang-chu)" component={Home}/>
-						
 						<Route exact path='/danh-sach-bac-si' component={ListDoctorPage}/>
 						<Route exact path='/danh-sach-bac-si/:doctorID' component={DetailDoctorPage}/>
 						<Route exact path='/danh-sach-benh-vien' component={ListHospitalPage}/>
 						<Route exact path='/chi-tiet-benh-vien/:hospitalId' component={DetailHospitalPage}/>
-
-
-
-						{/* <Route exact path='/danh-sach-bac-si' component={DoctorPage}/> */}
-						{/* <Route exact path='/danh-sach-bac-si/:doctorID' component={DoctorInfo}/> */}
-
-						{/* <Route exact path='/danh-sach-benh-vien' component={HospitalPage}/> */}
-						{/* <Route exact path='/chi-tiet-benh-vien/:hospitalId' component={HospitalProfile}/> */}
-
 						<Route exact path='/dang-nhap' component={LoginPatient}/>
 						<Route exact path='/dat-kham/:doctorID/dang-nhap' component={LoginPatient}/>
+
+						{/* private route */}
 						<Route exact path='/dat-kham/:doctorID' component={BookingPage}/>
-						<Route exact path='/quan-li-tai-khoan' component={ManagePatient}/>
-						
 
-						{/* <Route exact path='/quan-li-tai-khoan/thong-tin' component={PatientInfo}/>
-						<Route exact path='/quan-li-tai-khoan/lich-kham' component={PatientSchedule}/> */}
-						<Route exact path='/patient/gopy' component={FeedBack}/>
-
-						{/* id */}
-						{/* <Route exact path='/patient/:' component={FeedBack}/> */}
-
-
-						<Route exact path='/bac-si/quan-li' component={FeedBack}/>
+						<PrivateRoute component={ManagePatient} path="/quan-li-tai-khoan" exact/>
+						{/* <Route exact path='/quan-li-tai-khoan' component={ManagePatient}/> */}
 						<Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
 
 						<Route path="*">

@@ -67,7 +67,6 @@ function* getVerifySMS ({payload}) {
             // SwalAlert( 'Success',`Mã xác thực đã được gửi đến ${payload}` , 'success')
             yield put({ type: IS_LOADED});
             const data = {patientInfo: response.data.patientInfo, token: response.data.token};
-            console.log('data :>> ', data);
             localStorage.setItem('userToken', response.data.token);
             localStorage.setItem('currentUser', JSON.stringify(data));
             yield put({ type: SET_CURRENT_USER, payload: data})

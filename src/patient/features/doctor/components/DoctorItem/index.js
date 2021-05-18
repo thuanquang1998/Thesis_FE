@@ -14,7 +14,6 @@ import Swal from 'sweetalert2'
 import './style.css'
 const DoctorItem = (props) => {
     const data = props.data;
-    console.log('data :>> ', data);
     const img = data.sex==='male'? logo_male:logo_female;
     const patient = useSelector(state=> state.patient);
     const history = useHistory();

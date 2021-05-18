@@ -47,7 +47,7 @@ const HomeDepart = (props) => {
                         <div className="specialities-slider slider">
                             <Slider {...settings}>
                                 {specialities && specialities.map((item,idx) => (
-                                    <div>
+                                    <div key={idx}>
                                         <div className="speicality-item text-center">
                                             <div className="speicality-img" style={{margin:"0 auto", cursor:"pointer", marginBottom:"20px"}}>
                                                 {/* <Link to={`/dsbacsi?ck=${item.name}`}>

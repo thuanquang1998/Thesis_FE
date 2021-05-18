@@ -1,27 +1,15 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useLocation } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
+import { useSelector } from 'react-redux';
 
-class SidebarNav extends Component {
-    constructor(props){
-      super(props);
-      this.state={
-        show: null
-      }
-    }
+const SidebarNav = (props) => {
+  const location = useLocation();
+  let pathname = location.pathname
+  console.log(pathname,"000000000");
 
-  handleShow(id){
-    this.setState({
-        show: id
-    })
-  }
   
-  render() {
-   
-   const {  location } = this.props
-   let pathname = location.pathname
-console.log('pathname', pathname);
-   return (
+  return (
     <div className="sidebar" id="sidebar">
       <div className="primary-nav">
         <nav role="navigation" className="menu">
@@ -47,7 +35,7 @@ console.log('pathname', pathname);
                   <Link to="/admin/cosoyte"><i className="fa fa-hospital"></i>Cơ sở y tế</Link>
                 </li>
                 <li className={`${'/admin/chuyen-khoa' === pathname ? 'active' : '' }`}>
-                   <Link to="/admin/chuyen-khoa"><i class="fas fa-first-aid"></i>Chuyên khoa</Link>
+                   <Link to="/admin/chuyen-khoa"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
                 </li>
                 <hr style={{borderTop:"2px solid #ddd"}}/>
                 <h4 style={{textAlign:"center", color:"white"}}>Admin bệnh viện</h4>
@@ -61,21 +49,21 @@ console.log('pathname', pathname);
                   <Link to="/admin/benhviena/nhanvien"><i className="fa fa-user"></i>Nhân viên</Link>
                 </li>
                 <li className={`${'/admin/benhviena/chuyenkhoa' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/benhviena/chuyenkhoa"><i class="fas fa-first-aid"></i>Chuyên khoa</Link>
+                  <Link to="/admin/benhviena/chuyenkhoa"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
                 </li>
                 <li className={`${'/admin/benhviena/danhgia' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/benhviena/danhgia"><i class="fas fa-clipboard-list"></i>Đánh giá</Link>
+                  <Link to="/admin/benhviena/danhgia"><i className="fas fa-clipboard-list"></i>Đánh giá</Link>
                 </li>
                 <li className={`${'/admin/benhviena/dslichkham' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/benhviena/dslichkham"><i class="far fa-calendar-alt"></i>Lịch khám</Link>
+                  <Link to="/admin/benhviena/dslichkham"><i className="far fa-calendar-alt"></i>Lịch khám</Link>
                 </li>
                 <hr style={{borderTop:"2px solid #ddd"}}/>
                 <h4 style={{textAlign:"center", color:"white"}}>Agent</h4>
                 <li className={`${'/admin/benhviena/dslichkham' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/benhviena/dslichkham"><i class="far fa-calendar-alt"></i>Lịch khám</Link>
+                  <Link to="/admin/benhviena/dslichkham"><i className="far fa-calendar-alt"></i>Lịch khám</Link>
                 </li>
                 <li className={`${'/admin/benhviena/dslichkham' === pathname ? 'active' : '' }`}>
-                  <Link to="/admin/benhviena/dslichkham"><i class="fas fa-first-aid"></i>Chuyên khoa</Link>
+                  <Link to="/admin/benhviena/dslichkham"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
                 </li>
                 <li className={`${'/admin/benhviena/thongtin' === pathname ? 'active' : '' }`}>
                   <Link to="/admin/benhviena/thongtin"><i className="fa fa-hospital"></i>Thông tin bệnh viện</Link>
@@ -86,8 +74,7 @@ console.log('pathname', pathname);
         </nav>
       </div>
     </div>
-  );
-}
+  )
 }
 
-export default withRouter(SidebarNav);
+export default SidebarNav

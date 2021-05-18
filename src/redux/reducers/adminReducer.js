@@ -9,6 +9,11 @@ import {
     LOADING_LOGIN,
     LOGIN_FAILED,
     LOGIN_SUCCESS,
+
+    LOGOUT_MANAGER,
+    LOGOUT_SUCCESS,
+
+    LOADING_PAGE,
 } from '../../redux/actions/adminActions';
 
 import Specialities from '../../admin/pages/specialities';
@@ -17,16 +22,10 @@ import Specialities from '../../admin/pages/specialities';
 
 const initialState={
     currentAdmin: JSON.parse(localStorage.getItem('currentAdmin'))||{},
-    isAdminLoggedIn: false,
+    isAdminLoggedIn: localStorage.getItem('currentAdmin')?true:false || false,
     loadingLogin: false,
 
-    loading : false,
-    data :{},
-    error : false,
-    login:false,
-    errors:[],
-    loadingHospital: false,
-    
+    loadingPage: false,
 }
 
 export const adminReducer = (state = initialState , action) =>{
@@ -57,6 +56,7 @@ export const adminReducer = (state = initialState , action) =>{
                 currentAdmin: action.payload,
                 loadingLogin: false,
                 isAdminLoggedIn: true,
+                loadingPage: false,
             }
         case LOGIN_FAILED:
             return {
@@ -64,6 +64,23 @@ export const adminReducer = (state = initialState , action) =>{
                 currentAdmin: {},
                 loadingLogin: false,
                 isAdminLoggedIn: false,
+                loadingPage: false,
+            }
+
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                currentAdmin: {},
+                isAdminLoggedIn: false,
+                loadingLogout: false,
+                loadingPage: false
+            }
+        
+        // loading Page
+        case LOADING_PAGE:
+            return {
+                ...state,
+                loadingPage: true
             }
         default:
 

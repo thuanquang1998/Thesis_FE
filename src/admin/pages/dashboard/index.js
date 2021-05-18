@@ -1,6 +1,7 @@
 import React from 'react'
 import SidebarNav from '../sidebar'
 const Dashboard = () => {
+	console.log("Dashboard");
     return (
         <>
             <SidebarNav/>

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { get_list_hospitals } from '../../../../redux/actions/adminActions'
-import SidebarNav from '../../sidebar'
+// import SidebarNav from '../../sidebar'
+import SidebarNav from '../../../components/SideBar'
 const HospitalsList = () => {
     const dispatch = useDispatch()
     const list_hospitals = useSelector(state=>state.admin.list_hospital)

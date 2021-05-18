@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
-import Admin from './admin/appAdmin'
+import AppAdmin from './admin/appAdmin'
 import AppDoctor from "./doctor/appDoctor";
 import AppPatient from "./patient/appPatient";
 
@@ -14,7 +14,7 @@ const AppContainer = function (props) {
           (
             <>
               <Switch>
-                <Route path="/admin" component={Admin} />
+                <Route path="/admin" component={AppAdmin} />
               </Switch>
             </>
           )

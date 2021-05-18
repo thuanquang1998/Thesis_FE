@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Card, Form, Button, Input, Modal, Select} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import logo from '../../assets/img/bk-logo.png'
@@ -9,56 +9,27 @@ import './style.css'
 // import { login, register } from '../../../redux/actions/doctorActions';
 import { login_by_email } from '../../../redux/actions/adminActions'
 import adminAPI from '../../../api/adminAPI';
-
+import LoadingTop from '../../components/loadingTop';
 
 const Login = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const admin = useSelector(state=>state.admin)
-    console.log('admin :>> ', admin);
-    // get list hospital
+    const {currentAdmin, loadingLogin, isAdminLoggedIn, loadingLogout} = admin;
+
     const [loginError, setLoginError] = useState({
         email:"",
         password:"",
     })
 
-    const onHandleLogin = (values) => {
-        console.log('values :>> ', values);
-        dispatch(login_by_email(values));
-
-        // loginByEmail(values);
+    const onHandleLogin = (data) => {
+        dispatch(login_by_email(data));
     }
-
-    const loginByEmail = async (data) => {
-        try {
-            const response = await adminAPI.login(data);
-            if(response.error) {
-                // dung sweetalert2
-                console.log(`errors[0]`, response.errors[0])
-                const error = response.errors[0];
-                if(error.message==='User not found') {
-                    setLoginError({...loginError,email:'Tên đăng nhập không đúng'})
-                } else {
-                    setLoginError({...loginError,password:'Mật khẩu không đúng'})
-                }
-            } else {
-                console.log(`response`, response)
-                localStorage.setItem('currentAdmin',response.data)
-
-                // check type Account
-                // if (response.data.accountType==='doctor') {
-                //     history.push('/danh-sach-bac-si');
-                //     console.log("111111111111111111111");
-                // } else {
-                //     history.push('/admin/dashboard')
-                //     console.log("22222222222222222");
-                // }
-            }
-        } catch (error) {
-            
+    useEffect(()=> {
+        if(!loadingLogin && isAdminLoggedIn) {
+        history.push('/admin')
         }
-    }
-   
+    },[admin])
 
     return (
         <div className="loginPage container">
@@ -69,6 +40,7 @@ const Login = () => {
                             <img src={logo} alt=""/>
                         </div>
                     </div>
+                    {/* <LoadingTop/> */}
                 <Form
                     name="normal_login"
                     className="login-form"

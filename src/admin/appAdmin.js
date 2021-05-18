@@ -15,42 +15,35 @@ import SpecialitiesHospital from './pages/adminHospital/specialitiesHospital'
 import ManageSchedule from './pages/adminHospital/manageSchedule'
 import Reviews from './pages/adminHospital/reviews'
 import {useDispatch, useSelector} from 'react-redux'
-
-
+import LoadingTop from './components/loadingTop';
 import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index';
-const Admin =({match})=>{
+
+import PrivateRouteAdmin from './components/Route/PrivateRouteAdmin';
+
+
+const AppAdmin =({match})=>{
     const admin = useSelector(state=>state.admin);
-    
-    
+    const {loadingPage, isAdminLoggedIn} = admin;
 
     return(
         <>
             <Router>
                 <div className="main-wrapper">
+                    {loadingPage && <LoadingTop/>}
                     <Route render={(props)=> <Header {...props}/>} />
                     <Switch>
-                        {/* check login - protected route */}
 
-                        {/* /login/admin => public */}
+                        <PrivateRouteAdmin component={DashboardSystem} path="/admin" exact/>
+                        <PrivateRouteAdmin component={Specialities} path="/admin/chuyen-khoa" exact/>
+                        <PrivateRouteAdmin component={HospitalPage} path="/admin/cosoyte"/>
+                        <PrivateRouteAdmin component={HospitalCreate} path="/admin/cosoyte/them-bv" exact/>
 
-                        {/* if (isLoggedIn) {
-                            switch (action.type) {
-                                case: 'system':
-                                    return 
-                            }
-                        } */}
-                        {/* <Route exact path='/admin' render={()=>{
-                            return localStorage.getItem('currentAdmin')?<Dashboard/>: <Login/>
-                        }}/> */}
-
-                        <Route exact path='/admin' component={DashboardSystem}/>
                         <Route exact path='/admin/dang-nhap' component={Login}/>
 
                         <Route exact path='/admin/dashboard' component={Dashboard}/>
-                        {/* <Route exact path='/admin/login' component={Login}/> */}
-                        <Route exact path='/admin/chuyen-khoa' component={Specialities}/>
-                        <Route exact path='/admin/cosoyte' component={HospitalPage}/>
-                        <Route exact path='/admin/cosoyte/them-bv' component={HospitalCreate} />
+
+                        {/* <Route exact path='/admin/chuyen-khoa' component={Specialities}/>
+                        <Route exact path='/admin/cosoyte/them-bv' component={HospitalCreate} /> */}
                         
                         
                         {/* route for admin hospital */}
@@ -64,8 +57,6 @@ const Admin =({match})=>{
 
                         <Route exact path='/admin/dashboard-system' component={DashboardSystem}/>
 
-
-
                     </Switch>
                 </div>
             </Router>
@@ -73,4 +64,4 @@ const Admin =({match})=>{
         </>
     )
 }
-export default Admin
+export default AppAdmin

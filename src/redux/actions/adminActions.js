@@ -13,7 +13,10 @@ export const LOGIN_FAILED = 'LOGIN_FAILED'
 export const LOADING_LOGIN = 'LOADING_LOGIN'
 
 export const LOGOUT_MANAGER = 'LOGOUT_MANAGER'
+export const LOGOUT_LOADING = 'LOGOUT_LOADING'
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 
+export const LOADING_PAGE = 'LOADING_PAGE'
 
 export const  get_specialities_system =()=>{
     return {
