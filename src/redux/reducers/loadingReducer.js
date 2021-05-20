@@ -4,7 +4,7 @@ import {
 } from '../actions/loadingActions';
 
 const initialState ={
-    loadingData: 0,
+    loadingData: "",
     listAllDoctors: [],
     listAllHospitals:[],
     listAllSpecials: [],
@@ -14,17 +14,17 @@ export const loadingReducer =(state = initialState , action)=>{
         case LOADING_DATA : 
             return {
                 ...state,
-                loadingData: state.loadingData+1
+                loadingData: 1*state.loadingData+1
             }
         case LOADING_DATA_SUCCESS : 
             return {
                 ...state,
-                loadingData : state.loadingData-1
+                loadingData : 1*state.loadingData-1
             }
         case LOADING_DATA_FAILED : 
             return {
                 ...state,
-                loadingData : state.loadingData-1
+                loadingData : 1*state.loadingData-1
             }
         case ALL_DOCTORS : 
             return {

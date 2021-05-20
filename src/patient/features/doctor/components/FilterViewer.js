@@ -37,13 +37,13 @@ function FilterViewer({ data ,filters = {}, onChange = null }) {
     
     useEffect(()=> {
         if(listAllHospitals.length!==0 && listAllSpecials.length!==0 ) {
-            const listBv = listAllHospitals.filter(x=>x.id===filters.bv);
+            const listBv = listAllHospitals.data.filter(x=>x.id===filters.bv);
             if (listBv.length!==0) {
                 setNameBv(listBv[0].name)
             } else {
                 setNameBv('')
             }
-            const listCk = listAllSpecials.filter(x=>x.key===filters.ck);
+            const listCk = listAllSpecials.filter(x=>x._id===filters.ck);
             if (listCk.length!==0) {
                 setNameCk(listCk[0].name)
             } else {

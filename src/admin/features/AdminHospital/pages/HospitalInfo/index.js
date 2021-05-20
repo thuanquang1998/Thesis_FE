@@ -12,7 +12,9 @@ import { useHistory } from 'react-router'
 
 
 const HospitalInfo = () => {
-	const dispatch = useDispatch()
+    const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
+	
+    const dispatch = useDispatch()
 	const hospital = useSelector(state=>state.admin.hospitalById)
 	console.log(hospital,"lllllllllllllll");
 	useEffect(()=> {
@@ -49,16 +51,17 @@ const HospitalInfo = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-7 col-auto">
-								<h3 className="page-title">Thông tin bệnh viện Hùng Vương</h3>
+								<h3 className="page-title">{`Thông tin ${hospitalInfo.name}`}</h3>
 								<ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
-									<li className="breadcrumb-item active">Bệnh viện Hùng Vương</li>
+									<li className="breadcrumb-item active">{`${hospitalInfo.name}`}</li>
 								</ul>
 							</div>
 							<div className="col-sm-5 col">
-							<a href="#0" className="btn btn-primary float-right mt-2" onClick={handleEditInfo}>
-								Chỉnh sửa thông tin</a>
-						</div>
+							    <a href="#0" className="btn btn-primary float-right mt-2" onClick={handleEditInfo}>
+								    Chỉnh sửa thông tin
+                                </a>
+						    </div>
 						</div>
 					</div>
                     

@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 
 const HospitalItem = (props) => {
     const data = props.data;
-    const address = props.data.address.number +', '+props.data.address.street+', '+props.data.address.ward+', '+props.data.address.district+', '+props.data.address.city
+    console.log('data :>> ', data);
+    // const address = props.data.address.number +', '+props.data.address.street+', '+props.data.address.ward+', '+props.data.address.district+', '+props.data.address.city
     return (
         <Card style={{marginTop:"30px", borderRadius:"10px", boxShadow:"5px 5px 13px rgba(0, 0, 0, 0.1)"}}>
             <Row> 
@@ -17,7 +18,7 @@ const HospitalItem = (props) => {
                             <Link to="#"><h3 style={{color:"#0096d4"}}>{data.name}</h3></Link>
                             <div>
                                 <span><i className="fas fa-map-marker-alt" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px", color:"#17a6df"}}></i></span>
-                                <span>{address}</span>
+                                <span>{data.address}</span>
                             </div>
                             <div>
                                 <span><i className="fas fa-phone" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px", color:"#17a6df"}}></i></span>

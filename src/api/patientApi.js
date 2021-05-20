@@ -22,7 +22,10 @@ class patientAPI{
         return http.get(`patient/${id}/get_appointment`,{ headers:{ 'x-access-token': token}}).then(res=> res.data).catch(err => err.response.data)
     }
     // huy lich
-
+    cancel_schedule(id) {
+        const token = localStorage.getItem('userToken');
+        return http.get(`appointment/${id}/cancel`).then(res=> res.data).catch(err => err.response.data)
+    }
     // doi lich
    
     get_time_works(id){

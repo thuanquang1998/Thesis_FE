@@ -16,7 +16,7 @@ const DetailHospitalPage = () => {
     const loadingData = appState.loadingData;
     const [renderDoctor, setRenderDoctor] = useState([]);
     const data = location.state;
-    const address = data.address.number +', '+data.address.street+', '+data.address.ward+', '+data.address.district+', '+data.address.city
+    // const address = data.address.number +', '+data.address.street+', '+data.address.ward+', '+data.address.district+', '+data.address.city
     useEffect(()=>{
         let _renderData = [];
         if(loadingData===0 && appState.listAllDoctors.length!==0) {
@@ -73,11 +73,11 @@ const DetailHospitalPage = () => {
                                     <ul style={{listStyleType:"none", paddingLeft:"5px"}}>
                                         <li>
                                             <span><RoomIcon style={{color:"#17a6df", marginRight:"10px"}}/></span>
-                                            {address}
+                                            {data.address||""}
                                         </li>
                                         <li>
                                             <span><PhoneIcon style={{color:"#17a6df", marginRight:"10px"}}/></span>
-                                           {data.phone}
+                                           {data.phone||""}
                                         </li>
                                     </ul> 
                                 </Card> 
@@ -93,7 +93,6 @@ const DetailHospitalPage = () => {
                             <DoctorList doctors={renderDoctor}/>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

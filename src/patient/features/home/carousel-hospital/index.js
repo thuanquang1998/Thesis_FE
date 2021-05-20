@@ -4,7 +4,7 @@ import Slider from "react-slick"
 import './style.css'
 import logoHospital from '../../../assets/img/benhvien.jpg'
 import iconHospital from '../../../assets/img/icon_hospital.jpg'
-const array = [1,2,3,4,5,6,1,2,3,4,5,6,8]
+
 const settings = {
     className: "center",
     dots: true,
@@ -35,6 +35,8 @@ const settings = {
       }
   ]
   };
+
+
 const CardHospital = (props) => {
     return (
         <a href="patient/cosoyte/profile">

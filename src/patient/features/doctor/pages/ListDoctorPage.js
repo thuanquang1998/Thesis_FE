@@ -37,6 +37,9 @@ function ListDoctorPage(props) {
     const appState = useSelector(state=>state.app);
     const { loadingData, listAllDoctors, listAllSpecials, listAllHospitals } = appState;
 
+    const [ loadingPage, setLoadingPage ] = useState(true);
+
+
     const queryParams = useMemo(()=>{
         const params = queryString.parse(location.search);
         return {
@@ -53,6 +56,7 @@ function ListDoctorPage(props) {
     const [label, setLabel] = useState({});
 
     useEffect( () => {
+        setLoadingPage(true);
         let _renderData = [];
         const label = {
             ck:"",
@@ -65,21 +69,22 @@ function ListDoctorPage(props) {
             const _ck = ck?ck==='all-ck'?'':ck:'';
 
             const _data = [...listAllDoctors];
-            console.log('_data :>> ', _data);
-            // const new_list_name = _data.filter((item,idx)=>{
-            //     return item.fullName.toLowerCase().includes(_tenBs.toLowerCase())===true;
-            // })
-            // const new_list_bv = new_list_name.filter((item,idx)=> {
-            //     return item.hopitalId.toLowerCase().includes(_bv.toLowerCase())===true;
-            // })
-            // const new_list_ck = new_list_bv.filter((item,idx)=> {
-            //     return item.specialization?item.specialization.id.toLowerCase().includes(_ck.toLowerCase())===true:true;
-            // })
-            // _renderData = new_list_ck;
-            _renderData=[]
+            const new_list_name = _data.filter((item,idx)=>{
+                return item.fullName.toLowerCase().includes(_tenBs.toLowerCase())===true;
+            })
+            const new_list_bv = new_list_name.filter((item,idx)=> {
+                return item.hopitalId.toLowerCase().includes(_bv.toLowerCase())===true;
+            })
+            const new_list_ck = new_list_bv.filter((item,idx)=> {
+                return item.spec_detail?item.spec_detail[0]?._id.toLowerCase().includes(_ck.toLowerCase())===true:true;
+            })
+            _renderData = new_list_ck;
         } else {
             _renderData = [];
         }
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 500);
         setListDoctor(_renderData);
     }, [queryParams, loadingData])
 
@@ -100,7 +105,7 @@ function ListDoctorPage(props) {
 
     return (
         <Box>
-            {!!loadingData && <LoadingTop/>}
+            {loadingPage && <LoadingTop/>}
 
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
@@ -133,10 +138,10 @@ function ListDoctorPage(props) {
                             <FilterViewer filters={queryParams} onChange={handleFilterViewer}/>
                             {/* list */}
                             <div style={{minHeight:"600px"}}>
-                                {/* {loadingData? 
-                                    <div>Loading Page</div> */}
-                                    <DoctorList doctors={listDoctor}/>
-                                {/* } */}
+                                {loadingData? 
+                                    <div>Loading Page</div>
+                                    :<DoctorList doctors={listDoctor}/>
+                                }
                             </div>
                             
                             <div className="load-more text-center">

@@ -25,7 +25,16 @@ const HomeDepart = (props) => {
                 }
             },
             {
-                breakpoint: 993,
+                breakpoint: 800,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    infinite: true,
+                    
+                }
+            },
+            {
+                breakpoint: 1200,
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
@@ -56,9 +65,7 @@ const HomeDepart = (props) => {
                                                 <Link
                                                     to={{
                                                         pathname: "/danh-sach-bac-si",
-                                                        search: `?ck=${item.id}`,
-                                                        // hash: "#the-hash",
-                                                        // state: { fromDashboard: true }
+                                                        search: `?ck=${item._id}`,
                                                       }}
                                                 >
                                                     <img key={idx} src={item.image} className="img-fluid" alt="Speciality"/>
@@ -68,8 +75,6 @@ const HomeDepart = (props) => {
                                                 to={{
                                                     pathname: "/danh-sach-bac-si",
                                                     search: `?ck=${item.id}`,
-                                                    // hash: "#the-hash",
-                                                    // state: { fromDashboard: true }
                                                 }} 
                                                 style={{marginTop:"15px"}}>{item.name}
                                             </Link>

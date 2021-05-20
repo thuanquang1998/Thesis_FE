@@ -1,5 +1,5 @@
 
-import React ,{useState} from 'react'
+import React ,{ useState, useEffect } from 'react'
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 import Header from './components/header'
 import Login from './components/login'
@@ -17,13 +17,21 @@ import Specialities from './features/AdminHospital/pages/Specialities';
 import Employees from './features/AdminHospital/pages/Employees';
 import Reviews from './features/AdminHospital/pages/Reviews';
 import HospitalInfo from './features/AdminHospital/pages/HospitalInfo';
+import CreateDoctor from './features/AdminHospital/components/CreateDoctor';
+
+import { get_specialities_system, get_list_hospitals } from '../redux/actions/adminActions';
+
 
 const AppAdmin =({match})=>{
+    const dispatch = useDispatch();
     const admin = useSelector(state=>state.admin);
-    console.log('admin :>> ', admin);
     const {loadingPage, isAdminLoggedIn, currentAdmin} = admin;
     const accountType = currentAdmin.accountType;
-
+    
+    useEffect(()=> {
+		dispatch(get_specialities_system());
+        dispatch(get_list_hospitals());
+	},[])
     return(
         <>
             <Router>
@@ -60,6 +68,8 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={Employees} path="/admin/hospital/nhan-vien" exact/>
                         <PrivateRouteAdmin component={Specialities} path="/admin/hospital/chuyen-khoa" exact/>
                         <PrivateRouteAdmin component={Reviews} path="/admin/hospital/danh-gia" exact/>
+                        <PrivateRouteAdmin component={CreateDoctor} path="/admin/hospital/nhan-vien/them" exact/>
+
 
                     </Switch>
                 </div>

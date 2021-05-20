@@ -61,8 +61,8 @@ function* get_specialities_system(){
         }
         else {
             yield put({type : SET_SPECIALITIES_SYSTEM, payload : response.data});
-            yield put({type : LOADING_DATA_SUCCESS});
             yield put({type : ALL_SPECIAL, payload : response.data});
+            yield put({type : LOADING_DATA_SUCCESS});
         }
     }
     catch(err){
@@ -80,8 +80,8 @@ function* get_list_hospitals(){
         }
         else {
             yield put({type : SET_LIST_HOSPITALS, payload : response.data})
-            yield put({type : LOADING_DATA_SUCCESS});
             yield put({type : ALL_HOSPITAL, payload : response.data});
+            yield put({type : LOADING_DATA_SUCCESS});
         }
     }
     catch(err){
@@ -107,6 +107,7 @@ function* get_hospital_byId({payload}){
 }
 
 function* login_by_email({payload}){
+    console.log("11111111111111");
     console.log('login by email');
     yield put({type : LOADING_PAGE});
     yield put({type : LOADING_LOGIN});
@@ -118,9 +119,24 @@ function* login_by_email({payload}){
             yield put({type : LOGIN_FAILED});
         }
         else {
-            const data = {
-                accountType: response.data.accountType,
-                adminToken: response.data.token,
+            let data = {};
+            switch (response.data.accountType) {
+                case "system-admin":
+                    data = {
+                        accountType: response.data.accountType,
+                        adminToken: response.data.token,
+                    }
+                    break;
+                case "hospital-admin":
+                    data = {
+                        accountType: response.data.accountType,
+                        adminToken: response.data.token,
+                        hospital: response.data.hospital,
+                    }
+                    break;
+                default:
+                    return data = {}
+                    break;
             }
             localStorage.setItem('currentAdmin', JSON.stringify(data));
             yield put({type : LOGIN_SUCCESS, payload : data});

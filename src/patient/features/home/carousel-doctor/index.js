@@ -8,6 +8,8 @@ import DoctorItem from '../../doctor/components/DoctorItem'
 
 const HomeBookDoctor = (props)  => {
     const {data} = props;
+    console.log('data HomeBookDoctor:>> ', data);
+
     const settings = {
         width:400,
         dots:false,
@@ -65,8 +67,8 @@ const HomeBookDoctor = (props)  => {
                 }
             }
         ]
-
       };
+
         return(
             <section className="section section-doctor" style={{backgroundColor:"#f3f7ff"}}>
                 <div className="container-fluid">
@@ -93,33 +95,6 @@ const HomeBookDoctor = (props)  => {
                 </div>
                 </div>
             </section>
-
-
-            // <section className="section section-doctor">
-            //     <div className="container-fluid ">
-            //         <div className="section-header col-lg-10" style={{margin: "0 auto",display:"flex", justifyContent:"flex-start", position:"relative"}}>
-            //             <h3>Bác sĩ nổi bật</h3>
-            //             <Link style={{position:"absolute", right:0}}>Xem thêm</Link>
-            //         </div>
-            //         <div className="row">
-            //             <div className="col-lg-10" style={{margin:"0 auto"}}>
-            //                 <div className="doctor-slider slider">
-                            
-            //                 <Slider {...settings}>
-            //                     {array.map(item=> {
-            //                         if (item%2===0)
-            //                         {
-            //                         return (<DoctorItem img={logo_male}/>)
-            //                     } else {
-            //                         return <DoctorItem img={logo_female}/>
-            //                     }  
-            //                     })}
-            //                 </Slider>    
-            //                 </div>
-            //             </div>
-            //         </div>
-            //     </div>
-            // </section>
         );
 }
 export default HomeBookDoctor;

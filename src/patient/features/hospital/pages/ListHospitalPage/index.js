@@ -3,28 +3,35 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import HospitalSearch from '../../components/HospitalSearch';
 import HospitalList from '../../components/HospitalList';
-// import HospitalList from './list-hospital'
-// import SearchClinic from './search-clinic'
+import LoadingTop from '../../../../components/loadingTop';
 
 const ListHospitalPage = () => {
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
     const [renderData, setRenderData] = useState([]);
     const [filter, setFilter] = useState('');
+    const [loadingPage, setLoadingPage] = useState(true);
+
     useEffect(() => {
-        if (loadingData === 0 && appState.listAllHospitals.length !==0) {
-            const _data = [...appState.listAllHospitals];
+        setLoadingPage(true);
+        if (loadingData === 0) {
+            const _data = [...appState.listAllHospitals.data];
             const _renderData = _data.filter((item,idx)=>{
                     return item.name.toLowerCase().includes(filter.toLowerCase())===true;
             })
+            setTimeout(() => {
+                setLoadingPage(false)
+            }, 500);
             setRenderData(_renderData);
         } 
     }, [filter, loadingData])
+
     const onHandleSearch = (value) => {
         setFilter(value)
     }
     return (
-        <>
+        <>  
+            {loadingPage && <LoadingTop/>}
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
                     <div className="row align-items-center">
@@ -41,8 +48,8 @@ const ListHospitalPage = () => {
                 </div>
             </div>
             <HospitalSearch searchName={onHandleSearch}/> 
-            {loadingData? 
-                <div>Loading Page</div>
+            {loadingPage? 
+                <div>...</div>
                 :<HospitalList data={renderData}/>
             }
         </>

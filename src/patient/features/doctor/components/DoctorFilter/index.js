@@ -1,6 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Select } from 'antd';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import './style.css';
 const { Option } = Select;
@@ -11,6 +11,22 @@ function ProductFilter({filters, onChange}) {
     const [form] = Form.useForm();
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
+    
+    const [loadingPage, setLoadingPage] = useState(true);
+    const [listData, setListData] = useState({
+        hospitals:[],
+        doctors:[]
+    })
+    useEffect(()=> {
+        if(loadingData===0 && appState.listAllSpecials.length !== 0){
+            setListData({
+                hospitals: appState.listAllHospitals.data,
+                specialities: appState.listAllSpecials,
+            });
+            setLoadingPage(false);
+        }
+    },[loadingData])
+   
 
     const handleOnFinish = (values) => {
         const { tenBs, ck, bv } = values;
@@ -53,7 +69,7 @@ function ProductFilter({filters, onChange}) {
                             <Input placeholder="Tìm theo tên" suffix={<SearchOutlined />}/>
                         </Form.Item>
                         <Form.Item name="bv" label="Tìm theo bệnh viện:" className="search__form--item">
-                            {loadingData?
+                            {loadingPage?
                                 <Select
                                     placeholder="Tìm theo bệnh viện"
                                 >
@@ -63,13 +79,13 @@ function ProductFilter({filters, onChange}) {
                                     placeholder="Tìm theo bệnh viện"
                                 >
                                     <Option value="all-bv">Tất cả</Option>
-                                    {appState.listAllHospitals.map(item=>(
+                                    {listData.hospitals.map(item=>(
                                         <Option key={item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>}
                         </Form.Item>
                         <Form.Item name="ck" label="Tìm theo chuyên khoa:" className="search__form--item">
-                            {loadingData?
+                            {loadingPage?
                                 <Select
                                     placeholder="Tìm theo chuyên khoa"
                                 >
@@ -79,8 +95,8 @@ function ProductFilter({filters, onChange}) {
                                     placeholder="Tìm theo chuyên khoa"
                                 >
                                     <Option value="all-ck">Tất cả</Option>
-                                    {appState.listAllSpecials.map(item=>(
-                                        <Option key={item.key} value={item.key}>{item.name}</Option>
+                                    {listData.specialities.map(item=>(
+                                        <Option key={item.key} value={item._id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             }

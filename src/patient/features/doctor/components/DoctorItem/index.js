@@ -14,7 +14,9 @@ import Swal from 'sweetalert2'
 import './style.css'
 const DoctorItem = (props) => {
     const data = props.data;
+    console.log('data DoctorItem:>> ', data);
     const img = data.sex==='male'? logo_male:logo_female;
+    const avatar = `http://localhost:3002${data.avatar}`;
     const patient = useSelector(state=> state.patient);
     const history = useHistory();
     const dispatch = useDispatch();
@@ -60,7 +62,7 @@ const DoctorItem = (props) => {
             <div className="profile-widget">
                 <div className="doc-img">
                     <Link to={`/danh-sach-bac-si/${props.data?.id}`}>
-                        <img className="img-fluid" alt="User" src={img} />
+                        <img className="img-fluid" alt="User" src={data.avatar?avatar:img} />
                     </Link>
                 </div>
                 <div className="pro-content">
@@ -75,15 +77,15 @@ const DoctorItem = (props) => {
                     <ul className="available-info">
                         <li>
                             <span><img src={departLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span>{data.specialization?.name}</span>
+                            <span>{data.spec_detail[0]?.name}</span>
                         </li>
                         <li>
                             <span><img src={hospitalLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span>{data.hopitaldetails[0]?.name}</span>
+                            <span>{data.hospital_info[0]?.name}</span>
                         </li>
                         <li>
                             <span><img src={location} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span> {data.hopitaldetails[0]?.address}
+                            <span> {data.hospital_info[0]?.address}
                             </span>
                         </li>
                         {/* <li>

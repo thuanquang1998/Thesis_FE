@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import PatientSidebar from '../../components/PatientSideBar';
 import patientAPI from '../../../../../api/patientApi';
 import moment from 'moment';
+
+
 function PatientSchedule(props) {
     const dispatch = useDispatch();
     const patient = useSelector(state=>state.patient)
@@ -45,6 +47,15 @@ function PatientSchedule(props) {
 
             }
             setLoadingSchedule(false)
+        } catch (error) {
+            
+        }
+    }
+
+    const cancelSchedule = async (id) => {
+        try {
+            const response = await patientAPI.cancel_schedule(id);
+            console.log('response cancelSchedule:>> ', response);
         } catch (error) {
             
         }
@@ -97,7 +108,7 @@ function PatientSchedule(props) {
                     <Button onClick={()=>console.log(record.id)} type="primary" style={{marginRight:"5px"}}>
                         Đổi lịch
                     </Button>
-                    <Button onClick={()=>console.log(record.id)} type="danger">
+                    <Button onClick={()=>cancelSchedule(record.id)} type="danger">
                         Hủy lịch
                     </Button>
                 </div>

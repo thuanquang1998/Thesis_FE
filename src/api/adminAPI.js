@@ -16,19 +16,6 @@ class adminAPI{
     get_hospital_info(id){
         return http.get(`hopitals/${id}`).then(res => res.data).catch(err=> err.response.data)
     }
-    // create_hospital(data){
-    //     const tokenObj = localStorage.getItem('currentAdmin');
-    //     const token = JSON.parse(token).adminToken;
-    //     console.log(token,"0000000000000000");
-    //     return http
-    //         .post(
-    //             `hopitals/create`,
-    //             { headers:{ 'x-access-token': token}}, 
-    //             data
-    //         )
-    //         .then(res=> res.data)
-    //         .catch(err => err.response.data)
-    // }
 
     create_hospital(data) {
         const tokenObj = localStorage.getItem('currentAdmin');
@@ -41,7 +28,11 @@ class adminAPI{
         .then(res=> res.data)
         .catch(err => err.response.data)
     }
- 
+    
+    // get list employee in hospital => doctor
+    get_doctors_of_hospital(id) {
+        return http.get(`hopitals/${id}/doctors`).then(res=> res.data).catch(err=> err.response.data)
+    }
     // api for agent
 
 }
