@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import SidebarNav from '../../sidebar'
+import SidebarNav from '../../../../components/SideBar'
 import {Card, Row, Col, Form, Input, Button, Modal} from 'antd'
-import img_logo from '../../../assets/img/logobv.jpg' 
-import img_background from '../../../assets/img/hospital_background.jpg'
+import img_logo from '../../../../assets/img/logobv.jpg' 
+import img_background from '../../../../assets/img/hospital_background.jpg'
 import './style.css'
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css';
-import { get_hospital_byId } from '../../../../redux/actions/adminActions'
+import { get_hospital_byId } from '../../../../../redux/actions/adminActions'
 import { useHistory } from 'react-router'
+
+
 const HospitalInfo = () => {
 	const dispatch = useDispatch()
 	const hospital = useSelector(state=>state.admin.hospitalById)

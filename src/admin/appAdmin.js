@@ -12,6 +12,11 @@ import CreateHospital from './features/AdminRoot/pages/CreateHospital';
 import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot';
 
 import DashboardHospital from './features/AdminHospital/pages/DashboardHospital';
+import Appoinments from './features/AdminHospital/pages/Appoinments';
+import Specialities from './features/AdminHospital/pages/Specialities';
+import Employees from './features/AdminHospital/pages/Employees';
+import Reviews from './features/AdminHospital/pages/Reviews';
+import HospitalInfo from './features/AdminHospital/pages/HospitalInfo';
 
 const AppAdmin =({match})=>{
     const admin = useSelector(state=>state.admin);
@@ -50,29 +55,11 @@ const AppAdmin =({match})=>{
 
                         {/* admin hospital */}
                         <PrivateRouteAdmin component={DashboardHospital} path="/admin/hospital" exact/>
-
-
-                        {/* <PrivateRouteAdmin component={Specialities} path="/admin/chuyen-khoa" exact/>
-                        <PrivateRouteAdmin component={HospitalPage} path="/admin/cosoyte"/>
-                        <PrivateRouteAdmin component={HospitalCreate} path="/admin/cosoyte/them-bv" exact/> */}
-
-                        
-
-                        {/* <Route exact path='/admin/dashboard' component={Dashboard}/> */}
-
-                        {/* <Route exact path='/admin/chuyen-khoa' component={Specialities}/> */}
-                        
-                        
-                        {/* route for admin hospital */}
-                        {/* <Route exact path='/admin/dashboard-bv' component={DashboardHospital}/>
-                        <Route exact path='/admin/benhviena/thongtin' component={HospitalInfo}/>
-                        <Route exact path='/admin/benhviena/dsbacsi' component={DoctorList}/>
-                        <Route exact path='/admin/benhviena/nhanvien' component={Employees}/>
-                        <Route exact path='/admin/benhviena/chuyenkhoa' component={SpecialitiesHospital}/>
-                        <Route exact path='/admin/benhviena/dslichkham' component={ManageSchedule}/>
-                        <Route exact path='/admin/benhviena/danhgia' component={Reviews}/>
-
-                        <Route exact path='/admin/dashboard-system' component={DashboardSystem}/> */}
+                        <PrivateRouteAdmin component={Appoinments} path="/admin/hospital/lich-kham" exact/>
+                        <PrivateRouteAdmin component={HospitalInfo} path="/admin/hospital/thong-tin" exact/>
+                        <PrivateRouteAdmin component={Employees} path="/admin/hospital/nhan-vien" exact/>
+                        <PrivateRouteAdmin component={Specialities} path="/admin/hospital/chuyen-khoa" exact/>
+                        <PrivateRouteAdmin component={Reviews} path="/admin/hospital/danh-gia" exact/>
 
                     </Switch>
                 </div>

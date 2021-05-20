@@ -49,7 +49,7 @@ const SidebarNav = (props) => {
                   <>
                     <h4 style={{textAlign:"center", color:"white"}}>Quản lí bệnh viện</h4>
                     <li className={`${'/admin/hospital' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/hospital"><i className="fa fa-home"></i>Dashboard Bệnh viện</Link>
+                      <Link to="/admin/hospital"><i className="fa fa-home"></i>Dashboard Bệnh viện</Link> 
                     </li>
                     <li className={`${'/admin/hospital/thong-tin' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/hospital/thong-tin"><i className="fa fa-hospital"></i>Thông tin bệnh viện</Link>
