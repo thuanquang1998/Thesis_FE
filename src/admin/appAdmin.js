@@ -11,6 +11,8 @@ import HospitalsPage from './features/AdminRoot/pages/HospitalsPage';
 import CreateHospital from './features/AdminRoot/pages/CreateHospital';
 import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot';
 
+import DashboardHospital from './features/AdminHospital/pages/DashboardHospital';
+
 const AppAdmin =({match})=>{
     const admin = useSelector(state=>state.admin);
     console.log('admin :>> ', admin);
@@ -28,7 +30,13 @@ const AppAdmin =({match})=>{
                         <Route
                             exact path='/admin' render={()=>(
                                 isAdminLoggedIn? 
-                                (accountType==='system-admin'? <DashboardSystem/>:<SpecialitiesRoot/>)
+                                    (accountType==='system-admin'? 
+                                        <DashboardSystem/>:
+                                        (accountType==='hospital-admin'?
+                                            <DashboardHospital/>:
+                                            <SpecialitiesRoot/>
+                                        )
+                                    )
                                 :<Redirect to='/admin/dang-nhap'/>
                             )}
                         />
@@ -40,7 +48,8 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={SpecialitiesRoot} path="/admin/root/chuyen-khoa" exact/>
                         <PrivateRouteAdmin component={CreateHospital} path="/admin/root/benh-vien/them-benh-vien" exact/>
 
-
+                        {/* admin hospital */}
+                        <PrivateRouteAdmin component={DashboardHospital} path="/admin/hospital" exact/>
 
 
                         {/* <PrivateRouteAdmin component={Specialities} path="/admin/chuyen-khoa" exact/>

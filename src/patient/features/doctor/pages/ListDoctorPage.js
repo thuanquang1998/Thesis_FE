@@ -65,16 +65,18 @@ function ListDoctorPage(props) {
             const _ck = ck?ck==='all-ck'?'':ck:'';
 
             const _data = [...listAllDoctors];
-            const new_list_name = _data.filter((item,idx)=>{
-                return item.fullName.toLowerCase().includes(_tenBs.toLowerCase())===true;
-            })
-            const new_list_bv = new_list_name.filter((item,idx)=> {
-                return item.hopitalId.toLowerCase().includes(_bv.toLowerCase())===true;
-            })
-            const new_list_ck = new_list_bv.filter((item,idx)=> {
-                return item.specialization?item.specialization.key.toLowerCase().includes(_ck.toLowerCase())===true:true;
-            })
-            _renderData = new_list_ck;
+            console.log('_data :>> ', _data);
+            // const new_list_name = _data.filter((item,idx)=>{
+            //     return item.fullName.toLowerCase().includes(_tenBs.toLowerCase())===true;
+            // })
+            // const new_list_bv = new_list_name.filter((item,idx)=> {
+            //     return item.hopitalId.toLowerCase().includes(_bv.toLowerCase())===true;
+            // })
+            // const new_list_ck = new_list_bv.filter((item,idx)=> {
+            //     return item.specialization?item.specialization.id.toLowerCase().includes(_ck.toLowerCase())===true:true;
+            // })
+            // _renderData = new_list_ck;
+            _renderData=[]
         } else {
             _renderData = [];
         }

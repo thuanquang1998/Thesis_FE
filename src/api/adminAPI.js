@@ -7,7 +7,7 @@ class adminAPI{
     }
     // api for admin system
     get_speacialities(method){
-        return http.get('hopitals/spec/list').then(res=> res.data).catch(err=> err.response.data)
+        return http.get('spec').then(res=> res.data).catch(err=> err.response.data)
     }
     get_list_hospitals(method){
         return http.get('hopitals').then(res => res.data).catch(err=> err.response.data)
@@ -30,19 +30,7 @@ class adminAPI{
     //         .catch(err => err.response.data)
     // }
 
-    create_hospital() {
-        const data = {
-            name: "Bệnh viện A33",
-            phone: "082321019933",
-            email: "abc33@gmail.com",
-            address: "123, Hoàng Hoa Thám, Phường 5, Quận Tân Bình, Tp.Hồ Chí Minh",
-            about: "Đội ngũ bác sĩ chuyên nghiệp, tận tình, chu đáo!...",
-            dateStart: "2021-05-22T00:00:00.000Z",
-            contractType: "Hợp đồng ngắn hạn",
-            scale: "Loại B",
-            adminPhone: "+8423210198",
-            adminEmail:"1610644@hcmut.edu.vn",
-        };
+    create_hospital(data) {
         const tokenObj = localStorage.getItem('currentAdmin');
         const _token = JSON.parse(tokenObj);
         return http.post(`hopitals/create`, data, { 

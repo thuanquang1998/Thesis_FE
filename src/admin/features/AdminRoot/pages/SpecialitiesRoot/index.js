@@ -11,7 +11,7 @@ const SpecialitiesRoot = () => {
 	const dispatch = useDispatch()
 	const [show, setShow] = useState(null)
 	const specialities = useSelector(state=>state.admin.specialities_system)
-	
+	console.log('specialities :>> ', specialities);
 	useEffect(()=> {
 		dispatch(get_specialities_system())
 	},[])

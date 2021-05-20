@@ -56,7 +56,7 @@ const HomeDepart = (props) => {
                                                 <Link
                                                     to={{
                                                         pathname: "/danh-sach-bac-si",
-                                                        search: `?ck=${item.key}`,
+                                                        search: `?ck=${item.id}`,
                                                         // hash: "#the-hash",
                                                         // state: { fromDashboard: true }
                                                       }}
@@ -67,7 +67,7 @@ const HomeDepart = (props) => {
                                             <Link 
                                                 to={{
                                                     pathname: "/danh-sach-bac-si",
-                                                    search: `?ck=${item.key}`,
+                                                    search: `?ck=${item.id}`,
                                                     // hash: "#the-hash",
                                                     // state: { fromDashboard: true }
                                                 }} 

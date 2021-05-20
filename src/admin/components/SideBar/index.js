@@ -45,7 +45,30 @@ const SidebarNav = (props) => {
                   </>
                 )}
                
-
+                { accountType === 'hospital-admin' && (
+                  <>
+                    <h4 style={{textAlign:"center", color:"white"}}>Quản lí bệnh viện</h4>
+                    <li className={`${'/admin/hospital' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital"><i className="fa fa-home"></i>Dashboard Bệnh viện</Link>
+                    </li>
+                    <li className={`${'/admin/hospital/thong-tin' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/thong-tin"><i className="fa fa-hospital"></i>Thông tin bệnh viện</Link>
+                    </li>
+                    <li className={`${'/admin/hospital/nhan-vien' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/nhan-vien"><i className="fa fa-user"></i>Nhân viên</Link>
+                    </li>
+                    <li className={`${'/admin/hospital/chuyen-khoa' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/chuyen-khoa"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
+                    </li>
+                    <li className={`${'/admin/hospital/danh-gia' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/danh-gia"><i className="fas fa-clipboard-list"></i>Đánh giá</Link>
+                    </li>
+                    <li className={`${'/admin/hospital/lich-kham' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/lich-kham"><i className="far fa-calendar-alt"></i>Lịch khám</Link>
+                    </li>
+                  </>
+                )}
+                
 
 
                 {/* <hr style={{borderTop:"2px solid #ddd"}}/>

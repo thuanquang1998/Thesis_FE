@@ -7,10 +7,18 @@ import SidebarNav from '../../../../components/SideBar'
 
 const ListHospitals = () => {
     const dispatch = useDispatch()
-    const list_hospitals = useSelector(state=>state.admin.list_hospital)
+    const list_hospitals = useSelector(state=>state.admin.list_hospital);
+    console.log('list_hospitals :>> ', list_hospitals);
+    const [listHospitals, setListHospitals] = useState([]);
     useEffect(()=> {
       dispatch(get_list_hospitals())
     },[])
+    useEffect(()=> {
+      if(list_hospitals && !list_hospitals?.isNull){
+        const list_bv = list_hospitals.data;
+        setListHospitals(list_bv);
+      }
+    },[list_hospitals])
 
     const columns = [
         {
@@ -47,8 +55,6 @@ const ListHospitals = () => {
         {
           title: 'Trạng thái',
           dataIndex: 'status',
-          fixed: 'right',
-          width: 150,
         },
         {
           title: 'Sự kiện',
@@ -59,6 +65,9 @@ const ListHospitals = () => {
                 <a href={`#/restaurants/edit/{partner.id}`}>
                   <Button type="primary" style={{marginRight:"15px"}}>Sửa</Button>
                 </a>
+                <a href={`#/restaurants/edit/{partner.id}`}>
+                  <Button type="danger" style={{marginRight:"15px"}}>Xóa</Button>
+                </a>
               </div>
             )
             }, 
@@ -67,116 +76,6 @@ const ListHospitals = () => {
         },
       ]
 
-    const data = [
-      {
-        name:'Bệnh viện Quận Thủ Đức',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dùng thử',
-        Size:'Loại A',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 5',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng ngắn hạn',
-        Size:'Loại B',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 10',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dài hạn',
-        Size:'Loại C',
-        status: 'Dừng hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận Thủ Đức',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dùng thử',
-        Size:'Loại A',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 5',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng ngắn hạn',
-        Size:'Loại B',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 10',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dài hạn',
-        Size:'Loại C',
-        status: 'Dừng hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận Thủ Đức',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dùng thử',
-        Size:'Loại A',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 5',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng ngắn hạn',
-        Size:'Loại B',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 10',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dài hạn',
-        Size:'Loại C',
-        status: 'Dừng hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận Thủ Đức',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dùng thử',
-        Size:'Loại A',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 5',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng ngắn hạn',
-        Size:'Loại B',
-        status: 'Đang hoạt động',
-      },
-      {
-        name:'Bệnh viện Quận 10',
-        address:'54/17 đường số 7, Linh Trung, Thủ Đức, TP. Hồ Chí Minh',
-        phone_number:'097558249',
-        email:'thuanquang23009@gmail.com',
-        contractType:'Hợp đồng dài hạn',
-        Size:'Loại C',
-        status: 'Dừng hoạt động',
-      },
-    ]
     
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showCreateHos = () => {
@@ -217,7 +116,7 @@ const ListHospitals = () => {
                     // loading={loading}
                     columns={columns}
                     pagination={false}
-                    dataSource={list_hospitals} 
+                    dataSource={listHospitals} 
                     />
                     <br />
                     <div className="d-flex flex-row-reverse">
