@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {useSelector, useDispatch } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Appointments from './pages/appointments';
 import DoctorDashboard from './pages/dashboard';
 import LoginContainer from './pages/login/login';
@@ -12,22 +12,43 @@ import ScheduleTiming from './pages/scheduletimings';
 // import { check_doctor_login } from '../redux/actions/doctorActions';
 import PatientProfile from './pages/patientprofile';
 import Header from './components/header'
+import LoadingTop from './components/loadingTop'
+import PrivateRouteDoctor from './components/PrivateRouteDoctor';
 
+import LoginManager from '../patient/features/auth/pages/LoginManager';
 
 const AppDoctor =  ({history}) => {
-	const doctor= useSelector(state=> state.doctor)
-	const dispatch = useDispatch()
-	// useEffect(()=>{
-	// 	dispatch(check_doctor_login(history))
-	// },[doctor.doctor_login])
+	
+	const dispatch = useDispatch();
+    const doctor= useSelector(state=> state.doctor);
+
+    const {loadingPage, isDoctorLoggedIn, currentDoctor} = doctor;
+    const accountType = currentDoctor.accountType;
+    
+    // useEffect(()=> {
+	// 	dispatch(get_specialities_system());
+    //     dispatch(get_list_hospitals());
+	// },[])
 
     return (
 		<>
             <Router>
-                
+				{loadingPage && <LoadingTop/>}
                 <div className="main-wrapper">
                     <Route render={(props)=> <Header {...props}/>} />
                     <Switch>
+						<Route
+                            exact path='/bac-si' render={()=>(
+                                isDoctorLoggedIn? 
+                                    (accountType==='doctor'? 
+                                        <DoctorDashboard/>:
+                                        <Appointments/>
+                                    )
+                                :<Redirect to='/quan-li/dang-nhap'/>
+                            )}
+                        />
+                        <Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
+
 						<Route exact path='/bac-si' component={DoctorDashboard}/>
 						<Route exact path='/bac-si/login' component={LoginContainer}/>
 						{/* <Route exact path='/bac-si' component={DoctorDashboard}/> */}

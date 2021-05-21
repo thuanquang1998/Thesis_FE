@@ -6,14 +6,15 @@ import logoHospital from '../../../assets/img/benhvien.jpg'
 import iconHospital from '../../../assets/img/icon_hospital.jpg'
 
 const settings = {
-    className: "center",
+    // className: "center",
+    width:400,
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 4,
     centerPadding: "10px",
-    arrows: false,
+    arrows: true,
     responsive: [
       {
           breakpoint: 800,
@@ -40,7 +41,7 @@ const settings = {
 const CardHospital = (props) => {
     return (
         <a href="patient/cosoyte/profile">
-            <div className="feature-item text-center">
+            <div className="feature-item text-center" style={{textAlign: 'center'}}>
                 <img src={props.data && props.data.logo} className="img-fluid" alt="Feature" />
                 <p>{props.data && props.data.name}</p>
             </div>
@@ -60,7 +61,7 @@ const HomeHospital = (props) => {
                 <h2 className="mt-2" style={{color:"#272b41", fontWeight:"500"}}>Cơ sở y tế</h2>
                 <hr style={{width:"120px", borderTop:"3px solid #f9a870"}}/>
               </div>
-              <div className="features-slider slider">
+              <div className="features-slider slider" style={{marginTop:"20px"}}>
                 <Slider {...settings}>
                     {props.data && props.data.map(item=>(
                         <CardHospital key={item.id} data={item}/>

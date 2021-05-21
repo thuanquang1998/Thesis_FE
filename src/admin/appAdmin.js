@@ -1,25 +1,25 @@
 
-import React ,{ useState, useEffect } from 'react'
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import { get_list_hospitals, get_specialities_system } from '../redux/actions/adminActions'
 import Header from './components/header'
+import LoadingTop from './components/loadingTop'
 import Login from './components/login'
-import {useDispatch, useSelector} from 'react-redux'
-import LoadingTop from './components/loadingTop';
-import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index';
-import PrivateRouteAdmin from './components/Route/PrivateRouteAdmin';
-import HospitalsPage from './features/AdminRoot/pages/HospitalsPage';
-import CreateHospital from './features/AdminRoot/pages/CreateHospital';
-import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot';
+import PrivateRouteAdmin from './components/Route/PrivateRouteAdmin'
+import CreateDoctor from './features/AdminHospital/components/CreateDoctor'
+import Appoinments from './features/AdminHospital/pages/Appoinments'
+import DashboardHospital from './features/AdminHospital/pages/DashboardHospital'
+import Employees from './features/AdminHospital/pages/Employees'
+import HospitalInfo from './features/AdminHospital/pages/HospitalInfo'
+import Reviews from './features/AdminHospital/pages/Reviews'
+import Specialities from './features/AdminHospital/pages/Specialities'
+import CreateHospital from './features/AdminRoot/pages/CreateHospital'
+import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index'
+import HospitalsPage from './features/AdminRoot/pages/HospitalsPage'
+import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot'
 
-import DashboardHospital from './features/AdminHospital/pages/DashboardHospital';
-import Appoinments from './features/AdminHospital/pages/Appoinments';
-import Specialities from './features/AdminHospital/pages/Specialities';
-import Employees from './features/AdminHospital/pages/Employees';
-import Reviews from './features/AdminHospital/pages/Reviews';
-import HospitalInfo from './features/AdminHospital/pages/HospitalInfo';
-import CreateDoctor from './features/AdminHospital/components/CreateDoctor';
 
-import { get_specialities_system, get_list_hospitals } from '../redux/actions/adminActions';
 
 
 const AppAdmin =({match})=>{

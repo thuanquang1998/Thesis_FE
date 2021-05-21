@@ -23,8 +23,7 @@ class patientAPI{
     }
     // huy lich
     cancel_schedule(id) {
-        const token = localStorage.getItem('userToken');
-        return http.get(`appointment/${id}/cancel`).then(res=> res.data).catch(err => err.response.data)
+        return http.put(`appointment/${id}/cancel`).then(res=> res.data).catch(err => err.response.data)
     }
     // doi lich
    

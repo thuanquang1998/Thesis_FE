@@ -1,19 +1,23 @@
 
-import { call, put, takeEvery } from 'redux-saga/effects'
-import { GET_DOCTORS_DATA, EMAIL_LOGIN, SET_DOCTORS_DATA, REGISTER } from '../../redux/actions/doctorActions'
-import { LOADING_DATA, LOADING_DATA_SUCCESS, LOADING_DATA_FAILED, ALL_DOCTORS, ALL_HOSPITAL, ALL_SPECIAL  } from '../actions/loadingActions';
+import { call, put, takeEvery } from 'redux-saga/effects';
+import doctorAPI from '../../api/doctorAPI';
+import { 
+    LOADING_PAGE_DOCTOR,
+    GET_DOCTORS_DATA, SET_DOCTORS_DATA,
+    LOGIN_DOCTOR,  LOGIN_DOCTOR_SUCCESS, LOGIN_DOCTOR_FAILED, LOADING_LOGIN_DOCTOR,
+    LOGOUT_DOCTOR, LOGOUT_DOCTOR_LOADING, LOGOUT_DOCTOR_SUCCESS
 
-import doctorAPI from '../../api/doctorAPI'
-import patientAPI from '../../api/patientApi';
-
-import { SwalAlert } from '../../utils/alert'
+} from '../../redux/actions/doctorActions';
+import { SwalAlert } from '../../utils/alert';
+import { ALL_DOCTORS, LOADING_DATA, LOADING_DATA_SUCCESS } from '../actions/loadingActions';
+import adminAPI from '../../api/adminAPI';
+import { useSnackbar } from 'notistack';
 
 export default function* watchAsyncDoctorActions(){
     yield takeEvery(GET_DOCTORS_DATA , get_doctors_data)
-    yield takeEvery(EMAIL_LOGIN, login)
-    yield takeEvery(REGISTER , register)
+    yield takeEvery(LOGIN_DOCTOR, loginDoctorByEmail)
+    yield takeEvery(LOGOUT_DOCTOR , logoutDoctor)
 }
-
 
 function* get_doctors_data({payload}){
     yield put({type : LOADING_DATA});
@@ -34,35 +38,39 @@ function* get_doctors_data({payload}){
     }
 }
 
-function* login({payload}){
+function* loginDoctorByEmail({payload}){
+
+    console.log("loginDoctorByEmail")
+    yield put({type : LOADING_PAGE_DOCTOR});
+    yield put({type : LOADING_LOGIN_DOCTOR});
     try{
-        const response = yield call(doctorAPI.login , payload)
+        const response = yield call( adminAPI.login , payload)
         if (response.error){
-            SwalAlert('Error', 'Server disconected','error')
-            // localStorage.clear()
+            SwalAlert('Error', 'Tên đăng nhập không đúng', 'error')
+            console.log("Error");
+            yield put({type : LOGIN_DOCTOR_FAILED});
         }
         else {
-            console.log(response)
-            // yield put({type : SET_DOCTORS_DATA, payload : response.data})
+            if(response.data.accountType!=='doctor') {
+                SwalAlert('Error', 'Tài khoản không tồn tại', 'error');
+                throw new Error("Tài khoản không tồn tại")
+            } else {
+                const data = {
+                    accountType: response.data.accountType,
+                    doctorToken: response.data.token,
+                }
+                localStorage.setItem('currentDoctor', JSON.stringify(data));
+                yield put({type : LOGIN_DOCTOR_SUCCESS, payload : data});
+            }
         }
     }
     catch(err){
-
+        console.log(err)    
     }
 }
-function* register({payload}){
-    try{
-        const response = yield call(doctorAPI.register , payload)
-        if (response.error){
-            SwalAlert('Error', 'Server disconected','error')
-            // localStorage.clear()
-        }
-        else {
-            console.log(response)
-            // yield put({type : SET_DOCTORS_DATA, payload : response.data})
-        }
-    }
-    catch(err){
 
-    }
-}
+function* logoutDoctor() {
+    yield put({type : LOADING_PAGE_DOCTOR})
+    localStorage.removeItem('currentDoctor');
+    yield put({type: LOGOUT_DOCTOR_SUCCESS});
+} 

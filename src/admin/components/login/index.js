@@ -1,15 +1,13 @@
-import React, {useState, useEffect} from 'react'
-import {Card, Form, Button, Input, Modal, Select} from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import logo from '../../assets/img/bk-logo.png'
-import {useHistory} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
-
-import './style.css'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Card, Form, Input } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 // import { login, register } from '../../../redux/actions/doctorActions';
 import { login_by_email } from '../../../redux/actions/adminActions'
-import adminAPI from '../../../api/adminAPI';
-import LoadingTop from '../../components/loadingTop';
+import logo from '../../assets/img/bk-logo.png'
+import './style.css'
+
 
 const Login = () => {
     const history = useHistory();

@@ -5,16 +5,36 @@ import {useDispatch, useSelector} from 'react-redux'
 import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SidebarNav from '../../../../components/SideBar';
-import { get_specialities_system } from '../../../../../redux/actions/adminActions';
+import adminAPI from '../../../../../api/adminAPI';
+import LoadingTop from '../../../../components/loadingTop';
+
 
 const Specialities = () => {
-	const dispatch = useDispatch()
-	const [show, setShow] = useState(null)
-	const specialities = useSelector(state=>state.admin.specialities_system)
+
+	const [show, setShow] = useState(null);
+	const [loadingPage, setLoadingPage] = useState(true);
+	const [ listSpec, setListSpec ] = useState([]);
 	
-	useEffect(()=> {
-		dispatch(get_specialities_system())
-	},[])
+	 useEffect(()=> {
+        setLoadingPage(true);
+        // call api 
+        (async ()=>{
+            try {
+                const response = await adminAPI.get_spec_of_hospital(JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
+                
+                if(!response.error){
+                    setListSpec(response.data)         
+                }
+                else {
+                    setListSpec([]);
+                }      
+            } catch (error) {
+                console.log('error.message :>> ', error.message);
+            }
+            setLoadingPage(false)
+        })()
+    },[])
+
 
 	const new_columns = [
 		{
@@ -31,7 +51,7 @@ const Specialities = () => {
 			title: 'Số bác sĩ',
 			render: (text, record) => (            
 			  <h4 className="table-avatar">
-				{Math.random(1,10),1}
+				{record.num_doctor}
 			  </h4>
 			), 
 		},
@@ -62,6 +82,7 @@ const Specialities = () => {
 	return(
 		<>
 		<SidebarNav />
+		{loadingPage && <LoadingTop/>}
 		<div className="page-wrapper">
 			<div className="content container-fluid">
 				<div className="page-header">
@@ -88,7 +109,7 @@ const Specialities = () => {
 				}>
 					<Table className="table-striped"
 						columns={new_columns}                 
-						dataSource={specialities}
+						dataSource={listSpec}
 						ascend={true}
 						style = {{overflowX : 'auto'}}
 						rowKey={record => record.id}

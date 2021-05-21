@@ -6,93 +6,43 @@ import AddEmployee from '../../components/Modal/AddEmployee';
 import adminAPI from '../../../../../api/adminAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import LoadingTop from '../../../../components/loadingTop';
 
 const Employees = () => {
-	const dispatch = useDispatch();
-	const admin = useSelector(state=> state.admin);
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
-	const [isAddEmployee, setIsAddEmployee] = useState(false);
+	const [loadingPage, setLoadingPage] = useState(true);
+	const [listEmployees, setListEmployees] = useState([]);
 
-	const appState = useSelector(state=>state.app);
-    const {loadingData, listAllSpecials, listAllHospitals} = appState;
-
-	useEffect(() => {
-		if(loadingData===0 && listAllSpecials.length !==0 && listAllHospitals.length !==0){
-			console.log('listAllSpecials :>> ', listAllSpecials);
-			console.log('listAllHospitals :>> ', listAllHospitals);
-		}
-	},[loadingData])
 	useEffect(()=> {
-		// (async ()=>{
-		// 	try {
-		// 		const response = await adminAPI.get_doctors_of_hospital(hospitalInfo.id);
-		// 		// console.log('response Employees:>> ', response);
-		// 	} catch (error) {
+		(async ()=>{
+			try {
+				const response = await adminAPI.get_doctors_of_hospital(hospitalInfo.id);
+				if(response.error) throw new Error(response.errors[0].message);
+				const data = response.data;
+				const _data = data.map(item=>{
+					const _item = {
+						name: item.fullName,
+						specialization: item.spec_detail[0].name,
+						id: item._id,
+						phone: item.phone,
+						email: item.email,
+						typeAccount: 'Bác sĩ'
+					}
+					return _item;
+				})
 				
-		// 	}
-		// })();
+				setListEmployees(_data)
+			} catch (error) {
+				console.log(`error.message`, error.message)
+			}
+			setTimeout(() => {
+				setLoadingPage(false);
+			}, 300);
+		})();
 		
 	},[])
 
-
-	const data_nhanvien = [
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: 'Tim mạch',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Bác sĩ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: 'Tim mạch',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Bác sĩ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: '',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Nv Hỗ trợ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: 'Tim mạch',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Bác sĩ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: '',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Nv Hỗ trợ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: '',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Nv Hỗ trợ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: '',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Nv Hỗ trợ',
-		},
-		{
-			name:'Nguyễn Văn Khánh',
-			specialities: '',
-			phone_number:'0975585249',
-			email: 'thuanquang2009@gmail.com',
-			role: 'Nv Hỗ trợ',
-		},
-	]
+	
 	const new_columns = [
         {
           title: 'Tên nhân viên',
@@ -108,13 +58,13 @@ const Employees = () => {
 		},
 		{
 			title:'Chuyên khoa',
-			dataIndex: 'specialities',
-			key:'specialities'
+			dataIndex: 'specialization',
+			key:'specialization'
 		},
         {
           title: 'Số điện thoại',
-		  dataIndex: 'phone_number',
-		  key:'phone_number'
+		  dataIndex: 'phone',
+		  key:'phone'
         },
         {
           title: 'Email',
@@ -123,8 +73,8 @@ const Employees = () => {
         },
         {
           title: 'Loại tài khoản',
-		  dataIndex: 'role',
-		  key:'role', 
+		  dataIndex: 'typeAccount',
+		  key:'typeAccount', 
 		  render: (text) => text==='Bác sĩ'?(<Tag color="green">{text}</Tag>):(<Tag color="purple">{text}</Tag>),
 		//   sorter: (a, b) => 
         },
@@ -144,6 +94,7 @@ const Employees = () => {
     return (
         <>
             <SidebarNav/>
+			{loadingPage && <LoadingTop/>}
             <div className="page-wrapper">
 			    <div className="content container-fluid">
 					<div className="page-header">
@@ -156,10 +107,7 @@ const Employees = () => {
 								</ul>
 							</div>
 							<div className="col-sm-5 col">
-							    {/* <a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>setIsAddEmployee(true)}>
-								    Thêm bác sĩ
-                                </a> */}
-								<Link to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link>
+								<Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link>
 						    </div>
 						</div>
 					</div>
@@ -170,7 +118,8 @@ const Employees = () => {
 						<Table
 							bordered={true}
 							columns={new_columns}
-							dataSource={data_nhanvien} 
+							dataSource={listEmployees} 
+							loading={loadingPage}
 							/>
 							<br />
 							<div className="d-flex flex-row-reverse">
@@ -178,11 +127,7 @@ const Employees = () => {
 							<br />
 					</Card>
                 </div>
-				<AddEmployee
-					showModal={isAddEmployee}
-					onCancel={()=>setIsAddEmployee(false)}
-					onSubmit={()=>{}}
-				/>
+				
             </div>
 
         </>

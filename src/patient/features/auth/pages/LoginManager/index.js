@@ -1,79 +1,37 @@
-import { Button, Col, Form, Input, Row, Card } from 'antd';
-import React, { useState, useEffect} from 'react';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {useHistory} from 'react-router-dom'
-import { getVerifyCode, getVerifySMS } from '../../../../../redux/actions/patientActions';
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
-
+import { useHistory } from 'react-router-dom';
+import { login_doctors } from '../../../../../redux/actions/doctorActions';
 import loginBanner from '../../../../assets/images/login-banner.png';
-import {Link} from 'react-router-dom';
-import { SwalAlert } from '../../../../../utils/alert';
-import adminAPI from '../../../../../api/adminAPI';
-
 import './style.css';
 
-const LoginManager = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const patient = useSelector(state=> state.patient);
 
-    const [statePageLogin, setStatePageLogin] = useState("status1");
-    const [phone, setPhone] = useState({});
-    const [loadingLogin, setLoadingLogin] = useState(false);
-    
-    // get list hospital
+
+
+
+const LoginManager = () => {
+
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const doctor = useSelector(state=>state.doctor)
+    const {currentDoctor, loadingLogin, isDoctorLoggedIn, loadingLogout} = doctor;
+
     const [loginError, setLoginError] = useState({
         email:"",
         password:"",
     })
 
-    const onHandleLogin = (values) => {
-        console.log('values :>> ', values);
-        // dispatch(login_by_email(values))
-        loginByEmail(values);
+    const onHandleLogin = (data) => {
+        dispatch(login_doctors(data));
     }
-    const loginByEmail = async (data) => {
-        try {
-            const response = await adminAPI.login(data);
-            if(response.error) {
-                // dung sweetalert2
-                console.log(`errors[0]`, response.errors[0])
-                const error = response.errors[0];
-                if(error.message==='User not found') {
-                    setLoginError({...loginError,email:'Tên đăng nhập không đúng'})
-                } else {
-                    setLoginError({...loginError,password:'Mật khẩu không đúng'})
-                }
-            } else {
-                console.log(`response`, response)
-                localStorage.setItem('currentManager',response.data)
-                // check type Account
-                if (response.data.accountType==='doctor') {
-                    history.push('/bac-si');
-                    console.log("111111111111111111111");
-                } else {
-                    history.push('/admin')
-                    console.log("22222222222222222");
-                }
-            }
-        } catch (error) {
-            
+    useEffect(()=> {
+        if(!loadingLogin && isDoctorLoggedIn) {
+            console.log("Đăng nhâp tài khoản bác sĩ thành công");
+            history.push('/bac-si')
         }
-    }
-    useEffect(() => {
-        if(patient.isLoggedIn) {
-            // history.push('/patient')
-            if (history.location.pathname==="/dang-nhap") {
-                history.push('/')
-            } else {
-                history.push({
-                    pathname: `/dat-kham/${history.location.state.data?.id}`,
-                    state: {...history.location.state}
-                })
-            }
-        }
-    }, [patient.isLoggedIn])
-
+    },[loadingLogin])
   
     
     return (

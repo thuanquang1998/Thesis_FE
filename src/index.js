@@ -22,6 +22,14 @@ import './patient/assets/css/style.css';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import { SnackbarProvider } from 'notistack';
 
 
-ReactDOM.render(<Provider store={store}><AppRouter/></Provider>, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+        <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            <AppRouter/>
+        </SnackbarProvider>
+    </Provider>, 
+    document.getElementById('root')
+);

@@ -4,7 +4,7 @@ import departLogo from '../../../../assets/img/depart.png'
 import hospitalLogo from '../../../../assets/img/hospital.png'
 import location from '../../../../assets/img/location.png'
 import price from '../../../../assets/img/price.png'
-
+import { formatPrice } from '../../../../../utils';
 
 function HeaderProfile({data = {}}) {
     return (
@@ -24,19 +24,19 @@ function HeaderProfile({data = {}}) {
                     <ul className="available-info">
                         <li>
                             <span><img src={departLogo} alt="Nội tiết"/></span>
-                            <span>{data.specialization.name}</span>
+                            <span>{data.spec_detail[0]?.name}</span>
                         </li>
                         <li>
                             <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                            <span>{data.hopitaldetails[0].name}</span>
+                            <span>{data.hospital_info[0]?.name}</span>
                         </li>
                         <li>
                             <span><img src={location} alt="Nội tiết"/></span>
-                            <span> {data.hopitaldetails[0].address} </span>
+                            <span> {data.hospital_info[0]?.address} </span>
                         </li>
                         <li>
                             <span><img src={price} alt="Nội tiết"/></span>
-                            <span>{data.price}</span>
+                            <span>{formatPrice(data.price)}</span>
                         </li>
                     </ul>
                 </div>

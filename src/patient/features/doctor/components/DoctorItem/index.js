@@ -59,7 +59,7 @@ const DoctorItem = (props) => {
     return (
         (data && 
         <div>
-            <div className="profile-widget">
+            <div className="profile-widget" style={{minWidth:"280px", maxWidth:"400px", margin:"0 auto"}}>
                 <div className="doc-img">
                     <Link to={`/danh-sach-bac-si/${props.data?.id}`}>
                         <img className="img-fluid" alt="User" src={data.avatar?avatar:img} />
@@ -74,7 +74,7 @@ const DoctorItem = (props) => {
                         {/* <i className="fas fa-check-circle verified"></i> */}
                     </h3>
                     <Rate value={3} />
-                    <ul className="available-info">
+                    <ul className="available-info" style={{height:"110px"}}>
                         <li>
                             <span><img src={departLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
                             <span>{data.spec_detail[0]?.name}</span>

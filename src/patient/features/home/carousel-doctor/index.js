@@ -15,14 +15,14 @@ const HomeBookDoctor = (props)  => {
         dots:false,
         infinite: true,
         speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 4,
+        slidesToShow: 3,
+        slidesToScroll: 3,
         centerPadding: '10px',
         arrows: true,
         centerMode: true,
              responsive: [
             {
-                breakpoint: 600,
+                breakpoint: 690,
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
@@ -40,16 +40,7 @@ const HomeBookDoctor = (props)  => {
                 }
             },
             {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    
-                }
-            },
-            {
-                breakpoint: 1350,
+                breakpoint: 1550,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
@@ -57,15 +48,6 @@ const HomeBookDoctor = (props)  => {
                     
                 }
             },
-            {
-                breakpoint: 1700,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    
-                }
-            }
         ]
       };
 

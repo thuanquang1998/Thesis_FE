@@ -12,6 +12,7 @@ const { TabPane } = Tabs;
 const DetailDoctorPage = (props) => {
     const history = useHistory();
     const data = history.location.state.data;
+    console.log('data :>> ', data);
     return (
         <div>
             {/* breadcrumb */}
@@ -38,7 +39,7 @@ const DetailDoctorPage = (props) => {
                         <Row>
                             <Col sm={{span:4, offset:10}} md={{span:4,offset:0}} lg={{span:3}} className="logoDoctor">
                                 <div>
-                                    <img src={logoDoctor} alt="logo"/>
+                                    <img src={data.avatar_image||logoDoctor} alt="logo"/>
                                 </div>
                             </Col>
                             <Col sm={{span:24}} md={{span:15}} className="infoDoctor">
@@ -49,21 +50,15 @@ const DetailDoctorPage = (props) => {
                                 <ul className="available-info">
                                     <li>
                                         <span><img src={departLogo} alt="Nội tiết"/></span>
-                                        <span>{data.specialization.name}</span>
+                                        <span>{data.spec_detail[0]?.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                                        <span>{data.hopitaldetails[0].name}</span>
+                                        <span>{data.hospital_info[0]?.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={location} alt="Nội tiết"/></span>
-                                        <span>
-                                            {`${data.hopitaldetails[0].address.number}, 
-                                            ${data.hopitaldetails[0].address.street}, 
-                                            ${data.hopitaldetails[0].address.ward},
-                                            ${data.hopitaldetails[0].address.district},
-                                            ${data.hopitaldetails[0].address.city}`}
-                                    </span>
+                                        <span> {data.hospital_info[0]?.address}</span>
                                     </li>
                                     <li>
                                         <span><img src={price} alt="Nội tiết"/></span>

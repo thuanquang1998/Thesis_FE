@@ -78,7 +78,9 @@ function ListDoctorPage(props) {
             const new_list_ck = new_list_bv.filter((item,idx)=> {
                 return item.spec_detail?item.spec_detail[0]?._id.toLowerCase().includes(_ck.toLowerCase())===true:true;
             })
-            _renderData = new_list_ck;
+            const new_doctors = new_list_ck.filter(x=>x.timeWorkIsNull===false);
+            _renderData = new_doctors;
+
         } else {
             _renderData = [];
         }

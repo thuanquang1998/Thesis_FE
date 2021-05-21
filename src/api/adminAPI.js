@@ -17,6 +17,7 @@ class adminAPI{
         return http.get(`hopitals/${id}`).then(res => res.data).catch(err=> err.response.data)
     }
 
+    // tạo bệnh viện
     create_hospital(data) {
         const tokenObj = localStorage.getItem('currentAdmin');
         const _token = JSON.parse(tokenObj);
@@ -29,11 +30,30 @@ class adminAPI{
         .catch(err => err.response.data)
     }
     
-    // get list employee in hospital => doctor
-    get_doctors_of_hospital(id) {
-        return http.get(`hopitals/${id}/doctors`).then(res=> res.data).catch(err=> err.response.data)
+    // tạo bác sĩ
+    create_doctor(data) {
+        return http.post('doctors/create',data)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
     }
-    // api for agent
+
+    // lấy danh sách bác sĩ thuộc bệnh viện => nhân viên
+    get_doctors_of_hospital(id) {
+        return http.get(`hopitals/${id}/doctors`)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
+
+
+
+    get_spec_of_hospital(id) {
+        return http.get(`spec/hospital/${id}`)
+            .then(res=>res.data)
+            .catch(err => err.response.data)
+    }
+
+
+    
 
 }
 export default new adminAPI
