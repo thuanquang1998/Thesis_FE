@@ -44,6 +44,26 @@ class adminAPI{
                     .catch(err => err.response.data)
     }
 
+    // xóa chuyên khoa khỏi bệnh viện
+    remove_spec_hospital(data){
+        return http.put(`/spec/removeouthospital`, data)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
+
+    // thêm chuyên khoa vào bệnh viện
+    add_spec_hospital(data){
+        return http.put(`/spec/addtohospital`, data)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
+
+    // lấy danh sách lịch khám của bệnh viện
+    get_appointment_of_hospital(id){
+         return http.get(`hopitals/${id}/appointments`)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
 
 
     get_spec_of_hospital(id) {

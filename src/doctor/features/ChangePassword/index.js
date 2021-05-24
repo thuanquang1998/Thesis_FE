@@ -3,7 +3,7 @@ import DoctorSidebar from '../../components/DoctorSideBar';
 import { Link } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
 
-const DoctorDashboard = () =>{
+const ChangePassword = () =>{
         return(
             <div>
                 <div className="breadcrumb-bar">
@@ -30,7 +30,7 @@ const DoctorDashboard = () =>{
                                 </StickyBox>
                             </div>
                             <div className="col-md-7 col-lg-8 col-xl-9">
-                                DoctorDashboard
+                                ChangePassword
                             </div>  
                         </div>
                     </div>
@@ -41,5 +41,5 @@ const DoctorDashboard = () =>{
      }
 
 
-export default DoctorDashboard;
+export default ChangePassword;
      

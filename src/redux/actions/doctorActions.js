@@ -24,7 +24,7 @@ export const login_doctors = (data) => {
         payload: data
     }
 }
-export const logout_doctors = () => { 
+export const logout_doctor = () => { 
     return {
         type : LOGOUT_DOCTOR,
     }

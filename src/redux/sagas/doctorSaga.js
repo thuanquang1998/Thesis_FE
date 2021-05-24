@@ -58,6 +58,7 @@ function* loginDoctorByEmail({payload}){
                 const data = {
                     accountType: response.data.accountType,
                     doctorToken: response.data.token,
+                    doctor: response.data.doctor_info,
                 }
                 localStorage.setItem('currentDoctor', JSON.stringify(data));
                 yield put({type : LOGIN_DOCTOR_SUCCESS, payload : data});

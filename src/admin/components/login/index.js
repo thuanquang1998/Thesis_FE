@@ -24,7 +24,6 @@ const Login = () => {
         dispatch(login_by_email(data));
     }
     useEffect(()=> {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaa");
         if(!loadingLogin && isAdminLoggedIn) {
         history.push('/admin')
         }

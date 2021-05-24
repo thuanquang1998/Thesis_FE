@@ -17,7 +17,7 @@ import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
 import ManagePatient from './features/ManagePatient';
 import LoginManager from './features/auth/pages/LoginManager';
 import PrivateRoute from './components/Route/PrivateRoute';
-
+import AppDoctor from '../doctor/appDoctor';
 
 const AppPatient = function (props) {
 	console.log('getAllData');
@@ -47,7 +47,8 @@ const AppPatient = function (props) {
 						<PrivateRoute component={ManagePatient} path="/quan-li-tai-khoan" exact/>
 						{/* <Route exact path='/quan-li-tai-khoan' component={ManagePatient}/> */}
 						<Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
-
+						<Route exact path='/bac-si' component={AppDoctor}/>
+						
 						<Route path="*">
 							<div>404 Not Found</div>
 						</Route>

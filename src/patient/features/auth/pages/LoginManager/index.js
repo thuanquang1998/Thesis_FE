@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { login_doctors } from '../../../../../redux/actions/doctorActions';
 import loginBanner from '../../../../assets/images/login-banner.png';
 import './style.css';
-
+import LoadingTop from '../../../../components/loadingTop';
 
 
 
@@ -28,7 +28,6 @@ const LoginManager = () => {
     }
     useEffect(()=> {
         if(!loadingLogin && isDoctorLoggedIn) {
-            console.log("Đăng nhâp tài khoản bác sĩ thành công");
             history.push('/bac-si')
         }
     },[loadingLogin])
@@ -36,6 +35,7 @@ const LoginManager = () => {
     
     return (
         <div className="content" style={{backgroundColor:"#fff"}}>
+            {loadingLogin && <LoadingTop/>}
             <div className="container">
                 <Row gutter={[16,16]}>
                     <Col sm={{span:0}} xs={{span:0}} md={{span:12}}>

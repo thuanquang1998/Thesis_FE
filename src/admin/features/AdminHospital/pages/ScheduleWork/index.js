@@ -1,7 +1,7 @@
-import { Badge, Button, Table, Tag, Form, Select, Row, Card, Col } from 'antd';
+import { Badge, Button, Table, Tag, Form, Select, Row, Card, Col, Input } from 'antd';
+import { Modal } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SidebarNav from '../../../../components/SideBar';
 import adminAPI from '../../../../../api/adminAPI';
@@ -17,8 +17,9 @@ const Appoinments = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [listSchedule, setListSchedule] = useState([]);
 	const [loadingPage, setLoadingPage] = useState(true);
-	const [show, setShow] = useState(null);
 	const [viewItem, setViewItem] = useState({});
+    const [show, setShow] = useState(null);
+
 
 
 	useEffect(()=> {
@@ -128,7 +129,10 @@ const Appoinments = () => {
             ),
 		},		
 	]
-	
+	const onSubmitSchedule = (value) => {
+        console.log('value :>> ', value);
+        let data = new FormData();
+    }
     return (
         <>
             <SidebarNav/>
@@ -137,17 +141,23 @@ const Appoinments = () => {
 			    <div className="content container-fluid">
 					<div className="page-header">
 						<div className="row">
-							<div className="col-sm-12">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>{`Thông tin ${hospitalInfo.name}`}</h3>
+							
+                            <div className="col-sm-7 col-auto">
+							    <h3 className="page-title" style={{paddingTop:"20px"}}>{`Thông tin ${hospitalInfo.name}`}</h3>
 								<ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
 									<li className="breadcrumb-item active">{hospitalInfo.name}</li>
 								</ul>
-							</div>
+						</div>
+						<div className="col-sm-5 col">
+							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>handleShow('addSchedule')}>
+								Thêm lịch</a>
+						</div>
 						</div>
 					</div>
                     
                     <div className="infobv">
+                        <h4>Lịch đã được cập nhật đến ngày 30/5/2021</h4>
 						<Card 
 							title={<>Danh sách lịch khám <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
 						>
@@ -163,73 +173,38 @@ const Appoinments = () => {
 						</Card>
 					</div>
                 </div>
-				<Modal show={show === 'view'} onHide={handleClose} centered className="modal-xl">
-					<Modal.Header closeButton>
-						<Modal.Title><h5 className="modal-title">Sửa chuyên khoa</h5></Modal.Title>
-					</Modal.Header>
+            </div>
+            <Modal show={show === 'addSchedule'} onHide={handleClose} centered>
+				<Modal.Header closeButton>
+					<Modal.Title><h5 className="modal-title">Thêm lịch</h5></Modal.Title>
+				</Modal.Header>
 				<Modal.Body>
-					<Row gutter={[20,20]}>
-						<Col span={12} style={{textAlign:'center'}}>
-							<h4>Thông tin bệnh nhân:</h4>
-							{viewItem.bookingFor &&
-								<div className="row">
-									<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên người đặt dùm</div>
-									<div className="col-sm-8">{viewItem.nameBookerFor}</div>
-								</div>
-							}
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bệnh nhân</div>
-								<div className="col-sm-8">{viewItem.patient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Ngày sinh</div>
-								<div className="col-sm-8">{viewItem.birthday}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
-								<div className="col-sm-8">{viewItem.addressPatient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Số điện thoại liên hệ</div>
-								<div className="col-sm-8">{viewItem.phonePatient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Giới tính</div>
-								<div className="col-sm-8">{viewItem.genderPatient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Lý do khám</div>
-								<div className="col-sm-8">{viewItem.medicalRecordSumanry}</div>
-							</div>
-						</Col>
-						<Col span={12} style={{textAlign:'center'}}>
-							<h4>Thông tin bệnh viện:</h4>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bệnh viện</div>
-								<div className="col-sm-8">{viewItem.hospital}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
-								<div className="col-sm-8">{viewItem.addressHospital}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bác sĩ</div>
-								<div className="col-sm-8">{viewItem.doctor}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Chuyên khoa</div>
-								<div className="col-sm-8">{viewItem.speciality}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Phòng khám</div>
-								<div className="col-sm-8">{viewItem.room}</div>
-							</div>
-						</Col>
-					</Row>
+				    <Form
+                        labelCol={{
+                            span: 24,
+                        }}
+                        wrapperCol={{
+                            span: 24,
+                        }}
+                        layout="vertical"
+                        size="large"
+                        onFinish={onSubmitSchedule}
+                    >
+                        <Form.Item name="file" label="Chọn file">
+                            <input
+                                // multiple
+                                type="file"
+                                accept="csv"
+                                // ref={fileInput}
+                                onChange={() => {}}
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">Thêm lịch</Button>
+                        </Form.Item>
+					</Form>
 				</Modal.Body>
 			</Modal>
-            </div>
-
         </>
     )
 }

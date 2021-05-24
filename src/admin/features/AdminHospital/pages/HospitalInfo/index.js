@@ -16,7 +16,7 @@ const HospitalInfo = () => {
 	
     const dispatch = useDispatch()
 	const hospital = useSelector(state=>state.admin.hospitalById)
-	console.log(hospital,"lllllllllllllll");
+	console.log(hospitalInfo,"lllllllllllllll");
 	useEffect(()=> {
 		dispatch(get_hospital_byId('5ffa9e2e1c8cbb1f801e71c4'))
 	},[])
@@ -70,51 +70,51 @@ const HospitalInfo = () => {
 							<Row gutter={[20,20]}>
 								<Col span={10} style={{textAlign:'center'}}>
 									<div className="img_logo">
-										<img src={img_logo} alt=""/>
+										<img src={hospitalInfo.logo||img_logo} alt=""/>
 									</div>
 									<h4 style={{paddingTop:'15px'}}>Logo bệnh viện</h4>
 								</Col>
 								<Col span={14} style={{textAlign:'center'}}>
 									<div className="img_background">
-										<img src={img_background} alt=""/>
+										<img src={hospitalInfo.background||img_background} alt=""/>
 									</div>
 									<h4 style={{paddingTop:'15px'}}>Background bệnh viện</h4>
 								</Col>
 							</Row>
 						</Card>
 						<Card className="card_detail_info" >
-							{hospital && <Row gutter={[20,20]}>
+							{hospitalInfo && <Row gutter={[20,20]}>
 								<Col sm={{span:24}} md={{span:10}}>
 									<h4>Thông tin chi tiết:</h4>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bệnh viện</div>
-										<div className="col-sm-8">{hospital.name}</div>
+										<div className="col-sm-8">{hospitalInfo.name}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Số điện thoại:</div>
-										<div className="col-sm-8">{hospital.phone}</div>
+										<div className="col-sm-8">{hospitalInfo.phone}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Email:</div>
-										<div className="col-sm-8">{hospital.email}</div>
+										<div className="col-sm-8">{hospitalInfo.email}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ:</div>
-										<div className="col-sm-8">{hospital.address}</div>
+										<div className="col-sm-8">{hospitalInfo.address}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Loại hợp đồng:</div>
-										<div className="col-sm-8">{hospital.contractType}</div>
+										<div className="col-sm-8">{hospitalInfo.contractType}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Quy mô cơ sở y tế:</div>
-										<div className="col-sm-8">{hospital.scale}</div>
+										<div className="col-sm-8">{hospitalInfo.scale}</div>
 									</div>
 								</Col>
 								<Col sm={{span:24}} md={{span:14}}>
 									<h4>Giới thiệu:</h4>
 									<div className="info_gioithieu">
-										{hospital.about}
+										{hospitalInfo.about}
 									</div>
 								</Col>
 								

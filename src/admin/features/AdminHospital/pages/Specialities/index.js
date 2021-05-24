@@ -1,5 +1,5 @@
 import { Card } from '@material-ui/core';
-import { Badge, Button, Table, Tag } from 'antd';
+import { Badge, Button, Table, Tag, Form, Select, Row } from 'antd';
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import { Modal } from 'react-bootstrap';
@@ -7,33 +7,52 @@ import { Link } from 'react-router-dom';
 import SidebarNav from '../../../../components/SideBar';
 import adminAPI from '../../../../../api/adminAPI';
 import LoadingTop from '../../../../components/loadingTop';
+import { useSnackbar } from 'notistack';
+import Swal from "sweetalert2";
 
 
 const Specialities = () => {
-
+    const {enqueueSnackbar} = useSnackbar();
 	const [show, setShow] = useState(null);
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [ listSpec, setListSpec ] = useState([]);
+	const [listSpecAdd, setListSpecAdd] = useState([]);
 	
-	 useEffect(()=> {
-        setLoadingPage(true);
-        // call api 
-        (async ()=>{
+	useEffect(()=> {
+		getListSpec();
+    },[])
+
+	useEffect(()=> {
+		(async ()=>{
+        	setLoadingPage(true);
             try {
-                const response = await adminAPI.get_spec_of_hospital(JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
-                
-                if(!response.error){
-                    setListSpec(response.data)         
-                }
-                else {
-                    setListSpec([]);
-                }      
+               	const response = await adminAPI.get_speacialities();
+                if(response.error) throw new Error(response.errors[0].message);
+				const _listSpec = listSpec.map(x=>x._id);
+				const _spec = response.data.filter(item=> !_listSpec.includes(item._id));
+				setListSpecAdd(_spec);
+				setLoadingPage(false)
             } catch (error) {
                 console.log('error.message :>> ', error.message);
             }
-            setLoadingPage(false)
         })()
-    },[])
+	},[listSpec])
+	
+	const getListSpec = async () => {
+        setLoadingPage(true);
+		try {
+			const response = await adminAPI.get_spec_of_hospital(JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
+			if(!response.error){
+				setListSpec(response.data)         
+			}
+			else {
+				setListSpec([]);
+			}      
+			setLoadingPage(false)
+		} catch (error) {
+            console.log('error.message :>> ', error.message);
+		}
+	}
 
 
 	const new_columns = [
@@ -66,7 +85,8 @@ const Specialities = () => {
 		render: (text, record) => (
 			<div className="actions">
 				<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>handleShow('edit')}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a>
-				<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>handleShow('delete')}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
+				<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>handleDeleteSpec(record)}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
+			
 			</div>
 		),
 		},		
@@ -78,6 +98,69 @@ const Specialities = () => {
 
 	const handleShow = (id) =>{
 		setShow(id)
+	}
+
+	const handleDeleteSpec = (data) => {
+		if(data.num_doctor!==0) {
+			Swal.fire({
+				icon: "error",
+				text: "Không thể xóa chuyên khoa này."
+			});
+		} else {
+			const _data = {
+				hospital_id: JSON.parse(localStorage.getItem('currentAdmin')).hospital._id,
+				spec_id: data._id,
+			}
+			Swal.fire({
+				icon: "info",
+				text: "Bạn muốn xóa chuyên khoa này?",
+				showCancelButton: true,
+				cancelButtonColor: "#3085d6",
+				confirmButtonColor: "#d33",
+				confirmButtonText: "Xóa",
+				cancelButtonText: "Hủy"
+			})
+			.then((result) => {
+				console.log('result.value :>> ', result.value);
+				if (result.value) {
+					removeSpec(_data);
+				} 
+			})
+			.catch((error) => {
+				console.log('error.message :>> ', error.message);
+			});
+		}
+	}
+	const removeSpec = async (data) => {
+		try {
+			const response = await adminAPI.remove_spec_hospital(data);
+			if(response.error) throw new Error(response.errors[0].message);
+			getListSpec();
+			setTimeout(() => {
+        		enqueueSnackbar('Xóa chuyên khoa thành công.', {variant: 'success'});
+			}, 300);
+		} catch (error) {
+			console.log('error.message :>> ', error.message);
+        	enqueueSnackbar('Xóa chuyên khoa không thành công.', {variant: 'error'})
+		}
+	}
+	const onHandleAddSpec = async (value) => {
+		const _data = {
+			hospital_id: JSON.parse(localStorage.getItem('currentAdmin')).hospital._id,
+			spec_id: value.specialization,
+		}
+		try {
+			const response = await adminAPI.add_spec_hospital(_data)
+			if(response.error) throw new Error(response.errors[0].message);
+			getListSpec();
+			setTimeout(() => {
+				handleClose();
+        		enqueueSnackbar('Thêm chuyên khoa thành công.', {variant: 'success'});
+			}, 300);
+		} catch (error) {
+			console.log('error.message :>> ', error.message);
+        	enqueueSnackbar('Thêm chuyên khoa không thành công.', {variant: 'error'})
+		}
 	}
 	return(
 		<>
@@ -114,6 +197,7 @@ const Specialities = () => {
 						style = {{overflowX : 'auto'}}
 						rowKey={record => record.id}
 						showSizeChanger={true} 
+						loading={loadingPage}
 					/>
 				</Card>
 			</div> 
@@ -123,24 +207,41 @@ const Specialities = () => {
 					<Modal.Title><h5 className="modal-title">Thêm chuyên khoa</h5></Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-				<form>
-						<div className="row form-row">
-							<div className="col-12 col-sm-6">
-								<div className="form-group">
-									<label>Tên chuyên khoa</label>
-									<input type="text" className="form-control" />
-								</div>
-							</div>
-							<div className="col-12 col-sm-6">
-								<div className="form-group">
-									<label>Logo chuyên khoa</label>
-									<input type="file"  className="form-control" />
-								</div>
-							</div>
-							
-						</div>
-						<button type="submit" className="btn btn-primary btn-block">Lưu thay đổi</button>
-					</form>
+				 <Form
+                        labelCol={{
+                            span: 24,
+                        }}
+                        wrapperCol={{
+                            span: 24,
+                        }}
+                        layout="vertical"
+                        size="large"
+                        onFinish={onHandleAddSpec}
+                    >   
+                        <Row gutter={[8,8]}>
+							<Form.Item
+								label="Chuyên khoa"
+								name="specialization"
+								rules={[
+									{
+									required: true,
+									message: 'Chọn chuyên khoa!',
+									},
+								]}
+							>
+								<Select className="province" placeholder="Chuyên khoa" onChange={()=>{}} loading={loadingPage}>
+									{listSpecAdd.length!==0 && listSpecAdd.map((item, index)=>(
+										<Select.Option value="agent" key={index} value={item._id}>{item.name}</Select.Option>
+									))}
+								</Select>
+							</Form.Item>
+                        </Row>
+							<Form.Item>
+								<Button loading={loadingPage} type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
+									Lưu
+								</Button>
+							</Form.Item>
+                    </Form>
 				</Modal.Body>
 			</Modal>
 			{/* Create Modal */}
@@ -171,18 +272,6 @@ const Specialities = () => {
 				</Modal.Body>
 			</Modal>
 			{/* Edit Modal */}
-			{/* Delete Modal */}
-			<Modal show={show === 'delete'} onHide={handleClose} centered>
-				<Modal.Body className="text-center">
-					<div className="form-content p-2">
-						<h4 className="modal-title">Xóa chuyên khoa</h4>
-						<p className="mb-4">Bạn có chắc muốn xóa chuyên khoa này?</p>
-						<button type="button" className="btn btn-primary">OK </button>
-						<button type="button" className="btn btn-danger" data-dismiss="modal" onClick={handleClose}>Đóng</button>
-					</div>
-				</Modal.Body>
-			</Modal>
-			{/* Delete Modal */}
 		</div>
 	</>         
 	)

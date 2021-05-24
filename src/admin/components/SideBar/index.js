@@ -66,6 +66,11 @@ const SidebarNav = (props) => {
                     <li className={`${'/admin/hospital/lich-kham' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/hospital/lich-kham"><i className="far fa-calendar-alt"></i>Lịch khám</Link>
                     </li>
+
+                    <li className={`${'/admin/hospital/lich-lam-viec' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/lich-lam-viec"><i className="far fa-calendar-alt"></i>Lịch làm việc</Link>
+                    </li>
+                   
                   </>
                 )}
                 

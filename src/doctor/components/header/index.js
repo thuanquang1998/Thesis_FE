@@ -1,81 +1,121 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//icon
-
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
-import logo from "../../assets/img/bk-logo.png";
-import IMG01 from "../../assets/images/doctor-thumb-02.jpg";
-import Dropdown from "react-bootstrap/Dropdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom'
+import { logout_doctor } from "../../../redux/actions/doctorActions";
+import { Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import LoadingTop from '../../components/loadingTop';
+import bkLogo from '../../assets/img/bk-logo.png'
+import './style.css'
+
 
 const Header = (props) => {
-  const url = window.location.pathname.split("/").slice(0, -1).join("/");
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const doctor = useSelector(state=> state.doctor);
+  const {currentDoctor, loadingLogin, isDoctorLoggedIn, loadingLogout, loadingPage} = doctor;
+  const url = window.location.pathname;
+  
+  const [userName, setUserName] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  return (
-    
-    <header className="header">
-      <nav className="navbar navbar-expand-lg header-nav">
-        <div className="navbar-header">
-          <Link to="/bac-si" className="navbar-brand logo">
-            <img src={logo} className="img-fluid" alt="Logo"/>
-          </Link>
-        </div>
-        <ul className="nav header-navbar-rht">
-          <li className="nav-item contact-item">
-            <div className="header-contact-img">
-              <FontAwesomeIcon icon={faHospital} />
-            </div>
-            <div className="header-contact-detail">
-              <p className="contact-header">Liên hệ</p>
-              <p className="contact-info-header"> +1 315 369 5943</p>
-            </div>
-          </li>
+  useEffect(()=> {
+    if(!loadingLogin && isDoctorLoggedIn) {
+      setUserName(JSON.parse(localStorage.getItem('currentDoctor'))?.doctor.fullName||"")
+    }
+  },[doctor])
 
-          {props.location.pathname === "/pages/voice-call" ||
-          "/pages/video-call" ? (
-            <>
-              <Dropdown className="user-drop nav-item dropdown has-arrow logged-item">
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  <span style={{display:'inline-block',width:'100%', height:"100%"}}>
-                        <i class="far fa-user-circle" style={{display:'block', fontSize:'40px', color:"#ddd"}}/>
-                      </span>
-                </Dropdown.Toggle>
+  useEffect(()=> {
+    if(location.pathname.split("/")[1] === 'bac-si') {
+      require('../../assets/css/app.css')
+      require('../../assets/css/fontawesome.min.css')
+    }
+  },[])
 
-                <Dropdown.Menu>
-                  <div className="user-header">
-                    <div className="avatar avatar-sm">
-                      <span style={{display:'block',width:'100%', height:"100%"}}>
-                        <i class="far fa-user-circle" style={{display:'block', fontSize:'40px', color:'#ddd'}}/>
-                      </span>
-                    </div>
-                    <div className="user-text">
-                      <h6 style={{paddingTop:'10px'}}>Darren Elder</h6>
-                      {/* <p className="text-muted mb-0">Doctor</p> */}
-                    </div>
-                  </div>
-                  <Dropdown.Item href="/bac-si/doctor-dashboard">
-                    Dashboard
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/bac-si/profile-setting">
-                    Profile Settings
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/login">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </>
-          ) : (
-            <>
-              <li className="nav-item">
-                <Link to="/login" className="nav-link header-login">
-                  login / Signup{" "}
-                </Link>
-              </li>{" "}
-            </>
-          )}
-        </ul>
-      </nav>
-    </header>
+  useEffect(()=> {
+    if(!loadingPage && !isDoctorLoggedIn) {
+      setTimeout(() => {
+        setLoading(false);
+        history.push('/quan-li/dang-nhap');
+      }, 500);
+    }
+  },[loadingPage, isDoctorLoggedIn])
+
+
+
+  const handleLogoutDoctor = () => {
+    setLoading(true)
+    dispatch(logout_doctor());
+  }
+
+  const handlesidebar=()=>{
+    console.log('d');
+    document.body.classList.toggle('mini-sidebar');
+  }
+
+  const menu = (
+    <Menu>
+      {/* <Menu.Item key="0">
+        <a href="/quan-li-tai-khoan">Tổng quan tài khoản</a> 
+      </Menu.Item>
+      <Menu.Divider /> */}
+      <Menu.Item onClick={handleLogoutDoctor} key="3">Đăng xuất</Menu.Item>
+    </Menu>
   );
-};
+  return (
+    <div>
+        <div className="header__admin">
+          <div className="header-left">
+            <Link to="/bac-si" className="logo">
+              <img src={bkLogo} alt="Logo" width="200" height="100%"/>
+            </Link>
+            <Link to="/bac-si" className="logo logo-small">
+              <img src={bkLogo} alt="Logo" width="30" height="50" />
+            </Link>
+          </div>
+
+          <a href="#0" id="toggle_bttn" onClick={handlesidebar}>
+					  <i className="fe fe-text-align-left"></i>
+				  </a>
+          <a href="#0" className="mobile_btn" id="mobile_btn">
+            <i className="fa fa-bars"></i>
+          </a>
+
+          <ul className="nav header-navbar-rht">
+            <li className="nav-item contact-item">
+              <div className="header-contact-img">
+                <FontAwesomeIcon icon={faHospital} />
+              </div>
+              <div className="header-contact-detail">
+                <p className="contact-header">Liên hệ</p>
+                <p className="contact-info-header"> 1900 8168</p>
+              </div>
+            </li>
+              <>
+                {!isDoctorLoggedIn && <li className="nav-item">
+                  <Link to="/admin/dang-nhap" className="nav-link header-login">
+                    Đăng nhập{" "}
+                  </Link>
+                </li>}
+                {isDoctorLoggedIn &&
+                  <li className="nav-item">
+                    <Dropdown overlay={menu} trigger={['click']}>
+                      <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <h4>{userName}<DownOutlined style={{marginBottom:0}}/></h4> 
+                      </a>
+                    </Dropdown>
+                  </li>
+                }
+              </>
+          </ul>
+
+        </div>
+      </div>
+  )}
 
 export default Header;
+

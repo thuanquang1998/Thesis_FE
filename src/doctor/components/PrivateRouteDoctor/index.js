@@ -4,10 +4,10 @@ import { Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
 
 const PrivateRouteDoctor = ({component: Component, path, exact}) => {
-    const admin = useSelector(state=> state.admin);
-    const { isAdminLoggedIn } = admin;
+    const doctor = useSelector(state=> state.doctor);
+    const { isDoctorLoggedIn } = doctor;
     return (
-        isAdminLoggedIn?
+        isDoctorLoggedIn?
         (<Route  path={path}  exact={exact} component={Component} />)
         :
         (<Redirect  to="/quan-li/dang-nhap"  />) 

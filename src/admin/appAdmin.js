@@ -18,8 +18,7 @@ import CreateHospital from './features/AdminRoot/pages/CreateHospital'
 import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index'
 import HospitalsPage from './features/AdminRoot/pages/HospitalsPage'
 import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot'
-
-
+import ScheduleWork from './features/AdminHospital/pages/ScheduleWork'
 
 
 const AppAdmin =({match})=>{
@@ -39,7 +38,6 @@ const AppAdmin =({match})=>{
                     {loadingPage && <LoadingTop/>}
                     <Route render={(props)=> <Header {...props}/>} />
                     <Switch>
-                        
                         <Route
                             exact path='/admin' render={()=>(
                                 isAdminLoggedIn? 
@@ -69,6 +67,7 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={Specialities} path="/admin/hospital/chuyen-khoa" exact/>
                         <PrivateRouteAdmin component={Reviews} path="/admin/hospital/danh-gia" exact/>
                         <PrivateRouteAdmin component={CreateDoctor} path="/admin/hospital/nhan-vien/them" exact/>
+                        <PrivateRouteAdmin component={ScheduleWork} path="/admin/hospital/lich-lam-viec" exact/>
 
 
                     </Switch>
