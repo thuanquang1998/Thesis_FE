@@ -12,7 +12,6 @@ const PatientSidebar = () => {
     const url = location.pathname;
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
-    console.log('url :>> ', url);
     return(
         <div className="profile-sidebar">
             <div className="widget-profile pro-widget-content">
@@ -50,14 +49,6 @@ const PatientSidebar = () => {
                         </NavLink>
                     </Nav.Item> 
 
-                    
-                    
-                    <Nav.Item> 
-                        <NavLink to="/doctor/change-passwword">
-                                <i className="fas fa-lock"></i>
-                                <span>Đổi mật khẩu</span>
-                        </NavLink>
-                    </Nav.Item> 
                     <Nav.Item> 
                         <NavLink to="/doctor" activeClassName="active">
                             <i className="fas fa-sign-out-alt"></i>

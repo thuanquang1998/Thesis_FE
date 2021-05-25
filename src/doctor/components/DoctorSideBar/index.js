@@ -5,21 +5,25 @@ import {useHistory} from 'react-router-dom'
 import { logout_doctor } from "../../../redux/actions/doctorActions";
 import Nav from 'react-bootstrap/Nav';
 import IMG01 from '../../assets/images/doctor-thumb-02.jpg';
+import LoadingTop from '../loadingTop';
 
 const DoctorSidebar = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const doctor = useSelector(state=> state.doctor);
-  const {currentDoctor, loadingLogin, isDoctorLoggedIn, loadingLogout, loadingPage} = doctor;
-  const url = window.location.pathname;
-  
-  const [userName, setUserName] = useState('');
-  const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const doctor = useSelector(state=> state.doctor);
+    const {currentDoctor, loadingLogin, isDoctorLoggedIn, loadingLogout, loadingPage} = doctor;
+    const url = window.location.pathname;
+
+    const [doctorData, setDoctorsData] = useState({});
+    
+    const [userName, setUserName] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleLogoutDoctor = () => {
         setLoading(true)
         dispatch(logout_doctor());
     }
+
 
     useEffect(()=> {
         if(!loadingPage && !isDoctorLoggedIn) {
@@ -32,16 +36,17 @@ const DoctorSidebar = () => {
    
     return(
         <div className="profile-sidebar">
+            {loading && <LoadingTop/>}
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
                     <Link href="#" className="booking-doc-img">
-                        <img src={IMG01} alt="User" />
+                        <img src={currentDoctor?.doctor.avatar_image||IMG01} alt="User" />
                     </Link>
                     <div className="profile-det-info">
-                        <h3 style={{fontWeight:"bold"}}>Bác sĩ Tô Ngọc Bình</h3>
+                        <h3 style={{fontWeight:"bold"}}>Bác sĩ {currentDoctor?.doctor.fullName}</h3>
                         
                         <div className="patient-details">
-                            <h5 className="mb-0">Bệnh viện Hùng Vương</h5>
+                            <h5 className="mb-0">Bệnh viện </h5>
                         </div>
                     </div>
                 </div>

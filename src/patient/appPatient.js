@@ -14,10 +14,12 @@ import ListDoctorPage from './features/doctor/pages/ListDoctorPage'
 import Home from './features/home'
 import DetailHospitalPage from './features/hospital/pages/DetailHospitalPage'
 import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
-import ManagePatient from './features/ManagePatient';
 import LoginManager from './features/auth/pages/LoginManager';
 import PrivateRoute from './components/Route/PrivateRoute';
 import AppDoctor from '../doctor/appDoctor';
+import PatientInfo from './features/ManagePatient/pages/PatientInfo';
+import PatientSchedule from './features/ManagePatient/pages/PatientSchedule';
+
 
 const AppPatient = function (props) {
 	console.log('getAllData');
@@ -44,7 +46,9 @@ const AppPatient = function (props) {
 						{/* private route */}
 						<Route exact path='/dat-kham/:doctorID' component={BookingPage}/>
 
-						<PrivateRoute component={ManagePatient} path="/quan-li-tai-khoan" exact/>
+						<PrivateRoute component={PatientInfo} path="/quan-li-tai-khoan" exact/>
+						<PrivateRoute component={PatientSchedule} path="/quan-li-tai-khoan/lich-kham" exact/>
+
 						{/* <Route exact path='/quan-li-tai-khoan' component={ManagePatient}/> */}
 						<Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
 						<Route exact path='/bac-si' component={AppDoctor}/>

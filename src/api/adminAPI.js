@@ -65,6 +65,18 @@ class adminAPI{
                     .catch(err => err.response.data)
     }
 
+    // tạo lịch khám
+    create_appointment_hospital(data){
+        const tokenObj = localStorage.getItem('currentAdmin');
+        const _token = JSON.parse(tokenObj);
+        return http.post(`upload/upload_file`, data, { 
+                        headers:{ 
+                            'x-access-token': _token.adminToken 
+                        }
+                    })
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
 
     get_spec_of_hospital(id) {
         return http.get(`spec/hospital/${id}`)

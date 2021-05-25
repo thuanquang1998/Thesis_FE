@@ -68,6 +68,7 @@ const Header = (props) => {
   );
   return (
     <div>
+        { loading && <LoadingTop/>}
         <div className="header__admin">
           <div className="header-left">
             <Link to="/bac-si" className="logo">

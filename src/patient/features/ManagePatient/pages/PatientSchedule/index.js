@@ -6,58 +6,98 @@ import { Link } from 'react-router-dom';
 import PatientSidebar from '../../components/PatientSideBar';
 import patientAPI from '../../../../../api/patientApi';
 import moment from 'moment';
-
+import { useSnackbar } from 'notistack';
+import Swal from "sweetalert2";
+import LoadingTop from '../../../../components/loadingTop';
+import { compareDates } from '../../../../../utils';
 
 function PatientSchedule(props) {
+    const {enqueueSnackbar} = useSnackbar();
     const dispatch = useDispatch();
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
     const [listSchedule, setListSchedule] = useState([]);
-    const [loadingSchedule, setLoadingSchedule] = useState(true);
+    const [loadingPage, setLoadingPage] = useState(true);
 
     useEffect(() => {
-        console.log("1111111111111111111111");
-        // dispatch(get_schedule_patient(patientInfo))
-        setLoadingSchedule(true);
         get_schedule_patient(patientInfo);
     }, [])
 
     const get_schedule_patient = async (patientInfo) => {
+        setLoadingPage(true);
         try {
             const response = await patientAPI.get_schedule(patientInfo.id);
-            console.log('response :>> ', response);
-            if(!response.error) {
-                // convert data
-                const _data = response.data.map(x=>{
-                    const { appointmentInfo, patientInfo} = x;
-                    const obj = {
-                        id: x.id,
-                        patient: patientInfo.name,
-                        doctor: appointmentInfo.doctorName,
-                        speciality: 'Tiêu hóa',
-                        address: `${appointmentInfo.location.room} ${appointmentInfo.location.hospitalName}`,
-                        date: moment(appointmentInfo.date).format('DD/MM/YYYY'),
-                        time: appointmentInfo.time,
-                        status: x.status
-                    }
-                    return obj
-                })
-                setListSchedule(_data);
-            } else {
+            if (response.error) throw new Error(response.errors[0].message)
+            const _data = response.data.map(x=>{
+                const { appointmentInfo, patientInfo} = x;
+                const obj = {
+                    id: x.id,
+                    patient: patientInfo.name,
+                    doctor: appointmentInfo.doctorName,
+                    speciality: 'Tiêu hóa',
+                    address: `${appointmentInfo.location.room} ${appointmentInfo.location.hospitalName}`,
+                    date: moment(appointmentInfo.date).format('DD/MM/YYYY'),
+                    time: appointmentInfo.time,
+                    status: x.status,
 
-            }
-            setLoadingSchedule(false)
+                    dateCheck: appointmentInfo.date
+                }
+                return obj
+            })
+            setListSchedule(_data);
+            setLoadingPage(false)
         } catch (error) {
-            
+            console.log('error.message :>> ', error.message);
+            setLoadingPage(false)
         }
     }
 
-    const cancelSchedule = async (id) => {
+    const cancelSchedule = async (record) => {
+        let currentTime = moment();
+        const check = compareDates(new Date(currentTime), new Date(record.dateCheck))
+
+        if(check) {
+			Swal.fire({
+				icon: "error",
+                title: "Không thể xóa lịch khám này.",
+	 			text: "Chỉ được hủy lịch khám trước 1 ngày."
+			});
+		} else {
+			Swal.fire({
+				icon: "info",
+                title: "Xác nhận xóa lịch khám?",
+				text: "Lịch khám sẽ bị xóa khỏi hệ thống.",
+				showCancelButton: true,
+				cancelButtonColor: "#3085d6",
+				confirmButtonColor: "#d33",
+				confirmButtonText: "Xóa",
+				cancelButtonText: "Hủy"
+			})
+			.then((result) => {
+				if (result.value) {
+					cancelScheduleMethod(record.id);
+				} 
+			})
+			.catch((error) => {
+				console.log('error.message :>> ', error.message);
+			});
+		}
+    }
+    const cancelScheduleMethod = async (id) => {
+        setLoadingPage(true)
         try {
             const response = await patientAPI.cancel_schedule(id);
-            console.log('response cancelSchedule:>> ', response);
+			if(response.error) throw new Error(response.errors[0].message);
+            get_schedule_patient(patientInfo);
+            setTimeout(() => {
+        		enqueueSnackbar('Xóa lịch khám thành công.', {variant: 'success'});
+                setLoadingPage(false)
+			}, 300);
+
         } catch (error) {
-            
+			console.log('error.message :>> ', error.message);
+        	enqueueSnackbar('Xóa lịch khám không thành công.', {variant: 'error'})
+            setLoadingPage(false)
         }
     }
    
@@ -108,7 +148,7 @@ function PatientSchedule(props) {
                     <Button onClick={()=>console.log(record.id)} type="primary" style={{marginRight:"5px"}}>
                         Đổi lịch
                     </Button>
-                    <Button onClick={()=>cancelSchedule(record.id)} type="danger">
+                    <Button onClick={()=>cancelSchedule(record)} type="danger">
                         Hủy lịch
                     </Button>
                 </div>
@@ -117,6 +157,7 @@ function PatientSchedule(props) {
 	]
     return (
         <>
+            {loadingPage && <LoadingTop/>}
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
                     <div className="row align-items-center">
@@ -149,7 +190,7 @@ function PatientSchedule(props) {
                                     style = {{overflowX : 'auto'}}
                                     rowKey={record => record.id}
                                     showSizeChanger={true} 
-                                    loading={loadingSchedule}
+                                    loading={loadingPage}
                                 />
                             </Card>
                         </Col>

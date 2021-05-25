@@ -121,7 +121,6 @@ const Specialities = () => {
 				cancelButtonText: "Hủy"
 			})
 			.then((result) => {
-				console.log('result.value :>> ', result.value);
 				if (result.value) {
 					removeSpec(_data);
 				} 

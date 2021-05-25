@@ -1,0 +1,29 @@
+.content {
+    padding-bottom: 40px !important;
+}
+.img_logo {
+    height: 250px;
+    text-align: center;
+}
+.img_logo img {
+    height: 100%;
+}
+.img_background {
+    height: 250px;
+}
+.img_background img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.infobv .card_detail_info {
+    margin-top: 30px;
+}
+.ql-container .ql-snow {
+    height: 150px !important;
+}
+.header-content {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+}

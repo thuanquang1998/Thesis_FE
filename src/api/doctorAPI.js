@@ -10,5 +10,16 @@ class doctorsAPI{
     register(data){
         return http.post('users/sign-up',data).then(res=>data).catch(err=> err.response.data)
     }
+    get_doctor_appoitmant(id) {
+        const tokenObj = localStorage.getItem('currentDoctor');
+        const _token = JSON.parse(tokenObj);
+        return http.get(`doctors/${id}/get_appointment`, { 
+            headers:{ 
+                'x-access-token': _token.doctorToken 
+            }
+        })
+        .then(res=> res.data)
+        .catch(err => err.response.data)
+    }
 }
 export default new doctorsAPI

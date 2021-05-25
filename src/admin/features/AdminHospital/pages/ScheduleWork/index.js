@@ -1,4 +1,4 @@
-import { Badge, Button, Table, Tag, Form, Select, Row, Card, Col, Input } from 'antd';
+import { Badge, Button, Table, Tag, Form, Select, Row, Card, Col, Input, Upload, message } from 'antd';
 import { Modal } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
@@ -9,6 +9,8 @@ import LoadingTop from '../../../../components/loadingTop';
 import { useSnackbar } from 'notistack';
 import Swal from "sweetalert2";
 import moment from 'moment';
+import { UploadOutlined } from '@ant-design/icons';
+
 
 import logoDoctor from '../../../../assets/img/male_logo.png'
 
@@ -19,7 +21,7 @@ const Appoinments = () => {
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [viewItem, setViewItem] = useState({});
     const [show, setShow] = useState(null);
-
+    const { enqueueSnackbar } = useSnackbar();
 
 
 	useEffect(()=> {
@@ -59,10 +61,10 @@ const Appoinments = () => {
 				return obj
 			}) 
             setListSchedule(_data);
-			setLoadingPage(false)
 		} catch (error) {
             console.log('error.message :>> ', error.message);
 		}
+		setLoadingPage(false)
 	}
 
 	const handleClose = () => {
@@ -129,10 +131,32 @@ const Appoinments = () => {
             ),
 		},		
 	]
-	const onSubmitSchedule = (value) => {
-        console.log('value :>> ', value);
-        let data = new FormData();
-    }
+	
+	const [file, setFile] = useState();
+  	const [fileName, setFileName] = useState("");
+
+	const saveFile = (e) => {
+		setFile(e.target.files[0]);
+		setFileName(e.target.files[0].name);
+	};
+
+	const uploadFile = async (e) => {
+		setLoadingPage(true)
+		const hospital_id = hospitalInfo._id;
+		const formData = new FormData();
+		formData.append("hospital_id", hospital_id);
+		formData.append("file", file);
+		try {
+			const response = await adminAPI.create_appointment_hospital(formData);
+			if(response.error) throw new Error(response.errors[0].message);
+			console.log('response uploadFile:>> ', response);
+            enqueueSnackbar('Thêm lịch thành công', {variant: 'success'});
+		} catch (error) {
+			console.log(error.message, "error.message");
+			enqueueSnackbar("Thêm lịch không thành công, hãy thử lại", {variant: 'error'})
+		}
+		setLoadingPage(false);
+	};
     return (
         <>
             <SidebarNav/>
@@ -176,33 +200,13 @@ const Appoinments = () => {
             </div>
             <Modal show={show === 'addSchedule'} onHide={handleClose} centered>
 				<Modal.Header closeButton>
-					<Modal.Title><h5 className="modal-title">Thêm lịch</h5></Modal.Title>
+					<Modal.Title><h4 style={{fontWeight:"600"}} className="modal-title">Thêm lịch</h4></Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-				    <Form
-                        labelCol={{
-                            span: 24,
-                        }}
-                        wrapperCol={{
-                            span: 24,
-                        }}
-                        layout="vertical"
-                        size="large"
-                        onFinish={onSubmitSchedule}
-                    >
-                        <Form.Item name="file" label="Chọn file">
-                            <input
-                                // multiple
-                                type="file"
-                                accept="csv"
-                                // ref={fileInput}
-                                onChange={() => {}}
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">Thêm lịch</Button>
-                        </Form.Item>
-					</Form>
+				   	<div className="mb-3">
+						<input className="form-control" type="file" onChange={saveFile}/>
+						<Button loading={loadingPage} style={{marginLeft:"0 auto", marginTop:"15px"}} type="primary" onClick={uploadFile}>Lưu</Button>
+					</div>
 				</Modal.Body>
 			</Modal>
         </>
