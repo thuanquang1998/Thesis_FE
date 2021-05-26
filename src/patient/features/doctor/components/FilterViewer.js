@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Box, makeStyles, Chip} from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { getAllByLabelText } from '@testing-library/dom';
 
 const useStyles = makeStyles (theme=> ({
     root: {

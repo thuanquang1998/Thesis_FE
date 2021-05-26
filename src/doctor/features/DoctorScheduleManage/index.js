@@ -2,55 +2,77 @@ import React, { useState, useEffect } from 'react';
 import DoctorSidebar from '../../components/DoctorSideBar';
 import { Link } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
-import {Card, DatePicker, Space} from 'antd'
-import {Tab, Tabs, Modal } from 'react-bootstrap';
+import {Card, DatePicker, Space, Modal, Popover} from 'antd';
 import moment from 'moment';
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { makeStyles } from '@material-ui/core/styles';
+
+moment.updateLocale('en', {
+        months : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        weekdays : ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"]
+    });
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& .rbc-event': {
+            backgroundColor: "#1db9aa !important"
+        },
+        '& .rbc-toolbar-label': {
+            fontWeight:"600 !important",
+            fontSize:"20px !important",
+        },
+        '& .rbc-btn-group > button:focus': {
+            backgroundColor:"#20c0f3"
+        }
+    },
+    event: {
+        margin: '0',
+        fontSize: '12px !important',
+        textAlign: 'center',
+    },
+}));
 
 const DoctorSchedule = () =>{
-    const [currentWeek, setCurrentWeek] = useState([]);
-    const [value, setValue] = useState('');
+    const classes = useStyles();
+    let formats = {
+        dayFormat: (date, culture, localizer) =>
+            localizer.format(date, 'DDD', culture),
+        weekdayFormat: (date, culture, localizer) =>
+            localizer.format(date, 'dddd', culture),
+    }
+    const localizer = momentLocalizer(moment)
+   
     useEffect(()=> {
-        const current = new Date();
-        
+        // get and handle schedule work
+
     },[])
-    const onChangeWeek = (date) => {
-        const _date = moment(date);
-        const array = [0,1,2,3,4,5,6];
-        const newListDate = array.map(item => {
-            const _item =  moment(_date.weekday(item))
-            const obj = {
-                dateString: _item.format('DD-MM-YYYY'),
-                // dateOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][moment(_item).getDay()],
-                date: _item,
+
+    const currentDate = moment();
+    const events = [
+        {
+            title: "07:00-11:30",
+            start:currentDate,
+            end: currentDate,
+            data: {
+                name:"Thuan",
+                room:"Phòng 200"
             }
-            return obj;
-        })
-        console.log('newListDate :>> ', newListDate);
-
-        // format day
-        let arrayDateOfWeek = [];
-        const data = {
-            string:"Thứ 7, 25/5",
-            date: "",
+        },
+        {
+            title: "13:00-17:30",
+            start:currentDate,
+            end: currentDate,
+            data: {
+                name:"Thuan",
+                room:"Phòng 200"
+            }
         }
-        
+    ]
 
-    }
-    const [key, setKey] = useState(1);
-    const [activeModal, setActiveModal] = useState(null)
-           
-    const handleSelect = (key) => {
-        setKey(key)
-    }
-    const openModal = (id) => {
-        setActiveModal(id)
-    }
-    const handleCloseModal = () => {
-        setActiveModal(false)
-         
-        };
+   
     return(
-        <div>
+        <div className={classes.root}>
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
                     <div className="row align-items-center">
@@ -75,117 +97,58 @@ const DoctorSchedule = () =>{
                             </StickyBox>
                         </div>
                         <div className="col-md-7 col-lg-8 col-xl-9">
-                            {/* react-big-calendar */}
                             <Card>
-                            <div className="form-group">
-                                <label style={{display:"block"}}>Thời gian cho mỗi khung giờ</label>
-                                <DatePicker onChange={onChangeWeek} picker="week" placeholder="Chọn thời gian" />
-                            </div>
-
-
-                            {/* tetststs */}
-
-                            <div className="row">
-                                                        <div className="col-md-12">
-                                                            <div className="card schedule-widget mb-0">
-                                                                <div className="schedule-header">
-                                                                    < div className="schedule-nav">
-                                                                        <Tabs
-                                                                            className="tab-view"
-                                                                            activeKey={key}
-                                                                            onSelect={handleSelect}
-                                                                            id="controlled-tab-example"
-                                                                        >
-
-                                                        <Tab className="nav-item" eventKey={2} title="Thứ 2">
-                                                        <h4 className="card-title d-flex justify-content-between">
-															  <span>Time Slots</span> 
-																		<a className="edit-link" data-toggle="modal" href="#edit_time_slot" onClick={()=>{}}><i className="fa fa-edit mr-1"></i>Edit</a>
-																	</h4>
-																	
-																
-																	<div className="doc-times">
-																		<div className="doc-slot-list">
-																			8:00 pm - 11:30 pm
-																			<a href="#0" className="delete_schedule">
-																				<i className="fa fa-times"></i>
-																			</a>
-																		</div>
-																		<div className="doc-slot-list">
-																			11:30 pm - 1:30 pm
-																			<a href="#0" className="delete_schedule">
-																				<i className="fa fa-times"></i>
-																			</a>
-																		</div>
-																		<div className="doc-slot-list">
-																			3:00 pm - 5:00 pm
-																			<a href="#0" className="delete_schedule">
-																				<i className="fa fa-times"></i>
-																			</a>
-																		</div>
-																		<div className="doc-slot-list">
-																			6:00 pm - 11:00 pm
-																			<a href="#0"  className="delete_schedule">
-																				<i className="fa fa-times"></i>
-																			</a>
-																		</div>
-																	</div>
-																
-                                                        </Tab>
-                                                        <Tab className="nav-item" eventKey={3} title="Thứ 3"> 
-                                                            <h4 className="card-title d-flex justify-content-between">
-                                                                <span>Khung giờ</span> 
-                                                                <a className="edit-link" data-toggle="modal" href="#add_time_slot" onClick={()=>{}}>
-                                                                <i className="fa fa-plus-circle"></i> Thêm khung giờ</a>
-                                                            </h4>
-                                                            <p className="text-muted mb-0">Chưa có khung giờ</p>
-                                                        </Tab>
-                                                        <Tab className="nav-item" eventKey={4} title="Thứ 4"> 
-                                                                <h4 className="card-title d-flex justify-content-between">
-                                                                    <span>Khung giờ</span> 
-                                                                    <a className="edit-link" data-toggle="modal" href="#add_time_slot" onClick={()=>{}}>
-                                                                    <i className="fa fa-plus-circle"></i> Thêm khung giờ</a>
-                                                                </h4>
-                                                                <p className="text-muted mb-0">Chưa có khung giờ</p>
-                                                        </Tab>
-                                                        <Tab className="nav-item" eventKey={5} title="Thứ 5"> 
-                                                            <h4 className="card-title d-flex justify-content-between">
-                                                                <span>Khung giờ</span> 
-                                                                <a className="edit-link" data-toggle="modal" href="#add_time_slot" onClick={()=>{}}>
-                                                                <i className="fa fa-plus-circle"></i> Thêm khung giờ</a>
-                                                            </h4>
-                                                            <p className="text-muted mb-0">Chưa có khung giờ</p>
-                                                        </Tab>
-                                                        <Tab className="nav-item" eventKey={6} title="Thứ 6">
-                                                            <h4 className="card-title d-flex justify-content-between">
-                                                                <span>Khung giờ</span> 
-                                                                <a className="edit-link" data-toggle="modal" href="#add_time_slot" onClick={()=>{}}>
-                                                                <i className="fa fa-plus-circle"></i> Thêm khung giờ</a>
-                                                            </h4>
-                                                            <p className="text-muted mb-0">Chưa có khung giờ</p>
-                                                        </Tab>
-                                                        <Tab className="nav-item" eventKey={7} title="Thứ 7">
-                                                            <h4 className="card-title d-flex justify-content-between">
-                                                                <span>Khung giờ</span> 
-                                                                <a className="edit-link" data-toggle="modal" href="#add_time_slot" onClick={()=>{}}>
-                                                                <i className="fa fa-plus-circle"></i> Thêm khung giờ</a>
-                                                            </h4>
-                                                            <p className="text-muted mb-0">Chưa có khung giờ</p>
-                                                        </Tab>
-                                                                        </Tabs>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                <Calendar
+                                    localizer={localizer}
+                                    events={events}
+                                    startAccessor="start"
+                                    endAccessor="end"
+                                    style={{ height: 600 }}
+                                    views={['month']}
+                                    formats={formats}
+                                    components={(event,e)=>(
+                                        <div>AAAAAA</div>
+                                    )}
+                                    messages = {
+                                        {
+                                            "today":'Hôm nay',
+                                            "previous": 'Tháng trước',
+                                            "next": 'Tháng sau',
+                                        }
+                                    }
+                                    popup={true}
+                                    components={{
+                                        event: (component: any) => {
+                                            const targetId = "...."
+                                            const {event} = component
+                                            console.log('event :>> ', event);
+                                            return (
+                                                <Popover 
+                                                    placement="bottom" 
+                                                    title={"Lịch làm việc"} 
+                                                    content={(
+                                                        <div style={{display:"flex", flexDirection:"column",alignItems:"center"}}>
+                                                           <div>{event.data.room}</div>
+                                                           <div>{event.title}</div> 
                                                         </div>
-                                                    </div>
-                            {/* tetstststst */}
+                                                    )} 
+                                                trigger="hover">
+                                                    <p className={classes.event}>{event.title}</p>
+                                                </Popover>
+                                            )
+                                        },
+                                    }}
+                                    // click cả ô
+                                    // onSelectSlot={()=>setVisibleModal(true)}
+                                    // click chỉ mỗi event
+                                    // onSelectEvent={(event, e)=>handleSelectEvent(event,e)}
+                                />
                             </Card>
                         </div>  
                     </div>
                 </div>
             </div>
         </div>
-        
     )
     }
 

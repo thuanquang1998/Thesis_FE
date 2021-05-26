@@ -39,7 +39,7 @@ const DoctorSidebar = () => {
             {loading && <LoadingTop/>}
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
-                    <Link href="#" className="booking-doc-img">
+                    <Link to="#" className="booking-doc-img">
                         <img src={currentDoctor?.doctor.avatar_image||IMG01} alt="User" />
                     </Link>
                     <div className="profile-det-info">
