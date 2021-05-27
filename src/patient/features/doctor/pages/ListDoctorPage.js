@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
+import {Pagination, Card} from 'antd';
 import { Box, Container, Grid, makeStyles, Paper, LinearProgress } from '@material-ui/core';
 import StickyBox from "react-sticky-box";
 import LoadingTop from '../../../components/loadingTop';
@@ -26,6 +27,19 @@ const useStyles = makeStyles(theme => ({
         position:'fixed',
         top: '0',
         width:"100%",
+    },
+    pagination: {
+        textAlign: 'center',
+        '& li': {
+            borderRadius: "50%",
+            
+        },
+        '& li button': {
+            border: 'none !important'
+        }
+    },
+    card: {
+        borderRadius: "15px"
     }
 }))
 
@@ -44,9 +58,8 @@ function ListDoctorPage(props) {
         const params = queryString.parse(location.search);
         return {
             ...params,
-            // ten:"",
-            // ck:"",
-            // bv:"",
+            page: 1,
+            limit: 6
         }
     },[location.search]);
 
@@ -63,7 +76,7 @@ function ListDoctorPage(props) {
             bv:"",
         }
         if(!loadingData && listAllDoctors.length!==0){
-            const { tenBs, bv, ck } = queryParams;
+            const { tenBs, bv, ck, page, limit } = queryParams;
             const _tenBs = tenBs || "";
             const _bv = bv?bv==='all-bv'?'':bv:'';
             const _ck = ck?ck==='all-ck'?'':ck:'';
@@ -78,8 +91,18 @@ function ListDoctorPage(props) {
             const new_list_ck = new_list_bv.filter((item,idx)=> {
                 return item.spec_detail?item.spec_detail[0]?._id.toLowerCase().includes(_ck.toLowerCase())===true:true;
             })
-            const new_doctors = new_list_ck.filter(x=>x.timeWorkIsNull===false);
-            _renderData = new_doctors;
+            let min = 0;
+            let max = 0;
+            if (page===1){
+                min = 0;
+                max = limit;
+            } else {
+                min = limit*(page-1);
+                max = limit*page;
+            }
+            const temp = new_list_ck.slice(min, max);
+            // const new_doctors = new_list_ck.filter(x=>x.timeWorkIsNull===false);
+            _renderData = temp;
 
         } else {
             _renderData = [];
@@ -103,6 +126,22 @@ function ListDoctorPage(props) {
 
     const handleFilterViewer = (newFilters) => {
 
+    }
+
+    const handlePageChange = (e, pageSize) => {
+      
+        const _temp = {
+            page: e,
+            limit: pageSize,
+        }
+        const filters = {
+            ...queryParams,
+            ..._temp,
+        }
+        history.push({
+            pathname: history.location.pathname,
+            search: queryString.stringify(filters)
+        })
     }
 
     return (
@@ -134,21 +173,27 @@ function ListDoctorPage(props) {
                             </StickyBox>
                         </div>
                         <div className="col-md-12 col-lg-8 col-xl-9">
-                            {/* Title */}
-                            <h2>{`Đã tìm thấy: ${listDoctor.length} bác sĩ`}</h2>
-                            {/* View */}
-                            <FilterViewer filters={queryParams} onChange={handleFilterViewer}/>
-                            {/* list */}
-                            <div style={{minHeight:"600px"}}>
-                                {loadingData? 
-                                    <div>Loading Page</div>
-                                    :<DoctorList doctors={listDoctor}/>
-                                }
-                            </div>
-                            
-                            <div className="load-more text-center">
-                                <a href="#0" className="btn btn-primary btn-sm">Xem thêm</a>
-                            </div>
+                            <Card className={classes.card}>
+                                {/* Title */}
+                                <h2>{`Đã tìm thấy: ${listDoctor.length} bác sĩ`}</h2>
+                                {/* View */}
+                                <FilterViewer filters={queryParams} onChange={handleFilterViewer}/>
+                                {/* list */}
+                                <div style={{minHeight:"600px"}}>
+                                    {loadingData? 
+                                        <div>Loading Page</div>
+                                        :<DoctorList doctors={listDoctor}/>
+                                    }
+                                </div>
+                                
+                                <Pagination 
+                                    className={classes.pagination}
+                                    defaultCurrent={1}
+                                    defaultPageSize={3}
+                                    total={20} 
+                                    onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
+                                />
+                            </Card>
                         </div>
                     </div>
 

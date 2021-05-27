@@ -20,9 +20,9 @@ function DoctorList({ doctors = [] }) {
             {check === 0?
                 <h2></h2>
                 :
-                <Row gutter={[16, 16]} style={{paddingTop:"0px"}}>
+                <Row gutter={[24, 24]} style={{paddingTop:"0px"}}>
                     {renderData && renderData.map((item,idx)=>(
-                        <Col key={idx} xs={{span:24}} sm={{span:12}} md={{span:8}} xl={{span:6}}>
+                        <Col key={idx} xs={{span:24}} sm={{span:24}} md={{span:12}} xl={{span:8}}>
                             <DoctorItem key={idx} data={item}/>
                         </Col>
                     ))}

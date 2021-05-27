@@ -39,8 +39,8 @@ function ProductFilter({filters, onChange}) {
         onChange(newFilters)
     }   
     return (
-        <div className="card search-filter" style={{marginBottom:"40px"}}>
-            <div className="card-header">
+        <div className="card search-filter" style={{marginBottom:"40px", borderRadius:"15px"}}>
+            <div className="card-header" style={{borderRadius:"15px"}}>
                 <h4 className="card-title mb-0">Lọc</h4>
             </div>
             <div className="card-body">

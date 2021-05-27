@@ -11,6 +11,7 @@ import DoctorProfile from './features/DoctorProfileManage';
 import DoctorAppointment from './features/DoctorAppointment';
 import DoctorSchedule from './features/DoctorScheduleManage';
 import ChangePassword from './features/ChangePassword';
+import Footer from './components/footer';
 
 const AppDoctor =  ({history}) => {
 	const dispatch = useDispatch();
@@ -44,10 +45,8 @@ const AppDoctor =  ({history}) => {
                         <PrivateRouteDoctor component={DoctorAppointment} path="/bac-si/lich-kham" exact/>
                         <PrivateRouteDoctor component={DoctorSchedule} path="/bac-si/lich-lam-viec" exact/>
                         <PrivateRouteDoctor component={ChangePassword} path="/bac-si/doi-mat-khau" exact/>
-
-                        
-						
 					</Switch>
+                    <Route render={(props)=> <Footer {...props}/>} />
                 </div>
             </Router>
         

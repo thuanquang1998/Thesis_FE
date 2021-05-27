@@ -67,9 +67,12 @@ const DetailDoctorPage = (props) => {
                                 </ul>
                             </Col>
                             <Col xs={{span:24, offset:8}} sm={{span:4, offset:10}} md={{span:5, offset:0}} style={{width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-                               <Link to={`/dat-kham/${props.match.params.doctorID}`}>
-                                <Button type="primary" style={{borderRadius:"20px"}}>Đặt lịch khám</Button>
-                                </Link>
+                                <Link 
+                                    to={{
+                                        pathname:`/dat-kham/${props.match.params.doctorID}`,
+                                        state: {data}
+                                    }}
+                                ><Button type="primary" style={{borderRadius:"20px"}}>Đặt lịch khám</Button></Link>
                             </Col>
                         </Row>
                     </Card>

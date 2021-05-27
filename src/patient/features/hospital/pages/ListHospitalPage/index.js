@@ -1,33 +1,123 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import HospitalSearch from '../../components/HospitalSearch';
 import HospitalList from '../../components/HospitalList';
 import LoadingTop from '../../../../components/loadingTop';
+import { Pagination, Card, Spin } from 'antd';
+import { makeStyles } from '@material-ui/core/styles';
+import queryString from 'query-string'; 
+import { useHistory, useLocation } from 'react-router-dom';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+  loadingSpin: {
+    height: "500px",
+    textAlign: "center",
+    paddingTop: "40px",
+    '& div': {
+        marginRight: "20px"
+    }
+  },
+  pagination: {
+    textAlign: 'center',
+    '& li': {
+        borderRadius: "50%",
+        
+    },
+    '& li button': {
+        border: 'none !important'
+    }
+  }
+}));
 
 const ListHospitalPage = () => {
+
+    const history = useHistory();
+    const location = useLocation();
+
+    
+    const classes = useStyles();
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
+    const [defaultData, setDefaultData] = useState([]);
     const [renderData, setRenderData] = useState([]);
     const [filter, setFilter] = useState('');
     const [loadingPage, setLoadingPage] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentData, setCurrentDate] = useState([]);
+ 
+
+    const queryParams = useMemo(()=>{
+        const params = queryString.parse(location.search);
+        console.log('params :>> ', params);
+        return {
+            ...params,
+            page: Number.parseInt(params.page) || 1, 
+            limit: Number.parseInt(params.limit) || 3,
+        }
+    },[location.search]);
 
     useEffect(() => {
+        console.log('queryParams :>> ', queryParams);
+        const {page, limit} = queryParams;
         setLoadingPage(true);
         if (loadingData === 0) {
             const _data = [...appState.listAllHospitals.data];
-            const _renderData = _data.filter((item,idx)=>{
+            const _renderDataTemp = _data.filter((item,idx)=>{
                     return item.name.toLowerCase().includes(filter.toLowerCase())===true;
             })
+            let min = 0;
+            let max = 0;
+            if (page===1){
+                min = 0;
+                max = limit;
+            } else {
+                min = limit*(page-1);
+                max = limit*page;
+            }
+            console.log('min :>> ', min);
+            console.log('max :>> ', max);
+            const _renderData = _renderDataTemp.slice(min, max);
+            console.log('_renderData :>> ', _renderData);
             setTimeout(() => {
                 setLoadingPage(false)
             }, 500);
+            setDefaultData(_data);
             setRenderData(_renderData);
         } 
-    }, [filter, loadingData])
+    }, [queryParams, loadingData])
 
     const onHandleSearch = (value) => {
-        setFilter(value)
+        setFilter(value);
+        const filters = {
+            ...queryParams,
+            search:value,
+        }
+        history.push({
+            pathname: history.location.pathname,
+            search: queryString.stringify(filters)
+        })
+    }
+    const handlePageChange = (e, pageSize) => {
+      
+        const _temp = {
+            page: e,
+            limit: pageSize,
+        }
+        const filters = {
+            ...queryParams,
+            ..._temp,
+        }
+        history.push({
+            pathname: history.location.pathname,
+            search: queryString.stringify(filters)
+        })
     }
     return (
         <>  
@@ -48,10 +138,25 @@ const ListHospitalPage = () => {
                 </div>
             </div>
             <HospitalSearch searchName={onHandleSearch}/> 
-            {loadingPage? 
-                <div>...</div>
-                :<HospitalList data={renderData}/>
-            }
+            <Card>
+                {loadingPage? 
+                <div className={classes.loadingSpin}>
+                    <Spin size="large"/>
+                    <Spin size="large"/>
+                    <Spin size="large"/>
+                </div>
+                :<>
+                    <HospitalList data={renderData}/>
+                    <Pagination 
+                        className={classes.pagination}
+                        defaultCurrent={queryParams.page}
+                        defaultPageSize={3}
+                        total={defaultData.length} 
+                        onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
+                    />
+                </>
+                }
+            </Card>
         </>
     )
 }

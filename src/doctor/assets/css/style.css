@@ -2744,7 +2744,7 @@ background: #f9f9f9 url("../images/search-bg.png") no-repeat bottom center;
 -----------------------*/
 
 .breadcrumb-bar {
-    background-color: #15558d;
+    background-color: #15558d !important;
     padding: 15px 0;
 }
 .breadcrumb-bar .breadcrumb-title {

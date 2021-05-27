@@ -59,7 +59,7 @@ function FilterViewer({ data ,filters = {}, onChange = null }) {
                     label={`Chuyên khoa: ${nameCk}`}
                     color='primary'
                     clickable={true}
-                    size="medium"
+                    size="small"
                     // onDelete={(filters)=>{
 
                     // }}

@@ -71,7 +71,7 @@ const DoctorItem = (props) => {
                         <p className="chucDanh">{data.title}</p>
                         <p className="tenBs">{data.fullName}</p>
                     </Link> 
-                        {/* <i className="fas fa-check-circle verified"></i> */}
+                        <i className="fas fa-check-circle verified"></i>
                     </h3>
                     <Rate value={3} />
                     <ul className="available-info" style={{height:"110px"}}>

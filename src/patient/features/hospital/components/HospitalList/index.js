@@ -5,7 +5,7 @@ import HospitalItem from '../HospitalItem'
 const HospitalList = (props) => {
     const listAllHospitals = props.data; 
     return (
-        <div className="container" style={{margin: "0 auto", paddingBottom:"50px"}}>
+        <div className="container" style={{margin: "0 auto", paddingBottom:"20px"}}>
              {listAllHospitals.length === 0?
             <h2>Không tìm thấy Cơ sở y tế</h2>
             :

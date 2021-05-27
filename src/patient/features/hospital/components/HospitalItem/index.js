@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 const HospitalItem = (props) => {
     const data = props.data;
-    console.log('data :>> ', data);
     // const address = props.data.address.number +', '+props.data.address.street+', '+props.data.address.ward+', '+props.data.address.district+', '+props.data.address.city
     return (
         <Card style={{marginTop:"30px", borderRadius:"10px", boxShadow:"5px 5px 13px rgba(0, 0, 0, 0.1)"}}>

@@ -86,7 +86,7 @@ const DoctorSchedule = () =>{
     return(
         <div className={classes.root}>
             {loadingPage && <LoadingTop/>}
-            <div className="breadcrumb-bar">
+            <div className="breadcrumb-bar" style={{marginTop:"80px"}}>
                 <div className="container-fluid">
                     <div className="row align-items-center">
                         <div className="col-md-12 col-12">
