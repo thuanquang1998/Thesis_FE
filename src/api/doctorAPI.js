@@ -21,5 +21,11 @@ class doctorsAPI{
         .then(res=> res.data)
         .catch(err => err.response.data)
     }
+    // load lịch làm việc của bác sĩ
+    get_doctor_timework(id) {
+        return http.get(`doctors/${id}/timework`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
 }
 export default new doctorsAPI

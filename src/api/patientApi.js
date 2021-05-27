@@ -28,7 +28,7 @@ class patientAPI{
     // doi lich
    
     get_time_works(id){
-        return http.get(`doctors/${id}/timework`).then(res => res.data).catch(err=> err.response.data)
+        return http.get(`doctors/${id}/timeslots`).then(res => res.data).catch(err=> err.response.data)
     }
 }
 export default new patientAPI

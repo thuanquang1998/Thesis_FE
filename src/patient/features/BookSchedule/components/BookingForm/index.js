@@ -30,6 +30,7 @@ function BookingForm(props) {
     const getTimeWorks = async () => {
         try {
             const res = await patientAPI.get_time_works(doctorId);
+
             const abc = new Date(res.data.data[0].date);
             const current = new Date();
             if(!res.error && !res.data.isNull) {

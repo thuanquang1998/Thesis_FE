@@ -32,7 +32,6 @@ const ScheduleWork = () => {
 					}
 					return _item;
 				})
-				
 				setListEmployees(_data)
 			} catch (error) {
 				console.log(`error.message`, error.message)
@@ -47,10 +46,14 @@ const ScheduleWork = () => {
 	const handleViewSchedule = (record) => {
 		console.log('record :>> ', record);
 		// send list doctor Array<Object>: Object:{name, id} => select
+		const listDoctor = {
+			data: [...listEmployees]
+		}
 		history.push({
 			pathname: `/admin/hospital/lich-lam-viec/${record.id}`,
 			state: {
-				data: {...record}
+				data: {...record},
+				listDoctor: [...listEmployees]
 			}
 		})
 	}
@@ -117,7 +120,7 @@ const ScheduleWork = () => {
 								</ul>
 							</div>
 							<div className="col-sm-5 col">
-								<Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link>
+								{/* <Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link> */}
 						    </div>
 						</div>
 					</div>

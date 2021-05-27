@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import DoctorSidebar from '../../components/DoctorSideBar';
 import { Link } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
+import {useSelector} from 'react-redux';
 import {Card, DatePicker, Space, Modal, Popover} from 'antd';
 import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { makeStyles } from '@material-ui/core/styles';
+import doctorAPI from '../../../api/doctorAPI';
+import LoadingTop from '../../components/loadingTop';
 
 moment.updateLocale('en', {
         months : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
@@ -34,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DoctorSchedule = () =>{
+    const doctor = useSelector(state=> state.doctor);
+    const { isDoctorLoggedIn, currentDoctor} = doctor;
+    const [loadingPage, setLoadingPage] = useState(true);
+    const [events, setEvents] = useState([]);
     const classes = useStyles();
     let formats = {
         dayFormat: (date, culture, localizer) =>
@@ -44,35 +51,41 @@ const DoctorSchedule = () =>{
     const localizer = momentLocalizer(moment)
    
     useEffect(()=> {
-        // get and handle schedule work
-
-    },[])
-
-    const currentDate = moment();
-    const events = [
-        {
-            title: "07:00-11:30",
-            start:currentDate,
-            end: currentDate,
-            data: {
-                name:"Thuan",
-                room:"Phòng 200"
-            }
-        },
-        {
-            title: "13:00-17:30",
-            start:currentDate,
-            end: currentDate,
-            data: {
-                name:"Thuan",
-                room:"Phòng 200"
-            }
+        setLoadingPage(true);
+        if(isDoctorLoggedIn) {
+            const id = currentDoctor.doctor._id;
+            getTimeWorks(id);    
         }
-    ]
-
+    },[isDoctorLoggedIn])
+    const getTimeWorks = async (id) => {
+        try {
+            const response = await doctorAPI.get_doctor_timework(id);
+            if(response.error) throw new Error(response.errors[0].message);
+            const data = response.data?.data;
+            let _listEvents = [];
+            data.forEach(item => {
+                const listTimeWork = item.time_work.split('/');
+                const _temp = listTimeWork.map(x=>{
+                    let obj = {
+                        title: x,
+                        start: moment(item.date),
+                        end: moment(item.date),
+                        data: item,
+                    }
+                    return obj
+                })
+                _listEvents = [..._listEvents,..._temp]
+            })
+            setEvents(_listEvents);
+        } catch (error) {
+            console.log('error.message :>> ', error.message);
+        }
+        setLoadingPage(false)
+    }
    
     return(
         <div className={classes.root}>
+            {loadingPage && <LoadingTop/>}
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
                     <div className="row align-items-center">
@@ -121,7 +134,7 @@ const DoctorSchedule = () =>{
                                         event: (component: any) => {
                                             const targetId = "...."
                                             const {event} = component
-                                            console.log('event :>> ', event);
+                                            // console.log('event :>> ', event);
                                             return (
                                                 <Popover 
                                                     placement="bottom" 
