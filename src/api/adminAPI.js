@@ -10,18 +10,18 @@ class adminAPI{
         return http.get('spec').then(res=> res.data).catch(err=> err.response.data)
     }
     get_list_hospitals(method){
-        return http.get('hopitals').then(res => res.data).catch(err=> err.response.data)
+        return http.get('hospitals').then(res => res.data).catch(err=> err.response.data)
     }
     // api for admin hospital
     get_hospital_info(id){
-        return http.get(`hopitals/${id}`).then(res => res.data).catch(err=> err.response.data)
+        return http.get(`hospitals/${id}`).then(res => res.data).catch(err=> err.response.data)
     }
 
     // tạo bệnh viện
     create_hospital(data) {
         const tokenObj = localStorage.getItem('currentAdmin');
         const _token = JSON.parse(tokenObj);
-        return http.post(`hopitals/create`, data, { 
+        return http.post(`hospitals/create`, data, { 
             headers:{ 
                 'x-access-token': _token.adminToken 
             }
@@ -39,7 +39,7 @@ class adminAPI{
 
     // lấy danh sách bác sĩ thuộc bệnh viện => nhân viên
     get_doctors_of_hospital(id) {
-        return http.get(`hopitals/${id}/doctors`)
+        return http.get(`hospitals/${id}/doctors`)
                     .then(res=> res.data)
                     .catch(err => err.response.data)
     }
@@ -60,7 +60,7 @@ class adminAPI{
 
     // lấy danh sách lịch khám của bệnh viện
     get_appointment_of_hospital(id){
-         return http.get(`hopitals/${id}/appointments`)
+         return http.get(`hospitals/${id}/appointments`)
                     .then(res=> res.data)
                     .catch(err => err.response.data)
     }

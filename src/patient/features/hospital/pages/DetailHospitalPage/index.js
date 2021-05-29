@@ -22,7 +22,7 @@ const DetailHospitalPage = () => {
         if(loadingData===0 && appState.listAllDoctors.length!==0) {
             const _doctor = [...appState.listAllDoctors];
             _renderData = _doctor.filter((item,idx)=>{
-                return item.hopitalId.toLowerCase().includes(data.id.toLowerCase())===true;
+                return item.hospital_info._id.toLowerCase().includes(data.id.toLowerCase())===true;
             })
         } else {
             _renderData=[];

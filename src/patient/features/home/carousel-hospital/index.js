@@ -1,9 +1,7 @@
-import { Card, Row, Col } from 'antd'
-import React from 'react'
-import Slider from "react-slick"
-import './style.css'
-import logoHospital from '../../../assets/img/benhvien.jpg'
-import iconHospital from '../../../assets/img/icon_hospital.jpg'
+import React from 'react';
+import Slider from "react-slick";
+import iconHospital from '../../../assets/img/icon_hospital.jpg';
+import './style.css';
 
 const settings = {
     // className: "center",
@@ -39,9 +37,10 @@ const settings = {
 
 
 const CardHospital = (props) => {
+    const {data} = props.data;
     return (
-        <a href="patient/cosoyte/profile">
-            <div className="feature-item text-center" style={{textAlign: 'center'}}>
+        <a href={`/chi-tiet-benh-vien/${props.data?.id}`}>
+           <div className="feature-item text-center" style={{textAlign: 'center'}}>
                 <img src={props.data && props.data.logo} className="img-fluid" alt="Feature" />
                 <p>{props.data && props.data.name}</p>
             </div>

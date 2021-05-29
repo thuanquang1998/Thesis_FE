@@ -2,23 +2,22 @@ import React, { useEffect } from 'react'
 import MessengerCustomerChat from 'react-messenger-customer-chat'
 import { useDispatch } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import AppDoctor from '../doctor/appDoctor'
 import { get_list_hospitals, get_specialities_system } from '../redux/actions/adminActions'
 import { get_doctors_data } from '../redux/actions/doctorActions'
-import FeedBack from './components/feedback'
 import Footer from './components/footer'
 import Header from './components/header'
+import PrivateRoute from './components/Route/PrivateRoute'
 import LoginPatient from './features/auth/pages/Login'
+import LoginManager from './features/auth/pages/LoginManager'
 import BookingPage from './features/BookSchedule/pages/BookingPage'
 import DetailDoctorPage from './features/doctor/pages/DetailDoctorPage'
 import ListDoctorPage from './features/doctor/pages/ListDoctorPage'
 import Home from './features/home'
 import DetailHospitalPage from './features/hospital/pages/DetailHospitalPage'
 import ListHospitalPage from './features/hospital/pages/ListHospitalPage'
-import LoginManager from './features/auth/pages/LoginManager';
-import PrivateRoute from './components/Route/PrivateRoute';
-import AppDoctor from '../doctor/appDoctor';
-import PatientInfo from './features/ManagePatient/pages/PatientInfo';
-import PatientSchedule from './features/ManagePatient/pages/PatientSchedule';
+import PatientInfo from './features/ManagePatient/pages/PatientInfo'
+import PatientSchedule from './features/ManagePatient/pages/PatientSchedule'
 
 
 const AppPatient = function (props) {
@@ -47,7 +46,7 @@ const AppPatient = function (props) {
 						<Route exact path='/dat-kham/:doctorID' component={BookingPage}/>
 
 						<PrivateRoute component={PatientInfo} path="/quan-li-tai-khoan" exact/>
-						<PrivateRoute component={PatientSchedule} path="/quan-li-tai-khoan/lich-kham" exact/>
+						<PrivateRoute component={PatientSchedule} path="/quan-li-lich-kham" exact/>
 
 						{/* <Route exact path='/quan-li-tai-khoan' component={ManagePatient}/> */}
 						<Route exact path='/quan-li/dang-nhap' component={LoginManager}/>

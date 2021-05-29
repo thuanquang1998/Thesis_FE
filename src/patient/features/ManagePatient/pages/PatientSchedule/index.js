@@ -1,15 +1,15 @@
-import { Badge, Card, Col, Row, Table, Button } from 'antd';
+import { Badge, Button, Card, Col, Row, Table } from 'antd';
+import moment from 'moment';
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Swal from "sweetalert2";
+import patientAPI from '../../../../../api/patientApi';
+import { compareDates } from '../../../../../utils';
+import LoadingTop from '../../../../components/loadingTop';
 // import { get_schedule_patient } from '../../../../../redux/actions/patientActions';
 import PatientSidebar from '../../components/PatientSideBar';
-import patientAPI from '../../../../../api/patientApi';
-import moment from 'moment';
-import { useSnackbar } from 'notistack';
-import Swal from "sweetalert2";
-import LoadingTop from '../../../../components/loadingTop';
-import { compareDates } from '../../../../../utils';
 
 function PatientSchedule(props) {
     const {enqueueSnackbar} = useSnackbar();

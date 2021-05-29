@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Box, makeStyles, Chip} from '@material-ui/core';
+import { Box, Chip, makeStyles } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles (theme=> ({

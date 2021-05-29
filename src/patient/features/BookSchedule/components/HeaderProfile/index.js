@@ -1,10 +1,10 @@
 import { Card, Col, Row } from 'antd'
 import React from 'react'
+import { formatPrice } from '../../../../../utils'
 import departLogo from '../../../../assets/img/depart.png'
 import hospitalLogo from '../../../../assets/img/hospital.png'
 import location from '../../../../assets/img/location.png'
 import price from '../../../../assets/img/price.png'
-import { formatPrice } from '../../../../../utils';
 
 function HeaderProfile({data = {}}) {
     return (
@@ -12,7 +12,7 @@ function HeaderProfile({data = {}}) {
             <Row gutter={[10,10]}>
                 <Col span={4}>
                     <div className="avatar">
-                        <img src={`http://localhost:3002/${data.avatar}`} alt="logoDoctor"/>
+                        <img src={data.avatar} alt="logoDoctor"/>
                     </div>
                     {/* <Rate value={3} /> */}
                 </Col>
@@ -24,15 +24,15 @@ function HeaderProfile({data = {}}) {
                     <ul className="available-info">
                         <li>
                             <span><img src={departLogo} alt="Nội tiết"/></span>
-                            <span>{data.spec_detail[0]?.name}</span>
+                            <span>{data.spec_detail?.name}</span>
                         </li>
                         <li>
                             <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                            <span>{data.hospital_info[0]?.name}</span>
+                            <span>{data.hospital_info?.name}</span>
                         </li>
                         <li>
                             <span><img src={location} alt="Nội tiết"/></span>
-                            <span> {data.hospital_info[0]?.address} </span>
+                            <span> {data.hospital_info?.address} </span>
                         </li>
                         <li>
                             <span><img src={price} alt="Nội tiết"/></span>

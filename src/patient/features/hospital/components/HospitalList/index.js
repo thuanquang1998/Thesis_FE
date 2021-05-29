@@ -1,6 +1,6 @@
-import { Col, Row } from 'antd'
-import React from 'react'
-import HospitalItem from '../HospitalItem'
+import { Col, Row } from 'antd';
+import React from 'react';
+import HospitalItem from '../HospitalItem';
 
 const HospitalList = (props) => {
     const listAllHospitals = props.data; 

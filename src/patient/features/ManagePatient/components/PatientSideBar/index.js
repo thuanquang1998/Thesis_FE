@@ -1,11 +1,11 @@
-import React,{ Component } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import React from 'react';
 import Nav from 'react-bootstrap/Nav';
+import { useSelector } from 'react-redux';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import IMG01 from '../../../../assets/images/doctor-thumb-02.jpg';
+import './style.css';
 
 
-import './style.css'
-import { useSelector } from 'react-redux'
 
 const PatientSidebar = () => {
     const location = useLocation();
@@ -42,8 +42,8 @@ const PatientSidebar = () => {
                         </NavLink> 
                     </Nav.Item> 
                     
-                    <Nav.Item className={`nav-item ${url==='/quan-li-tai-khoan/lich-kham'?'active-nav':''}`}> 
-                        <NavLink to='/quan-li-tai-khoan/lich-kham'>
+                    <Nav.Item className={`nav-item ${url==='/quan-li-lich-kham'?'active-nav':''}`}> 
+                        <NavLink to='/quan-li-lich-kham'>
                             <i className="fas fa-calendar-check"></i>
                                 <span>Quản lí lịch khám</span> 
                         </NavLink>

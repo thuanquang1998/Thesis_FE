@@ -116,7 +116,7 @@ function* make_appointment({payload}){
             SwalAlert('Error', 'Server disconected','error')
         }
         else {
-            SwalAlert('Success', 'Making appointment success','success')
+            SwalAlert('Đặt lịch khám thành công','success')
         }
     }
     catch(err){

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 // import DoctorItem from '../../doctor-page/doctor-item'
-import DoctorItem from '../../doctor/components/DoctorItem'
+import DoctorItem from '../../doctor/components/DoctorItem';
 
 
 

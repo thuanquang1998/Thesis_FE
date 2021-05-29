@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import HospitalSearch from '../../components/HospitalSearch';
-import HospitalList from '../../components/HospitalList';
-import LoadingTop from '../../../../components/loadingTop';
-import { Pagination, Card, Spin } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
-import queryString from 'query-string'; 
-import { useHistory, useLocation } from 'react-router-dom';
+import { Card, Pagination, Spin } from 'antd';
+import queryString from 'query-string';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import LoadingTop from '../../../../components/loadingTop';
+import HospitalList from '../../components/HospitalList';
+import HospitalSearch from '../../components/HospitalSearch';
 
 
 const useStyles = makeStyles((theme) => ({

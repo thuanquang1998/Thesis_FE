@@ -39,7 +39,7 @@ const LoginPatient = () => {
                 history.push('/')
             } else {
                 history.push({
-                    pathname: `/dat-kham/${history.location.state.data?.id}`,
+                    pathname: `/dat-kham/${history.location.state.data?._id}`,
                     state: {...history.location.state}
                 })
             }

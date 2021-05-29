@@ -1,7 +1,7 @@
 import { Button, Card, Col, Row } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
-import React from 'react';
 import moment from 'moment';
+import React from 'react';
 
 function BookingConfirm(props) {
     const {handleSubmit, handleReturn, showModal, data} = props;

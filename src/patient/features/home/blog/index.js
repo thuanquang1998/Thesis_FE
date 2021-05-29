@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { IMG01, IMG02, IMG03, IMG04, IMG_th01, IMG_th02, IMG_th03, IMG_th04} from './img.js';
 import { Link } from 'react-router-dom';
-import './style.css'
+import { IMG01, IMG02, IMG03, IMG04, IMG_th01, IMG_th02, IMG_th03, IMG_th04 } from './img.js';
+import './style.css';
 class HomeBlog extends Component{
     
     render(){

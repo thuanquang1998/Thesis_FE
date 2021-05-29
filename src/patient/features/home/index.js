@@ -1,14 +1,14 @@
-import React, { useState, useEffect} from 'react'
+import { Button } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import LoadingTop from '../../components/loadingTop'
 import HomeSearch from '../../components/search'
 import Advertisement from './advertisement'
 import HomeBlog from './blog'
 import HomeDepart from './carousel-depart'
 import HomeBookDoctor from './carousel-doctor/index'
 import HomeHospital from './carousel-hospital'
-import LoadingTop from '../../components/loadingTop';
-import {Button} from '@material-ui/core';
-import { useSnackbar } from 'notistack';
 const Home = () => {
     const {enqueueSnackbar} = useSnackbar();
     const appState = useSelector(state=>state.app);

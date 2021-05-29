@@ -1,8 +1,8 @@
+import { Card, Col, Form, Input, Row } from 'antd';
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Button, Card, Col, DatePicker, Form, Input, Radio, Rate, Row, Select } from 'antd'
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PatientSidebar from '../../components/PatientSideBar';
-import { useSelector } from 'react-redux'
 function PatientInfo(props) {
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;

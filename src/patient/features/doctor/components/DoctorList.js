@@ -1,7 +1,6 @@
-import React, { useState, useEffect} from 'react';
-import { Box, Grid } from '@material-ui/core';
+import { Col, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
 import DoctorItem from './DoctorItem';
-import { Col, Row, Select, Input } from 'antd'
 
 function DoctorList({ doctors = [] }) {
     const check = doctors.length;

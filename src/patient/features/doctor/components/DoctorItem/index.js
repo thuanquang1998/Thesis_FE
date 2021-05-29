@@ -1,20 +1,17 @@
-import React, {useState} from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { Rate, Button } from 'antd';
-import departLogo from '../../../../assets/img/depart.png';
-import hospitalLogo from '../../../../assets/img/hospital.png'
-import location from '../../../../assets/img/location.png'
-import price from '../../../../assets/img/price.png'
-import logo_female from '../../../../assets/img/female_logo.png';
-import logo_male from '../../../../assets/img/male_logo.png';
+import { Button, Rate } from 'antd';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { set_confirm_booking } from "../../../../../redux/actions/patientActions";
-import Swal from 'sweetalert2'
+import { Link, useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import departLogo from '../../../../assets/img/depart.png';
+import logo_female from '../../../../assets/img/female_logo.png';
+import hospitalLogo from '../../../../assets/img/hospital.png';
+import location from '../../../../assets/img/location.png';
+import logo_male from '../../../../assets/img/male_logo.png';
+import './style.css';
 
-import './style.css'
 const DoctorItem = (props) => {
     const data = props.data;
-    console.log('data DoctorItem:>> ', data);
     const img = data.sex==='male'? logo_male:logo_female;
     const avatar = `http://localhost:3002${data.avatar}`;
     const patient = useSelector(state=> state.patient);
@@ -24,7 +21,7 @@ const DoctorItem = (props) => {
         if (patient.isLoggedIn === true) {
             // history.push(`/patient/${props.data?.id}/datlich`)
             history.push({
-                pathname: `/dat-kham/${props.data?.id}`,
+                pathname: `/dat-kham/${props.data?._id}`,
                 state: {data}
             })
         } else {
@@ -62,7 +59,7 @@ const DoctorItem = (props) => {
             <div className="profile-widget" style={{minWidth:"280px", maxWidth:"400px", margin:"0 auto"}}>
                 <div className="doc-img">
                     <Link to={`/danh-sach-bac-si/${props.data?.id}`}>
-                        <img className="img-fluid" alt="User" src={data.avatar?avatar:img} />
+                        <img className="img-fluid" alt="User" src={data.avatar?data.avatar:img} />
                     </Link>
                 </div>
                 <div className="pro-content">
@@ -77,15 +74,15 @@ const DoctorItem = (props) => {
                     <ul className="available-info" style={{height:"110px"}}>
                         <li>
                             <span><img src={departLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span>{data.spec_detail[0]?.name}</span>
+                            <span>{data.spec_detail?.name}</span>
                         </li>
                         <li>
                             <span><img src={hospitalLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span>{data.hospital_info[0]?.name}</span>
+                            <span>{data.hospital_info?.name}</span>
                         </li>
                         <li>
                             <span><img src={location} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>
-                            <span> {data.hospital_info[0]?.address}
+                            <span> {data.hospital_info?.address}
                             </span>
                         </li>
                         {/* <li>
@@ -97,7 +94,7 @@ const DoctorItem = (props) => {
                         <div className="col-6">
                             <Link 
                                 to={{
-                                    pathname:`/danh-sach-bac-si/${props.data?.id}`,
+                                    pathname:`/danh-sach-bac-si/${props.data?._id}`,
                                     state: {data}
                                 }}
                                 className="btn view-btn">Xem thông tin</Link>

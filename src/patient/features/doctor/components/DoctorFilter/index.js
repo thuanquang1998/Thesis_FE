@@ -1,6 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Select } from 'antd';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import './style.css';
 const { Option } = Select;

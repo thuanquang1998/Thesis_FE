@@ -17,12 +17,13 @@ const Employees = () => {
 		(async ()=>{
 			try {
 				const response = await adminAPI.get_doctors_of_hospital(hospitalInfo.id);
+				console.log('response :>> ', response);
 				if(response.error) throw new Error(response.errors[0].message);
-				const data = response.data;
+				const {data} = response.data;
 				const _data = data.map(item=>{
 					const _item = {
 						name: item.fullName,
-						specialization: item.spec_detail[0].name,
+						specialization: item.spec_detail.name,
 						id: item._id,
 						phone: item.phone,
 						email: item.email,

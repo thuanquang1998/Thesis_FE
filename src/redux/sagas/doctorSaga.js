@@ -19,18 +19,18 @@ export default function* watchAsyncDoctorActions(){
     yield takeEvery(LOGOUT_DOCTOR , logoutDoctor)
 }
 
-function* get_doctors_data({payload}){
+function* get_doctors_data({}){
     yield put({type : LOADING_DATA});
     try{
-        const response = yield call(doctorAPI.get_doctors, payload)
+        const response = yield call(doctorAPI.get_doctors)
         if (response.error){
             SwalAlert('Error', 'Server disconected','error')
             localStorage.clear()
         }
         else {
-            yield put({type : SET_DOCTORS_DATA, payload : response.data})
+            yield put({type : SET_DOCTORS_DATA, payload : response.data?.data})
             yield put({type : LOADING_DATA_SUCCESS});
-            yield put({type : ALL_DOCTORS, payload : response.data});
+            yield put({type : ALL_DOCTORS, payload : response.data?.data});
         }
     }
     catch(err){

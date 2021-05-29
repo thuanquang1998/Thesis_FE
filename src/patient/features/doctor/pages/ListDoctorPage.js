@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import queryString from 'query-string'; 
-import {Pagination, Card} from 'antd';
-import { Box, Container, Grid, makeStyles, Paper, LinearProgress } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
+import { Card, Pagination } from 'antd';
+import queryString from 'query-string';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
 import LoadingTop from '../../../components/loadingTop';
-
 import DoctorFilter from '../components/DoctorFilter';
-import FilterViewer from '../components/FilterViewer';
 import DoctorList from '../components/DoctorList';
+import FilterViewer from '../components/FilterViewer';
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -82,27 +81,28 @@ function ListDoctorPage(props) {
             const _ck = ck?ck==='all-ck'?'':ck:'';
 
             const _data = [...listAllDoctors];
+            console.log('_data :>> ', _data);
             const new_list_name = _data.filter((item,idx)=>{
                 return item.fullName.toLowerCase().includes(_tenBs.toLowerCase())===true;
             })
             const new_list_bv = new_list_name.filter((item,idx)=> {
-                return item.hopitalId.toLowerCase().includes(_bv.toLowerCase())===true;
+                return item.hospital_info._id.toLowerCase().includes(_bv.toLowerCase())===true;
             })
             const new_list_ck = new_list_bv.filter((item,idx)=> {
-                return item.spec_detail?item.spec_detail[0]?._id.toLowerCase().includes(_ck.toLowerCase())===true:true;
+                return item.spec_detail?item.spec_detail?._id.toLowerCase().includes(_ck.toLowerCase())===true:true;
             })
-            let min = 0;
-            let max = 0;
-            if (page===1){
-                min = 0;
-                max = limit;
-            } else {
-                min = limit*(page-1);
-                max = limit*page;
-            }
-            const temp = new_list_ck.slice(min, max);
-            // const new_doctors = new_list_ck.filter(x=>x.timeWorkIsNull===false);
-            _renderData = temp;
+            // let min = 0;
+            // let max = 0;
+            // if (page===1){
+            //     min = 0;
+            //     max = limit;
+            // } else {
+            //     min = limit*(page-1);
+            //     max = limit*page;
+            // }
+            // const temp = new_list_ck.slice(min, max);
+            const new_doctors = new_list_ck.filter(x=>x.timeWorkIsNull===false);
+            _renderData = new_doctors;
 
         } else {
             _renderData = [];

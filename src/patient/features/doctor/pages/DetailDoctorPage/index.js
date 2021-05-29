@@ -1,7 +1,7 @@
-import { Button, Card, Col, Rate, Row, Select, Tabs } from 'antd'
+import { Button, Card, Col, Rate, Row, Tabs } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import React from 'react'
-import { Link , useLocation, useHistory} from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import logoDoctor from '../../../../assets/img/bsnam.jpg'
 import departLogo from '../../../../assets/img/depart.png'
 import hospitalLogo from '../../../../assets/img/hospital.png'
@@ -12,7 +12,6 @@ const { TabPane } = Tabs;
 const DetailDoctorPage = (props) => {
     const history = useHistory();
     const data = history.location.state.data;
-    console.log('data :>> ', data);
     return (
         <div>
             {/* breadcrumb */}
@@ -50,15 +49,15 @@ const DetailDoctorPage = (props) => {
                                 <ul className="available-info">
                                     <li>
                                         <span><img src={departLogo} alt="Nội tiết"/></span>
-                                        <span>{data.spec_detail[0]?.name}</span>
+                                        <span>{data.spec_detail?.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                                        <span>{data.hospital_info[0]?.name}</span>
+                                        <span>{data.hospital_info?.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={location} alt="Nội tiết"/></span>
-                                        <span> {data.hospital_info[0]?.address}</span>
+                                        <span> {data.hospital_info?.address}</span>
                                     </li>
                                     <li>
                                         <span><img src={price} alt="Nội tiết"/></span>
