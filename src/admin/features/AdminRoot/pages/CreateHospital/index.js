@@ -1,13 +1,15 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select, Steps } from 'antd'
-import React, { useState, useEffect } from 'react'
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Steps } from 'antd'
+import moment from 'moment'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import adminAPI from '../../../../../api/adminAPI'
 import districtData from '../../../../assets/data/district'
 import provinceData from '../../../../assets/data/province'
 import wardData from '../../../../assets/data/ward'
+import LoadingTop from '../../../../components/loadingTop'
 import SidebarNav from '../../../../components/SideBar'
-import moment from 'moment';
-import adminAPI from '../../../../../api/adminAPI';
-import LoadingTop from '../../../../components/loadingTop';
+import { useSnackbar } from 'notistack'
+import {useHistory} from 'react-router-dom'
 
 const { Step } = Steps;
 
@@ -27,6 +29,9 @@ const INIT_DATA = {
 }
 
 const CreateHospital = () => {
+    const {enqueueSnackbar} = useSnackbar();
+    const history = useHistory();
+
     /* goi api lay danh sach benh vien, loc ra ten, email, sdt
         gop chung 3 form lam 1
     */
@@ -63,12 +68,21 @@ const CreateHospital = () => {
         try {
             const response = await adminAPI.create_hospital(data);
             console.log('response :>> ', response);
+            if(response.error) {
+                throw new Error({message:"Tạo bệnh viện không thành công"})
+            }
+            history.push('/admin/root/benh-vien');
+            enqueueSnackbar('Tạo bệnh viện thành công', {variant: 'success'})
+
         } catch (error) {
             console.log('error.message :>> ', error.message);
+            enqueueSnackbar('Tạo bệnh viện không thành công', {variant: 'error'})
         }
+        setLoadingPage(false)
     }
     
     const onHandleSubmitForm = (data) => {
+        setLoadingPage(true);
         const _district = data.address.district.split(" ");
         const _province = data.address.province.split(" ");
         _district.splice(0,1);
