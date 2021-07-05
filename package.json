@@ -13,6 +13,7 @@
     "antd": "^4.6.1",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.0",
+    "caniuse-lite": "^1.0.30001242",
     "font-awesome": "^4.7.0",
     "history": "^5.0.0",
     "jquery": "^3.2.1",

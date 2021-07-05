@@ -10,6 +10,9 @@ import { compareDates } from '../../../../../utils';
 import LoadingTop from '../../../../components/loadingTop';
 // import { get_schedule_patient } from '../../../../../redux/actions/patientActions';
 import PatientSidebar from '../../components/PatientSideBar';
+import ScheduleOutDate from '../../components/ScheduleOutDate';
+import ScheduleCurrent from '../../components/ScheduleCurrent';
+import ScheduleFuture from '../../components/ScheduleFuture';
 
 function PatientSchedule(props) {
     const {enqueueSnackbar} = useSnackbar();
@@ -181,8 +184,12 @@ function PatientSchedule(props) {
                         </Col>
                         <Col md={{span:14}} lg={{span:16}} xl={{span:18}}>
                             <Card 
-                                title={<>Danh sách lịch khám <Badge count={listSchedule.length} style={{ backgroundColor: '#52c41a' }} /></>}
+                                title={<>Quản lí lịch khám <Badge count={listSchedule.length} style={{ backgroundColor: '#52c41a' }} /></>}
                             >
+                                {/* tab  */}
+                                <Button>Lịch khám quá hạn</Button>
+                                <Button>Lịch khám hôm nay</Button>
+                                <Button>Lịch khám sắp diễn ra</Button>
                                 <Table className="table-striped"
                                     columns={columns}                 
                                     dataSource={listSchedule}
