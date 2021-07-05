@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Col, Row, Table } from 'antd';
+import { Badge, Button, Card, Col, Row, Table, Tabs } from 'antd';
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -13,6 +13,8 @@ import PatientSidebar from '../../components/PatientSideBar';
 import ScheduleOutDate from '../../components/ScheduleOutDate';
 import ScheduleCurrent from '../../components/ScheduleCurrent';
 import ScheduleFuture from '../../components/ScheduleFuture';
+const { TabPane } = Tabs;
+
 
 function PatientSchedule(props) {
     const {enqueueSnackbar} = useSnackbar();
@@ -186,19 +188,26 @@ function PatientSchedule(props) {
                             <Card 
                                 title={<>Quản lí lịch khám <Badge count={listSchedule.length} style={{ backgroundColor: '#52c41a' }} /></>}
                             >
-                                {/* tab  */}
-                                <Button>Lịch khám quá hạn</Button>
-                                <Button>Lịch khám hôm nay</Button>
-                                <Button>Lịch khám sắp diễn ra</Button>
-                                <Table className="table-striped"
-                                    columns={columns}                 
-                                    dataSource={listSchedule}
-                                    ascend={true}
-                                    style = {{overflowX : 'auto'}}
-                                    rowKey={record => record.id}
-                                    showSizeChanger={true} 
-                                    loading={loadingPage}
-                                />
+                                <Tabs defaultActiveKey="2" >
+                                    <TabPane tab="Lịch khám quá hạn" key="1">
+                                        <ScheduleOutDate data={listSchedule}/>
+                                    </TabPane>
+                                    <TabPane tab="Lịch khám hôm nay" key="2">
+                                        <ScheduleCurrent data={listSchedule}/>
+                                        <Table className="table-striped"
+                                            columns={columns}                 
+                                            dataSource={listSchedule}
+                                            ascend={true}
+                                            style = {{overflowX : 'auto'}}
+                                            rowKey={record => record.id}
+                                            showSizeChanger={true} 
+                                            loading={loadingPage}
+                                        />
+                                    </TabPane>
+                                    <TabPane tab="Lịch khám sắp diễn ra" key="3">
+                                        <ScheduleFuture data={listSchedule}/>
+                                    </TabPane>
+                                </Tabs>
                             </Card>
                         </Col>
                     </Row>
