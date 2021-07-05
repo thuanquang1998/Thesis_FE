@@ -38,6 +38,7 @@ const Home = () => {
     }
     return(
         <div>
+            <h1>0000000000000000000000000000</h1>
             {loadingPage?
             <div className="main-wrapper">
                 <LoadingTop/>
