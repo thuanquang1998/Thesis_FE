@@ -58,7 +58,7 @@ const DoctorProfile = () =>{
                                 <Row gutter={[20,20]}>
                                     <Col sm={{span:24}} md={{span:10}}>
                                         <div>
-                                            <img src={doctorData.avatar_image||IMG01} alt="doctorAvatar"></img>
+                                            <img src={doctorData.avatar||IMG01} alt="doctorAvatar"></img>
                                         </div>
                                     </Col>
                                     <Col sm={{span:24}} md={{span:14}}>
@@ -72,15 +72,15 @@ const DoctorProfile = () =>{
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-3 text-muted text-sm-left mb-0 mb-sm-3">Tên bệnh viện:</div>
-                                            <div className="col-sm-9">Chưa có data</div>
+                                            <div className="col-sm-9">{doctorData.hospital_info?.name}</div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-3 text-muted text-sm-left mb-0 mb-sm-3">Chuyên khoa:</div>
-                                            <div className="col-sm-9">Chưa có data</div>
+                                            <div className="col-sm-9">{doctorData.spec_detail?.name}</div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-3 text-muted text-sm-left mb-0 mb-sm-3">Địa chỉ:</div>
-                                            <div className="col-sm-9">Chưa có data</div>
+                                            <div className="col-sm-9">{doctorData.hospital_info?.address}</div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-3 text-muted text-sm-left mb-0 mb-sm-3">Ngày sinh:</div>

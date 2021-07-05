@@ -40,7 +40,7 @@ const DoctorSidebar = () => {
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
                     <Link to="#" className="booking-doc-img">
-                        <img src={currentDoctor?.doctor.avatar_image||IMG01} alt="User" />
+                        <img src={currentDoctor?.doctor.avatar||IMG01} alt="User" />
                     </Link>
                     <div className="profile-det-info">
                         <h3 style={{fontWeight:"bold"}}>Bác sĩ {currentDoctor?.doctor.fullName}</h3>
