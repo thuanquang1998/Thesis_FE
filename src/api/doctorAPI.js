@@ -1,9 +1,6 @@
 import http from './http-common'
 
 class doctorsAPI{
-    get_doctors(){
-        return http.get('doctors').then(res=> res.data).catch(err=> err.response.data)
-    }
     login(data){
         return http.post('users/sign-in', data).them(res=>res.data).catch(err=>err.response.data)
     }
@@ -24,6 +21,31 @@ class doctorsAPI{
     // load lịch làm việc của bác sĩ
     get_doctor_timework(id) {
         return http.get(`doctors/${id}/timework`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+
+    // transfer state schedule
+    // uncheck => checking
+    transfer_schedule_to_checking(id) {
+        return http.get(`appointment/${id}/change_to_checking`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+    update_data_checking(data) {
+        return http.put(`/record/update`, data)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
+    // get record by id checking
+    get_record_by_id(id) {
+        return http.get(`record/get_by_appointment_id/${id}`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+    // checking => checked
+    transfer_schedule_to_checked(id) {
+        return http.get(`appointment/${id}/change_to_checked`)
                     .then(res => res.data)
                     .catch(err=> err.response.data)
     }

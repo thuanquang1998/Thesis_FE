@@ -1,41 +1,17 @@
 
 import { call, put, takeEvery } from 'redux-saga/effects';
-import doctorAPI from '../../api/doctorAPI';
-import { 
-    LOADING_PAGE_DOCTOR,
-    GET_DOCTORS_DATA, SET_DOCTORS_DATA,
-    LOGIN_DOCTOR,  LOGIN_DOCTOR_SUCCESS, LOGIN_DOCTOR_FAILED, LOADING_LOGIN_DOCTOR,
-    LOGOUT_DOCTOR, LOGOUT_DOCTOR_LOADING, LOGOUT_DOCTOR_SUCCESS
+import adminAPI from '../../api/adminAPI';
+import {
+    LOADING_LOGIN_DOCTOR, LOADING_PAGE_DOCTOR,
 
+    LOGIN_DOCTOR, LOGIN_DOCTOR_FAILED, LOGIN_DOCTOR_SUCCESS,
+    LOGOUT_DOCTOR, LOGOUT_DOCTOR_SUCCESS
 } from '../../redux/actions/doctorActions';
 import { SwalAlert } from '../../utils/alert';
-import { ALL_DOCTORS, LOADING_DATA, LOADING_DATA_SUCCESS } from '../actions/loadingActions';
-import adminAPI from '../../api/adminAPI';
-import { useSnackbar } from 'notistack';
 
 export default function* watchAsyncDoctorActions(){
-    yield takeEvery(GET_DOCTORS_DATA , get_doctors_data)
     yield takeEvery(LOGIN_DOCTOR, loginDoctorByEmail)
     yield takeEvery(LOGOUT_DOCTOR , logoutDoctor)
-}
-
-function* get_doctors_data({}){
-    yield put({type : LOADING_DATA});
-    try{
-        const response = yield call(doctorAPI.get_doctors)
-        if (response.error){
-            SwalAlert('Error', 'Server disconected','error')
-            localStorage.clear()
-        }
-        else {
-            yield put({type : SET_DOCTORS_DATA, payload : response.data?.data})
-            yield put({type : LOADING_DATA_SUCCESS});
-            yield put({type : ALL_DOCTORS, payload : response.data?.data});
-        }
-    }
-    catch(err){
-        console.log(err)    
-    }
 }
 
 function* loginDoctorByEmail({payload}){

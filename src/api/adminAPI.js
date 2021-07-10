@@ -5,10 +5,15 @@ class adminAPI{
     login(data){
         return http.post('/users/sign-in', data).then(res=> res.data).catch(err=> err.response.data)
     }
-    // api for admin system
+    // get list spec for homepage
     get_speacialities(method){
         return http.get('spec').then(res=> res.data).catch(err=> err.response.data)
     }
+    // get list doctors for homepage
+    get_doctors(){
+        return http.get('doctors').then(res=> res.data).catch(err=> err.response.data)
+    }
+    // get list hospital for homepage
     get_list_hospitals(method){
         return http.get('hospitals').then(res => res.data).catch(err=> err.response.data)
     }

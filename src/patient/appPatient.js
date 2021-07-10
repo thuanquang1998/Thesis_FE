@@ -3,7 +3,7 @@ import MessengerCustomerChat from 'react-messenger-customer-chat'
 import { useDispatch } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import AppDoctor from '../doctor/appDoctor'
-import { get_list_hospitals, get_specialities_system } from '../redux/actions/adminActions'
+import { get_list_hospitals, get_specialities_system, get_doctors_system } from '../redux/actions/adminActions'
 import { get_doctors_data } from '../redux/actions/doctorActions'
 import Footer from './components/footer'
 import Header from './components/header'
@@ -26,7 +26,8 @@ const AppPatient = function (props) {
 	useEffect(()=> {
 		dispatch(get_specialities_system());
         dispatch(get_list_hospitals());
-        dispatch(get_doctors_data());
+        // dispatch(get_doctors_data());
+		dispatch(get_doctors_system());
 	},[])
     return (
 		<Router>

@@ -1,6 +1,9 @@
 export const GET_SPECIALITIES_SYSTEM = 'GET_SPECIALITIES_SYSTEM'
 export const SET_SPECIALITIES_SYSTEM = 'SET_SPECIALITIES_SYSTEM'
 
+export const GET_DOCTORS_SYSTEM = 'GET_DOCTORS_SYSTEM'
+export const SET_DOCTORS_SYSTEM = 'SET_DOCTORS_SYSTEM'
+
 export const GET_LIST_HOSPITALS = 'GET_LIST_HOSPITALS'
 export const SET_LIST_HOSPITALS = 'SET_LIST_HOSPITALS'
 
@@ -21,6 +24,11 @@ export const LOADING_PAGE = 'LOADING_PAGE'
 export const  get_specialities_system =()=>{
     return {
         type: GET_SPECIALITIES_SYSTEM
+    }
+}
+export const  get_doctors_system =()=>{
+    return {
+        type: GET_DOCTORS_SYSTEM,
     }
 }
 export const get_list_hospitals = () => {

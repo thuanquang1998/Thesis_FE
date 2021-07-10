@@ -52,7 +52,7 @@ const ScheduleWork = () => {
 		history.push({
 			pathname: `/admin/hospital/lich-lam-viec/${record.id}`,
 			state: {
-				data: {...record},
+				data: {...record.fullData},
 				listDoctor: [...listEmployees]
 			}
 		})

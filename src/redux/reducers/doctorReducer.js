@@ -5,12 +5,6 @@ import {
     LOGOUT_DOCTOR_SUCCESS, SET_DOCTORS_DATA
 } from '../../redux/actions/doctorActions';
 
-// const initialState ={
-//     loading : false , 
-//     doctor_login : true,
-//     doctor_data  :[],
-//     errors:[]
-// }
 
 const initialState={
     currentDoctor: JSON.parse(localStorage.getItem('currentDoctor'))||{},
@@ -23,11 +17,6 @@ const initialState={
 
 export const doctorReducer =(state = initialState , action)=>{
     switch (action.type) {
-        case SET_DOCTORS_DATA : 
-            return {
-                ...state,
-                doctor_data : [...action.payload]
-            }
         case LOADING_LOGIN_DOCTOR:
             return {
                 ...state,

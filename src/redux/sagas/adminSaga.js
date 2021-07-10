@@ -3,9 +3,11 @@ import {
     GET_HOSPITAL_BYID, 
     GET_LIST_HOSPITALS, 
     GET_SPECIALITIES_SYSTEM, 
+    GET_DOCTORS_SYSTEM,
     SET_HOSPITAL_BYID, 
     SET_LIST_HOSPITALS, 
     SET_SPECIALITIES_SYSTEM,
+    SET_DOCTORS_SYSTEM,
 
     LOGIN_BY_EMAIL,
     LOADING_LOGIN,
@@ -45,6 +47,7 @@ import Swal from 'sweetalert2';
 export default function* watchAsyncAdminActions(){
     yield takeEvery( GET_SPECIALITIES_SYSTEM , get_specialities_system)
     yield takeEvery( GET_LIST_HOSPITALS , get_list_hospitals)
+    yield takeEvery( GET_DOCTORS_SYSTEM , get_doctors_system)
     yield takeEvery( GET_HOSPITAL_BYID , get_hospital_byId )
     yield takeEvery( LOGIN_BY_EMAIL, login_by_email )
     yield takeEvery( LOGOUT_MANAGER, logoutManager )
@@ -62,6 +65,25 @@ function* get_specialities_system(){
         else {
             yield put({type : SET_SPECIALITIES_SYSTEM, payload : response.data});
             yield put({type : ALL_SPECIAL, payload : response.data});
+            yield put({type : LOADING_DATA_SUCCESS});
+        }
+    }
+    catch(err){
+        console.log(err)    
+    }
+}
+
+function* get_doctors_system(){
+    yield put({type : LOADING_DATA});
+    try{
+       
+        const response = yield call( adminAPI.get_doctors , 'Get')
+        if (response.error){
+            console.log("Error");
+        }
+        else {
+            yield put({type : SET_DOCTORS_SYSTEM, payload : response.data?.data});
+            yield put({type : ALL_DOCTORS, payload : response.data?.data});
             yield put({type : LOADING_DATA_SUCCESS});
         }
     }
