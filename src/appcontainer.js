@@ -5,7 +5,11 @@ import AppAdmin from './admin/appAdmin'
 import AppDoctor from "./doctor/appDoctor";
 import AppPatient from "./patient/appPatient";
 
+import Actions from './redux/actions/index';
+
 const AppContainer = function (props) {
+  console.log('props AppContainer:>> ', props);
+  console.log('Actions AppContainer:>> ', Actions);
   if (props) {
     const url = props.location.pathname.split("/")[1];
     return (

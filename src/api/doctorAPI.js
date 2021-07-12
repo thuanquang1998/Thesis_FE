@@ -28,7 +28,7 @@ class doctorsAPI{
     // transfer state schedule
     // uncheck => checking
     transfer_schedule_to_checking(id) {
-        return http.get(`appointment/${id}/change_to_checking`)
+        return http.put(`appointment/${id}/change_to_checking`)
                     .then(res => res.data)
                     .catch(err=> err.response.data)
     }
@@ -44,8 +44,21 @@ class doctorsAPI{
                     .catch(err=> err.response.data)
     }
     // checking => checked
-    transfer_schedule_to_checked(id) {
-        return http.get(`appointment/${id}/change_to_checked`)
+
+    transfer_schedule_to_checked(data) {
+        return http.put(`record/update_and_finish`, data)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+    // get checked appointment
+    get_checked_appointment(id) {
+        return http.get(`appointment/${id}/getchecked`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+    // get dashboard doctors
+    get_dashboard_doctors(id) {
+        return http.get(`doctors/${id}/statistic`)
                     .then(res => res.data)
                     .catch(err=> err.response.data)
     }

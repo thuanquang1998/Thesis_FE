@@ -9,10 +9,27 @@ import wardData from '../../../../assets/data/ward';
 
 function BookingForm(props) {
     const {submitData, onSubmitForm, doctorId} = props;
+    const initData = props.initData||{};
+    console.log('initData :>> ', initData);
     const [dataSubmit, setDataSubmit] = useState({...submitData})
     const currentTimeNumber = new Date().getTime();
     const [listDateValid, setListDateValid] = useState([]);
     const [listTimeStep, setListTimeStep] = useState([]);
+     const temp = moment('2021-05-12T04:47:07.000Z', 'YYYY-MM-DD')
+    const obj = {
+        date: "1/1/2021",
+        time: "7:30-8:00",
+        name: "aaaa",
+        phone:"bbbb",
+        address: {
+            province: "Binh Dinh",
+            district: "Hoai An",
+            ward: "An Tuong Dong",
+            street: "mmm"
+        },
+        birthday: temp,
+    }
+    
 
    
     // state for address
@@ -23,6 +40,7 @@ function BookingForm(props) {
     const [bookingFor, setBookingFor] = useState(false)
 
     useEffect(()=> {
+
         getTimeWorks();
     },[])
 
@@ -75,10 +93,10 @@ function BookingForm(props) {
             room: room_temp
         });
     }
-
-
+   
     // submit data
     const onHandleSubmit = (data) => {
+        console.log('data :>> ', data);
         const _district = data.address.district.split(" ");
         const _province = data.address.province.split(" ");
         _district.splice(0,1);
@@ -115,6 +133,8 @@ function BookingForm(props) {
             layout="vertical"
             size="large"
             onFinish={onHandleSubmit}
+            initialValues={initData}
+            // initialValues={obj}
         >   
             <Row gutter={[8,8]}>
                 <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>

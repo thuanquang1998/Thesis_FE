@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Col, Row, Table, Tabs } from 'antd';
+import { Badge, Button, Card, Col, Row, Table, Tabs, Tag } from 'antd';
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -10,10 +10,7 @@ import { compareDates } from '../../../../../utils';
 import LoadingTop from '../../../../components/loadingTop';
 // import { get_schedule_patient } from '../../../../../redux/actions/patientActions';
 import PatientSidebar from '../../components/PatientSideBar';
-import ScheduleOutDate from '../../components/ScheduleOutDate';
 import ScheduleCurrent from '../../components/ScheduleCurrent';
-import ScheduleFuture from '../../components/ScheduleFuture';
-const { TabPane } = Tabs;
 
 
 function PatientSchedule(props) {
@@ -44,7 +41,7 @@ function PatientSchedule(props) {
                     date: moment(appointmentInfo.date).format('DD/MM/YYYY'),
                     time: appointmentInfo.time,
                     status: x.status,
-
+                    fullData: {...x},
                     dateCheck: appointmentInfo.date
                 }
                 return obj
@@ -58,8 +55,11 @@ function PatientSchedule(props) {
     }
 
     const cancelSchedule = async (record) => {
+        console.log('record :>> ', record);
         let currentTime = moment();
-        const check = compareDates(new Date(currentTime), new Date(record.dateCheck))
+        const check1 = compareDates(new Date(currentTime), new Date(record.dateCheck))
+        const check2 = record.status!=="uncheck"?true:false;
+        const check = check1&&check2;
 
         if(check) {
 			Swal.fire({
@@ -105,7 +105,29 @@ function PatientSchedule(props) {
             setLoadingPage(false)
         }
     }
-   
+    const renderStatus = (status) => {
+        let str = "";
+        let color = "";
+        switch (status) {
+            case 'uncheck':
+                str = 'Chưa khám';
+                color = "red"
+                break;
+            case 'checking':
+                str = 'Đang xử lí'
+                color = "gold"
+                break;
+            case 'checked':
+                str = 'Đã khám';
+                color = "green"
+                break;
+            default:
+                str = 'Chưa khám'
+                color = "red"
+                break;
+        }
+        return <Tag style={{ backgroundColor: `${color}` }}>{str}</Tag>
+    }
     const columns = [
         {
 			title: 'Bệnh nhân',
@@ -142,9 +164,10 @@ function PatientSchedule(props) {
         {
 			title:'Trạng thái',
 			dataIndex:'status',
-            render: (text, record) => (
-                <Badge style={{ backgroundColor: '#52c41a' }}>{record.status?'Chưa khám':'Đã khám'}</Badge>
-            )
+            render: (text, record) => {
+                const data = renderStatus(record.status);
+                return data
+            }
 		},
 		{
             title: 'Sự kiện',
@@ -185,30 +208,12 @@ function PatientSchedule(props) {
                             <PatientSidebar />
                         </Col>
                         <Col md={{span:14}} lg={{span:16}} xl={{span:18}}>
-                            <Card 
-                                title={<>Quản lí lịch khám <Badge count={listSchedule.length} style={{ backgroundColor: '#52c41a' }} /></>}
-                            >
-                                <Tabs defaultActiveKey="2" >
-                                    <TabPane tab="Lịch khám quá hạn" key="1">
-                                        <ScheduleOutDate data={listSchedule}/>
-                                    </TabPane>
-                                    <TabPane tab="Lịch khám hôm nay" key="2">
-                                        <ScheduleCurrent data={listSchedule}/>
-                                        <Table className="table-striped"
-                                            columns={columns}                 
-                                            dataSource={listSchedule}
-                                            ascend={true}
-                                            style = {{overflowX : 'auto'}}
-                                            rowKey={record => record.id}
-                                            showSizeChanger={true} 
-                                            loading={loadingPage}
-                                        />
-                                    </TabPane>
-                                    <TabPane tab="Lịch khám sắp diễn ra" key="3">
-                                        <ScheduleFuture data={listSchedule}/>
-                                    </TabPane>
-                                </Tabs>
-                            </Card>
+                            <ScheduleCurrent 
+                                data={listSchedule}
+                                cancelSchedule={cancelSchedule}
+                                changeSchedule={()=>{}}
+                            />
+                            
                         </Col>
                     </Row>
                 </div>

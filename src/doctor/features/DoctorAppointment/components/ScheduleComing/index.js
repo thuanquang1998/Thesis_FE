@@ -65,7 +65,7 @@ function ScheduleComing(props) {
                 <div className="actions">
                     <Button 
                         onClick={()=>{
-                            const data = record;
+                            const data = record.fullData;
                             setModalData({
                                 ...modalData,
                                 visible: true,
@@ -81,6 +81,7 @@ function ScheduleComing(props) {
             ),
 		},		
 	]
+    console.log('listSchedule :>> ', listSchedule);
     return (
         <div>
             <Card>

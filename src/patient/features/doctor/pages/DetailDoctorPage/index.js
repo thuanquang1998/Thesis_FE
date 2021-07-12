@@ -1,6 +1,6 @@
 import { Button, Card, Col, Rate, Row, Tabs } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import logoDoctor from '../../../../assets/img/bsnam.jpg'
 import departLogo from '../../../../assets/img/depart.png'
@@ -8,10 +8,31 @@ import hospitalLogo from '../../../../assets/img/hospital.png'
 import location from '../../../../assets/img/location.png'
 import price from '../../../../assets/img/price.png'
 import './style.css'
+import patientAPI from '../../../../../api/patientApi';
 const { TabPane } = Tabs;
 const DetailDoctorPage = (props) => {
     const history = useHistory();
     const data = history.location.state.data;
+    const [reviewData, setReviewData] = useState([]);
+    const [loadingReview, setLoadingReview] = useState(true);
+    useEffect(()=> {
+        getReviewDoctors(data._id);
+    },[])
+    const getReviewDoctors = async (id) => {
+        try {
+            const response = await patientAPI.get_doctor_reviews(id);
+            if(response.error) throw new Error("Can't get getReviewDoctors")
+            console.log('response getReviewDoctors:>> ', response);
+            setReviewData([...response.data]);
+            setLoadingReview(false);
+        } catch (error) {
+            console.log('error :>> ', error);
+        }
+    }
+    // check login
+    const submitReviewData = async (data) => {
+
+    }
     return (
         <div>
             {/* breadcrumb */}
@@ -109,15 +130,17 @@ const DetailDoctorPage = (props) => {
                             </TabPane>
                             <TabPane tab="Đánh giá" key="3">
                                 <h4 style={{display:"none"}}>Chưa có đánh giá </h4>
-                                <div className="review__item">
-                                    <div className="review__item--header">
-                                        <div className="review__header--left"><i class="far fa-user"></i></div>
-                                        <div className="review__header--right">Lưu Quang Thuận <span>Đã khám bệnh tại hệ thống</span></div>
+                                {reviewData.map((item,index)=>(
+                                    <div className="review__item" key={index}>
+                                        <div className="review__item--header">
+                                            <div className="review__header--left"><i class="far fa-user"></i></div>
+                                            <div className="review__header--right">{item.patient_name} <span>Đã khám bệnh tại hệ thống</span></div>
+                                        </div>
+                                        <div className="review__item--rating"><Rate value={item.rate.star_num}/></div>
+                                        <div className="review__item--comment"><p>{item.rate.comment}</p></div>
                                     </div>
-                                    <div className="review__item--rating"><Rate value={4}/></div>
-                                    <div className="review__item--comment"><p>Bác sĩ khám bệnh nhiệt tình</p></div>
-                                </div>
-
+                                ))}
+                               
                                 <Card>
                                     <h4>Nhận xét</h4>
                                     <Rate value={0}/>

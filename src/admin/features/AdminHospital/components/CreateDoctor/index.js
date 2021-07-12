@@ -76,7 +76,7 @@ const CreateDoctor = () => {
         }
         
         console.log('_data :>> ', _data);
-        createDoctor(_data)
+        // createDoctor(_data)
     }
     const createDoctor = async (data) => {
         setLoadingPage(true)

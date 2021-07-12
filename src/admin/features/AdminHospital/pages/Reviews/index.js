@@ -178,7 +178,7 @@ const Reviews = () => {
 								<ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
 									<li className="breadcrumb-item active">Bệnh viện Hùng Vương</li>
-									<li className="breadcrumb-item active">Đánh giá bác sĩ</li>
+									<li className="breadcrumb-item active">Đánh giá bác sĩ aaa</li>
 								</ul>
 							</div>
 						</div>
@@ -187,13 +187,13 @@ const Reviews = () => {
                     <div className="infobv">
 						<Card>
 							<Table className="table-striped"
-							bordered={true}
-							ascend={true}
-							rowKey={record => record.id}
-							showSizeChanger={true} 
-							columns={columns}
-							pagination={true}
-							dataSource={data} 
+								bordered={true}
+								ascend={true}
+								rowKey={record => record.id}
+								showSizeChanger={true} 
+								columns={columns}
+								pagination={true}
+								dataSource={data} 
 							/>
 						</Card>
 					</div>

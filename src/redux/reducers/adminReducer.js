@@ -20,7 +20,6 @@ const initialState={
     currentAdmin: JSON.parse(localStorage.getItem('currentAdmin'))||{},
     isAdminLoggedIn: localStorage.getItem('currentAdmin')?true:false || false,
     loadingLogin: false,
-
     loadingPage: false,
 }
 

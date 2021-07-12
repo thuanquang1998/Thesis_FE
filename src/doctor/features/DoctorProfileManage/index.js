@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import DoctorSidebar from '../../components/DoctorSideBar';
+import { Button, Card, Col, Row } from 'antd';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import 'react-quill/dist/quill.snow.css';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
-import {useDispatch, useSelector} from 'react-redux';
-import { Card, Form, Row, Col, Input, Button } from 'antd';
-import ReactQuill from 'react-quill'; // ES6
-import 'react-quill/dist/quill.snow.css';
 import IMG01 from '../../assets/images/doctor-thumb-02.jpg';
-import './style.css';
+import DoctorSidebar from '../../components/DoctorSideBar';
 import LoadingTop from '../../components/loadingTop';
-import moment from 'moment';
+import './style.css';
+import UpdateProfileDoctor from './UpdateProfileDoctor';
 
-const DoctorProfile = () =>{
+const DoctorProfile = (props) =>{
+    console.log('props :>> DoctorProfile', props);
     const doctor = useSelector(state=> state.doctor);
     const { isDoctorLoggedIn, currentDoctor} = doctor;
     const [doctorData, setDoctorData ] = useState({});
     const [loadingPage, setLoadingPage] = useState(true);
-
+    const [modalData, setModalData] = useState({
+        visible: false,
+        data: {},
+    })
     useEffect(()=> {
         if(isDoctorLoggedIn) {
             setDoctorData({...currentDoctor.doctor});
@@ -52,6 +56,10 @@ const DoctorProfile = () =>{
                             </StickyBox>
                         </div>
                         <div className="col-md-7 col-lg-8 col-xl-9">
+                            <div style={{display: 'flex', justifyContent:"space-between"}}>
+                                <h2>Thông tin cá nhân</h2>
+                                <Button type="primary" onClick={()=>setModalData({...modalData, visible:true})}>Cập nhật thông tin</Button>
+                            </div>
                             <Card>
                                 <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Thông tin chi tiết:</h4>
                                 {doctorData && 
@@ -111,7 +119,21 @@ const DoctorProfile = () =>{
                                     </div>
                                 </>}
                             </Card>
-
+                            <UpdateProfileDoctor
+                                modalData={modalData}
+                                handleOk={()=>{
+                                    setModalData({
+                                        ...modalData,
+                                        visible: !modalData.visible,
+                                    })
+                                }}
+                                handleClose={()=>{
+                                    setModalData({
+                                        ...modalData,
+                                        visible: !modalData.visible,
+                                    })
+                                }}
+                            />
                         </div>  
                     </div>
                 </div>

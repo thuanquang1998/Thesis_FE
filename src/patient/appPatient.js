@@ -28,7 +28,8 @@ const AppPatient = function (props) {
         dispatch(get_list_hospitals());
         // dispatch(get_doctors_data());
 		dispatch(get_doctors_system());
-	},[])
+	},[]);
+	
     return (
 		<Router>
 			<div>

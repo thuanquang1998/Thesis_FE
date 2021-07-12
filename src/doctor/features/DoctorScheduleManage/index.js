@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const DoctorSchedule = () =>{
+const DoctorSchedule = (props) =>{
+    console.log('props DoctorSchedule:>> ', props);
     const doctor = useSelector(state=> state.doctor);
     const { isDoctorLoggedIn, currentDoctor} = doctor;
     const [loadingPage, setLoadingPage] = useState(true);

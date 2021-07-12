@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import DoctorSidebar from '../../components/DoctorSideBar';
+import { Tabs } from 'antd';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import 'react-quill/dist/quill.snow.css';
 import { Link } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
-import {useDispatch, useSelector} from 'react-redux';
-import { Card, Form, Row, Col, Input, Button, Table, Badge, Tabs } from 'antd';
-import ReactQuill from 'react-quill'; // ES6
-import 'react-quill/dist/quill.snow.css';
-import IMG01 from '../../assets/images/doctor-thumb-02.jpg';
-import LoadingTop from '../../components/loadingTop';
-import moment from 'moment';
 import doctorAPI from '../../../api/doctorAPI';
-import ScheduleOutDate from './components/ScheduleOutDate';
-import ScheduleCurrent from './components/ScheduleCurrent';
+import DoctorSidebar from '../../components/DoctorSideBar';
+import LoadingTop from '../../components/loadingTop';
 import ScheduleComing from './components/ScheduleComing';
+import ScheduleCurrent from './components/ScheduleCurrent';
+import ScheduleOutDate from './components/ScheduleOutDate';
+import SchedulePending from './components/SchedulePending';
 
 const { TabPane } = Tabs;
-const DoctorAppointment = () =>{
-
-    const doctor = useSelector(state=> state.doctor);
-    const { isDoctorLoggedIn, currentDoctor} = doctor;
+const DoctorAppointment = (props) =>{
+    const { isDoctorLoggedIn, currentDoctor} = props.doctorData;
     const [loadingPage, setLoadingPage] = useState(true);
     const [appointment, setAppointment] = useState([]);
+    const [reExam, setReExam] = useState({
+        defaultTabs: 3,
+        currentStatus: 1,
+    });
 
     useEffect(() => {
         setLoadingPage(true);
@@ -59,6 +59,21 @@ const DoctorAppointment = () =>{
         }
         setLoadingPage(false)
     }
+    const changeStatusCurrentSchedule = (data) => {
+        setReExam({
+            ...reExam,
+            currentStatus:data
+        })
+    }
+    const handleReExamSuccess = () => {
+        setLoadingPage(true);
+        const id = currentDoctor.doctor._id;
+        getAppointment(id); 
+        setReExam({
+            defaultTabs: 3,
+            currentStatus: 2,
+        });
+    }
     return(
         <div>
             {loadingPage && <LoadingTop/>}
@@ -69,6 +84,7 @@ const DoctorAppointment = () =>{
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
+                                            set
                                     <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
                                 </ol>
                             </nav>
@@ -87,18 +103,22 @@ const DoctorAppointment = () =>{
                         </div>
                         <div className="col-md-7 col-lg-8 col-xl-9">
                             <h2>Quản lí lịch khám</h2>
-                            <Tabs defaultActiveKey="2" >
+                            <Tabs defaultActiveKey={`${reExam.defaultTabs}`} >
                                 <TabPane tab="Lịch khám quá hạn" key="1">
                                     <ScheduleOutDate data={appointment}/>
                                 </TabPane>
-                                <TabPane tab="Lịch khám đang xử lí" key="4">
-                                    <ScheduleOutDate data={appointment}/>
-                                    Lịch khám đang xử lí
+                                <TabPane tab="Lịch khám đang xử lí" key="2">
+                                    <SchedulePending data={appointment}/>
                                 </TabPane>
-                                <TabPane tab="Lịch khám hôm nay" key="2">
-                                    <ScheduleCurrent data={appointment}/>
+                                <TabPane tab="Lịch khám hôm nay" key="3">
+                                    <ScheduleCurrent {...props}
+                                        data={appointment}
+                                        status={reExam.currentStatus}
+                                        changeStatus={changeStatusCurrentSchedule}
+                                        reExamSuccess={handleReExamSuccess}
+                                    />
                                 </TabPane>
-                                <TabPane tab="Lịch khám sắp diễn ra" key="3">
+                                <TabPane tab="Lịch khám sắp diễn ra" key="4">
                                     <ScheduleComing data={appointment}/>
                                 </TabPane>
                             </Tabs>

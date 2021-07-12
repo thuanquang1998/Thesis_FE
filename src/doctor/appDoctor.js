@@ -1,27 +1,25 @@
-import React, { useEffect } from 'react';
-import {useSelector, useDispatch } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import Header from './components/header'
-import LoadingTop from './components/loadingTop'
-import PrivateRouteDoctor from './components/PrivateRouteDoctor';
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import LoginManager from '../patient/features/auth/pages/LoginManager';
-import DoctorDashboard from './features/DashBoardDoctor';
-import DoctorProfile from './features/DoctorProfileManage';
-import DoctorAppointment from './features/DoctorAppointment';
-import DoctorSchedule from './features/DoctorScheduleManage';
-import ChangePassword from './features/ChangePassword';
-import ViewSchedule from './features/DoctorAppointment/components/ViewShedule';
 import Footer from './components/footer';
+import Header from './components/header';
+import LoadingTop from './components/loadingTop';
+import PrivateRouteDoctor from './components/PrivateRouteDoctor';
+import ChangePassword from './features/ChangePassword';
+import DoctorDashboard from './features/DashBoardDoctor';
+import DoctorAppointment from './features/DoctorAppointment';
+import ViewSchedule from './features/DoctorAppointment/components/ViewShedule';
+import DoctorProfile from './features/DoctorProfileManage';
+import DoctorSchedule from './features/DoctorScheduleManage';
+import ReviewDoctor from './features/ReviewDoctor';
 
 const AppDoctor =  ({history}) => {
 	const dispatch = useDispatch();
     const doctor= useSelector(state=> state.doctor);
-
     const {loadingPage, isDoctorLoggedIn, currentDoctor} = doctor;
     const accountType = currentDoctor.accountType;
    
-
     return (
 		<>
             <Router>
@@ -33,7 +31,7 @@ const AppDoctor =  ({history}) => {
                             exact path='/bac-si' render={()=>(
                                 isDoctorLoggedIn? 
                                     (accountType==='doctor'? 
-                                        <DoctorDashboard/>:
+                                        <DoctorDashboard doctorData={doctor}/>:
                                         <DoctorDashboard/>
                                     )
                                 :<Redirect to='/quan-li/dang-nhap'/>
@@ -46,7 +44,8 @@ const AppDoctor =  ({history}) => {
                         <PrivateRouteDoctor component={DoctorAppointment} path="/bac-si/lich-kham" exact/>
                         <PrivateRouteDoctor component={DoctorSchedule} path="/bac-si/lich-lam-viec" exact/>
                         <PrivateRouteDoctor component={ChangePassword} path="/bac-si/doi-mat-khau" exact/>
-                        <PrivateRouteDoctor component={ViewSchedule} path="/bac-si/lich-lam-viec/:id" exact/>
+                        <PrivateRouteDoctor component={ViewSchedule} path="/bac-si/lich-kham/:id" exact/>
+                        <PrivateRouteDoctor component={ReviewDoctor} path="/bac-si/danh-gia" exact/>
 					</Switch>
                     <Route render={(props)=> <Footer {...props}/>} />
                 </div>

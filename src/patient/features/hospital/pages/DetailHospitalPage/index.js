@@ -90,6 +90,9 @@ const DetailHospitalPage = () => {
                                 </Card> 
                         </div>
                         <div className="col-md-12 col-lg-8 col-xl-9">
+                            <Card>
+                                Search form
+                            </Card>
                             <DoctorList doctors={renderDoctor}/>
                         </div>
                     </div>

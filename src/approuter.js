@@ -4,7 +4,6 @@ import AppContainer from './appcontainer.js';
 import {createBrowserHistory} from 'history'
 const  history= createBrowserHistory()
 const AppRouter = (props) => {
-    
     return(
         <>
             <Router  history={history}>

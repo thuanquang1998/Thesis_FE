@@ -13,7 +13,6 @@ const DoctorSidebar = () => {
     const doctor = useSelector(state=> state.doctor);
     const {currentDoctor, loadingLogin, isDoctorLoggedIn, loadingLogout, loadingPage} = doctor;
     const url = window.location.pathname;
-
     const [doctorData, setDoctorsData] = useState({});
     
     const [userName, setUserName] = useState('');
@@ -57,7 +56,7 @@ const DoctorSidebar = () => {
                 <Nav className="dashboard-menu">
 
                     <Nav.Item> 
-                        <NavLink to="/bac-si"> 
+                        <NavLink to="/bac-si" > 
                             <i className="fas fa-columns"></i>
                             <span>Dashboard</span>
                         </NavLink>
@@ -71,19 +70,24 @@ const DoctorSidebar = () => {
                     </Nav.Item> 
 
                     <Nav.Item> 
-                        <NavLink to="/bac-si/lich-kham"  activeClassName="active">
+                        <NavLink to="/bac-si/lich-kham" >
                             <i className="fas fa-hourglass-start"></i>
                             <span>Lịch khám</span> 
                         </NavLink>
                     </Nav.Item> 
 
                     <Nav.Item> 
-                        <NavLink to="/bac-si/lich-lam-viec"  activeClassName="active">
+                        <NavLink to="/bac-si/lich-lam-viec"  >
                             <i className="fas fa-calendar-check"></i>
                             <span>Lịch làm việc</span> 
                         </NavLink>
                     </Nav.Item>
-
+                    <Nav.Item> 
+                        <NavLink to="/bac-si/danh-gia">
+                            <i className="fas fa-lock"></i>
+                            <span>Đánh giá</span>
+                        </NavLink>
+                    </Nav.Item>
                     <Nav.Item> 
                         <NavLink to="/bac-si/doi-mat-khau">
                             <i className="fas fa-lock"></i>
@@ -92,7 +96,7 @@ const DoctorSidebar = () => {
                     </Nav.Item>
 
                     <Nav.Item> 
-                        <NavLink to="/bac-si/dang-xuat" activeClassName="active" onClick={handleLogoutDoctor}>
+                        <NavLink to="/bac-si/dang-xuat"  onClick={handleLogoutDoctor}>
                             <i className="fas fa-sign-out-alt"></i>
                             <span>Đăng xuất</span>
                         </NavLink>

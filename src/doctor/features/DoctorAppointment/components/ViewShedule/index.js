@@ -1,90 +1,54 @@
-import React, {useState, useEffect} from 'react';
-import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Card, Tabs, Space } from 'antd';
-import DoctorSidebar from '../../../../components/DoctorSideBar';
-import { Link } from 'react-router-dom';
-import StickyBox from "react-sticky-box";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import InfoSchedule from '../InfoSchedule';
+import { Button, Card, Col, Form, Input, Row, Space, Tabs } from 'antd';
+import { useSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import StickyBox from "react-sticky-box";
 import doctorAPI from '../../../../../api/doctorAPI';
+import DoctorSidebar from '../../../../components/DoctorSideBar';
+import InfoSchedule from '../InfoSchedule';
+import LoadingTop from '../../../../components/loadingTop';
+
 const { TabPane } = Tabs;
 function ViewSchedule(props) {
-    // console.log('props.data :>> ', props.location.state.data);
+    const location = useLocation();
+    const {enqueueSnackbar} = useSnackbar();
     const [form] = Form.useForm();
     const [initForm, setInitForm] = useState({});
     const [loadingInit, setLoadingInit] = useState(true);
-    const [submitAction, setSubmitAction] = useState({
-        action: null,
-        data: null
-    })
-    const obj = {
-        clinical: {
-            heartbeat:""
-        },
-        // test: [
-        //     {
-        //         sight: "a",
-        //         price: "a"
-        //     },
-        //     {
-        //         sight: "a",
-        //         price: "a"
-        //     }
-        // ]
-    }
-    
+
+    const [stateForm, setStateForm] = useState(0);
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
+
     const submitForm = (data) => {
-        console.log('data :>> ', data);
-        setSubmitAction({
-            ...submitAction,
-            data: {...data}
-        })
-    }
-    const submit1 = () => {
-        setSubmitAction({
-            ...submitAction,
-            action: "checking"
-        })
-        form.submit();
-    }
-    const submit2 = () => {
-        setSubmitAction({
-            ...submitAction,
-            action: "checked"
-        })
-        form.submit();
-    }
-    useEffect(()=> {
-        // convert to checking
-        transferToChecking(props.location.state.data.id);
-        getRecordData(props.location.state.data.id);
-    },[])
-    useEffect(() => {
-        const {action, data} = submitAction;
+        setLoadingSubmit(true);
         const submit_data = {
             ...data,
-            appointmentId: props.location.state.data.id,
+            appointmentId: location.state.data.id,
         }
-        // console.log('action :>> ', action);
-        // console.log('data :>> ', data);
-        if(action!==null && data!==null) {
-            switch (action) {
-                case "checking":
-                    // call api checking
-                    checkingUpdateData(submit_data)
-                    break;
-                case "checked":
-                    // call api checked
-                    break;
-                default:
-                    break;
-            }
+        if(stateForm==='checking') {
+            checkingUpdateData(submit_data);
+        } else if(stateForm==='checked') {
+            finish_exam_schedule(submit_data);
+        } else {
+            return
         }
-       
-    }, [submitAction]);
+    }
+    
+    useEffect(()=> {
+        // convert to checking
+        if(location.state.data.status==="uncheck") {
+            transferToChecking(location.state.data.id);
+            getRecordData(location.state.data.id);
+        } else {
+            getRecordData(location.state.data.id);
+        }
+        
+    },[])
+    
     const transferToChecking = async (id) => {
         try {
             const response = await doctorAPI.transfer_schedule_to_checking(id);
-            console.log('response transferToChecking:>> ', response);
         } catch (error) {
             console.log('error :>> ', error);
         }
@@ -97,17 +61,21 @@ function ViewSchedule(props) {
         } catch (error) {
             console.log('error :>> ', error);
         }
+        setLoadingSubmit(false);
     }
-    const submitToChecked = async (data) => {
+    const finish_exam_schedule = async (submitData) => {
         try {
-            const response = await doctorAPI.update_data_checking(data);
-            console.log('response checkingUpdateData:>> ', response);
-           
+            const response = await doctorAPI.transfer_schedule_to_checked(submitData);
+            console.log(' response:>> finish_exam_schedule ', response);
+            if(response.error) throw new Error("Can't finish_exam_schedule");
+            enqueueSnackbar('Hoàn thành khám', {variant: 'success'})
         } catch (error) {
-            console.log('error :>> ', error);
+            console.log('error finish_exam_schedule:>> ', error);
+            enqueueSnackbar('Đã có lỗi xảy ra, mời thử lại', {variant: 'error'})
         }
+        setLoadingSubmit(false);
     }
-
+    
     const getRecordData = async (id) => {
         try {
             const response = await doctorAPI.get_record_by_id(id);
@@ -119,9 +87,9 @@ function ViewSchedule(props) {
             console.log('error :>> ', error);
         }
     }
-    console.log('initForm :>> ', initForm);
     return (
         <div>
+            {loadingSubmit&& <LoadingTop/>}
             <div className="breadcrumb-bar" style={{marginTop:"80px"}}>
                 <div className="container-fluid">
                     <div className="row align-items-center">
@@ -149,7 +117,7 @@ function ViewSchedule(props) {
                             <h2>Thông tin lịch khám</h2>
                             <Tabs defaultActiveKey="2" >
                                 <TabPane tab="Thông tin" key="1">
-                                    <InfoSchedule data={props.location.state.data}/>
+                                    <InfoSchedule data={location.state.data}/>
                                 </TabPane>
                                 <TabPane tab="Khám bệnh" key="2">
                                 <Card>
@@ -274,15 +242,11 @@ function ViewSchedule(props) {
                                             </Row>
                                             <Col span={24}>
                                                 <Form.Item>
-                                                    <Button type="primary" htmlType="submit" onClick={submit1}>Lưu</Button>
+                                                    <Button type="primary" htmlType="submit" onClick={()=>setStateForm('checking')}>Lưu</Button>
                                                 </Form.Item>
                                                 <Form.Item>
-                                                    <Button type="primary" htmlType="submit" onClick={submit2}>Hoàn thành khám</Button>
+                                                    <Button type="primary" htmlType="submit" onClick={()=>setStateForm('checked')}>Hoàn thành khám</Button>
                                                 </Form.Item>
-                                                <Form.Item>
-                                                    <Button type="primary" htmlType="submit">Thoát</Button>
-                                                </Form.Item>
-                                                
                                             </Col>
                                         </Form>
                                         }   

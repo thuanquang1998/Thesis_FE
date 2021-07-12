@@ -1,29 +1,33 @@
-import { Badge, Button, Card, Input, Table } from 'antd';
+import { Badge, Button, Card, Input, Table, Tabs } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ModalSchedule from '../ModalSchedule';
 
-function ScheduleOutDate(props) {
+function SchedulePending(props) {
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
     const [modalData, setModalData] = useState({
         visible: false,
         data: {},
     })
+    const [filterSchedule, setFilterSchedule] = useState({
+        search: "",
+        status: 1,
+        currentPage: 1,
+    })
     // handle outdate schedule
     useEffect(()=> {
+        const {search, status} = filterSchedule;
         const listData = [...props.data];
-        const listUncheck = listData.filter(item=>item.status==="uncheck");
-        const listOutDate = listUncheck.filter(item=> {
-             // handle time
-            const dateFormat = convertDateStringtoDate(item.date);
-            const currentDate = new Date();
-            const compareDate = moment(currentDate).isAfter(dateFormat);
-            return compareDate
-        })
-        setListSchedule(listOutDate);
+        const listUncheck = listData.filter(item=>item.status==="checking");
+        const listScheduleSearch = listUncheck.filter(item=>{
+            const name = item.patient.toUpperCase();
+            const searchS = search.toUpperCase();
+            return name.includes(searchS)
+        });
+        setListSchedule(listScheduleSearch);
         setLoadingSchedule(false);
-    },[props.data])
+    },[props.data,filterSchedule])
     const convertDateStringtoDate = (dateStr) => {
         const dateMomentObject = moment(dateStr, "DD/MM/YYYY");
         const dateObject = dateMomentObject.toDate();
@@ -83,11 +87,17 @@ function ScheduleOutDate(props) {
             ),
 		},		
 	]
+    const onChangeSearch = (e) => {
+        setFilterSchedule({
+            ...filterSchedule,
+            search: e.target.value
+        })
+    }
     return (
         <div>
             <Card>
                 <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
-                {/* <Input placeholder="Tìm kiếm" /> */}
+                <Input placeholder="Tìm kiếm" onChange={onChangeSearch} value={filterSchedule.search}/>
                 <Table className="table-striped"
                     columns={columns}                 
                     dataSource={listSchedule}
@@ -117,4 +127,4 @@ function ScheduleOutDate(props) {
     );
 }
 
-export default ScheduleOutDate;
+export default SchedulePending;

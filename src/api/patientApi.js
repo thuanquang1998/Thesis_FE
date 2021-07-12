@@ -30,5 +30,15 @@ class patientAPI{
     get_time_works(id){
         return http.get(`doctors/${id}/timeslots`).then(res => res.data).catch(err=> err.response.data)
     }
+
+    // reviews
+        // create reviews
+        create_review(data) {
+            return http.put(`doctors/add_review`).then(res=> res.data).catch(err => err.response.data)
+        }
+        // get all reviews for doctors
+        get_doctor_reviews(id){
+            return http.get(`doctors/${id}/rate`).then(res => res.data).catch(err=> err.response.data)
+        }
 }
 export default new patientAPI

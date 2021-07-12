@@ -3,10 +3,11 @@ import {Modal, Button} from 'antd';
 import InfoSchedule from '../InfoSchedule';
 function ModalSchedule(props) {
     const {modalData, handleOk, handleClose} = props;
-    console.log(`modalData.fullData`, modalData.fullData)
+    const {data} = modalData;
     return (
         <Modal 
             title="Xem lịch khám" 
+            width={1000}
             visible={modalData.visible} 
             onOk={handleOk} 
             onCancel={handleClose}
@@ -16,7 +17,7 @@ function ModalSchedule(props) {
                 </Button>
               ]}
         >
-            <InfoSchedule data={props.fullData}/>
+            <InfoSchedule data={data}/>
         </Modal>
     );
 }

@@ -13,13 +13,13 @@ import DashboardHospital from './features/AdminHospital/pages/DashboardHospital'
 import Employees from './features/AdminHospital/pages/Employees'
 import HospitalInfo from './features/AdminHospital/pages/HospitalInfo'
 import Reviews from './features/AdminHospital/pages/Reviews'
+import ScheduleDoctorPage from './features/AdminHospital/pages/ScheduleDoctorPage'
+import ScheduleWork from './features/AdminHospital/pages/ScheduleWork'
 import Specialities from './features/AdminHospital/pages/Specialities'
 import CreateHospital from './features/AdminRoot/pages/CreateHospital'
 import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index'
 import HospitalsPage from './features/AdminRoot/pages/HospitalsPage'
 import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot'
-import ScheduleWork from './features/AdminHospital/pages/ScheduleWork'
-import ScheduleDoctorPage from './features/AdminHospital/pages/ScheduleDoctorPage'
 
 const AppAdmin =({match})=>{
     const dispatch = useDispatch();
@@ -69,6 +69,8 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={CreateDoctor} path="/admin/hospital/nhan-vien/them" exact/>
                         <PrivateRouteAdmin component={ScheduleWork} path="/admin/hospital/lich-lam-viec" exact/>
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/hospital/lich-lam-viec/:id" exact/>
+
+                        {/* agent hospital */}
 
 
                     </Switch>

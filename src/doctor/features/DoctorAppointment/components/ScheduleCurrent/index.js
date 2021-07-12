@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Tabs, Input, Radio, Card, Table, Badge, Button} from 'antd';
+import {Tabs, Input, Radio, Card, Table, Badge, Button, Tag} from 'antd';
 import moment from 'moment';
 import ModalSchedule from '../ModalSchedule';
+import ReExamination from '../ReExamination';
 import { useHistory } from 'react-router-dom';
 
 function ScheduleCurrent(props) {
+    const {status, changeStatus} = props;
     const history = useHistory();
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
@@ -18,6 +20,10 @@ function ScheduleCurrent(props) {
         visible: false,
         data: {},
     })
+    const [modalReExam, setModalReExam] = useState({
+        visible: false,
+        data: {},
+    })
 
 
     const onChangeStatus = (e) => {
@@ -25,6 +31,7 @@ function ScheduleCurrent(props) {
             ...filterSchedule,
             status: e.target.value
         })
+        changeStatus(e.target.value);
     };
     const onChangeSearch = (e) => {
         setFilterSchedule({
@@ -76,6 +83,29 @@ function ScheduleCurrent(props) {
         const dateObject = dateMomentObject.toDate();
         return dateObject
     }
+    const renderStatus = (status) => {
+        let str = "";
+        let color = "";
+        switch (status) {
+            case 'uncheck':
+                str = 'Chưa khám';
+                color = "red"
+                break;
+            case 'checking':
+                str = 'Đang xử lí'
+                color = "gold"
+                break;
+            case 'checked':
+                str = 'Đã khám';
+                color = "green"
+                break;
+            default:
+                str = 'Chưa khám'
+                color = "red"
+                break;
+        }
+        return <Tag style={{ backgroundColor: `${color}` }}>{str}</Tag>
+    }
     const columns = [
         {
 			title: 'Bệnh nhân',
@@ -85,7 +115,7 @@ function ScheduleCurrent(props) {
 				<span>{text}</span>
 			  </div>
 			), 
-			sorter: (a, b) => a.specialities.length - b.specialities.length,
+			// sorter: (a, b) => a.specialities.length - b.specialities.length,
 		},
         {
 			title:'Ngày khám',
@@ -102,54 +132,73 @@ function ScheduleCurrent(props) {
         {
 			title:'Trạng thái',
 			dataIndex:'status',
-            render: (text, record) => (
-                <Badge style={{ backgroundColor: 'red' }}>{checkStatus(record.status)}</Badge>
-            )
+            render: (text, record) => {
+                const data = renderStatus(record.status);
+                return data
+            }
 		},
 		{
             title: 'Sự kiện',
             render: (text, record) => (
                 <div className="actions">
-                    <Button 
-                        onClick={()=>{
-                            const data = record;
-                            setModalData({
-                                ...modalData,
-                                visible: true,
-                                data: {...data}
-                            })
-                        }} 
-                        type="primary" 
-                        style={{marginRight:"5px"}}
-                    >
-                        Xem lịch
-                    </Button>
-                    <Button 
-                        onClick={()=>{
-                            const data = record.fullData;
-                            history.push({
-                                pathname: `/bac-si/lich-lam-viec/${data._id}`,
-                                state: {
-                                    data: {...data},
-                                }
-                            })
-                        }} 
-                        type="primary" 
-                        style={{marginRight:"5px"}}
-                    >
-                        Khám bệnh
-                    </Button>
+                    {record.status==="checked"?
+                        <Button 
+                            onClick={()=>{
+                                const data = record;
+                                setModalReExam({
+                                    ...modalReExam,
+                                    visible: true,
+                                    data: {...data}
+                                })
+                            }} 
+                            type="primary" 
+                            style={{marginRight:"5px"}}
+                        >
+                            Tái khám
+                        </Button>
+                        :
+                        <>
+                            <Button 
+                                onClick={()=>{
+                                    const data = record.fullData;
+                                    setModalData({
+                                        ...modalData,
+                                        visible: true,
+                                        data: {...data}
+                                    })
+                                }} 
+                                type="primary" 
+                                style={{marginRight:"5px"}}
+                            >
+                                Xem lịch
+                            </Button>
+                            <Button 
+                                onClick={()=>{
+                                    const data = record.fullData;
+                                    history.push({
+                                        pathname: `/bac-si/lich-kham/${data._id}`,
+                                        state: {
+                                            data: {...data},
+                                        }
+                                    })
+                                }} 
+                                type="primary" 
+                                style={{marginRight:"5px"}}
+                            >
+                                Khám bệnh
+                            </Button>
+                        </>
+                    }
                 </div>
             ),
 		},		
 	]
-    console.log('listSchedule :>> ', listSchedule);
     return (
         <div>
             <Card>
                 <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
                 <Input placeholder="Tìm kiếm" onChange={onChangeSearch} value={filterSchedule.search}/>
-                <Radio.Group onChange={onChangeStatus} value={filterSchedule.status}>
+                <Radio.Group onChange={onChangeStatus} value={status}>
                     <Radio value={1}>Tất cả</Radio>
                     <Radio value={2}>Chưa khám</Radio>
                     <Radio value={3}>Đang khám</Radio>  
@@ -163,6 +212,7 @@ function ScheduleCurrent(props) {
                     rowKey={record => record.id}
                     showSizeChanger={true} 
                     loading={loadingSchedule}
+                    // pagination={}
                 />
             </Card>
             <ModalSchedule
@@ -180,9 +230,26 @@ function ScheduleCurrent(props) {
                     })
                 }}
             />
+            <ReExamination
+                modalData={modalReExam}
+                handleOk={()=>{
+                    setModalReExam({
+                        ...modalReExam,
+                        visible: !modalReExam.visible,
+                    })
+                }}
+                handleClose={()=>{
+                    setModalReExam({
+                        ...modalReExam,
+                        visible: !modalReExam.visible,
+                    })
+                }}
+                reExamSuccess = {props.reExamSuccess}
+            />
         </div>
     );
 }
+
 const checkStatus = (status) => {
     let str = "";
     switch (status) {

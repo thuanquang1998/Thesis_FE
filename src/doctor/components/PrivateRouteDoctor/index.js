@@ -8,7 +8,7 @@ const PrivateRouteDoctor = ({component: Component, path, exact}) => {
     const { isDoctorLoggedIn } = doctor;
     return (
         isDoctorLoggedIn?
-        (<Route  path={path}  exact={exact} component={Component} />)
+        (<Route  path={path}  exact={exact}  render={() => <Component doctorData={doctor}/>}  />)
         :
         (<Redirect  to="/quan-li/dang-nhap"  />) 
     );
