@@ -19,6 +19,7 @@ const HospitalSearch = (props) => {
                         enterButton="Tìm kiếm"
                         size="large"
                         onSearch={onSearch}
+                        defaultValue={props.searchValue}
                     />
                 </div>
                 

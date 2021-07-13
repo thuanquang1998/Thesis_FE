@@ -48,13 +48,10 @@ const ListHospitalPage = () => {
     const [renderData, setRenderData] = useState([]);
     const [filter, setFilter] = useState('');
     const [loadingPage, setLoadingPage] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentData, setCurrentDate] = useState([]);
  
 
     const queryParams = useMemo(()=>{
         const params = queryString.parse(location.search);
-        console.log('params :>> ', params);
         return {
             ...params,
             page: Number.parseInt(params.page) || 1, 
@@ -63,14 +60,18 @@ const ListHospitalPage = () => {
     },[location.search]);
 
     useEffect(() => {
-        console.log('queryParams :>> ', queryParams);
-        const {page, limit} = queryParams;
+        const {page, limit, search} = queryParams;
         setLoadingPage(true);
         if (loadingData === 0) {
             const _data = [...appState.listAllHospitals.data];
-            const _renderDataTemp = _data.filter((item,idx)=>{
-                    return item.name.toLowerCase().includes(filter.toLowerCase())===true;
-            })
+            let _renderDataTemp=[];
+            if(!search) {
+                _renderDataTemp=[..._data]
+            } else {
+                _renderDataTemp = _data.filter((item,idx)=>{
+                    return item.name.toLowerCase().includes(search.toLowerCase())===true;
+                })
+            }
             let min = 0;
             let max = 0;
             if (page===1){
@@ -80,20 +81,16 @@ const ListHospitalPage = () => {
                 min = limit*(page-1);
                 max = limit*page;
             }
-            console.log('min :>> ', min);
-            console.log('max :>> ', max);
             const _renderData = _renderDataTemp.slice(min, max);
-            console.log('_renderData :>> ', _renderData);
             setTimeout(() => {
                 setLoadingPage(false)
             }, 500);
-            setDefaultData(_data);
+            setDefaultData(_renderDataTemp);
             setRenderData(_renderData);
         } 
     }, [queryParams, loadingData])
 
     const onHandleSearch = (value) => {
-        setFilter(value);
         const filters = {
             ...queryParams,
             search:value,
@@ -136,26 +133,33 @@ const ListHospitalPage = () => {
                     </div>
                 </div>
             </div>
-            <HospitalSearch searchName={onHandleSearch}/> 
-            <Card>
-                {loadingPage? 
-                <div className={classes.loadingSpin}>
-                    <Spin size="large"/>
-                    <Spin size="large"/>
-                    <Spin size="large"/>
+            <div className="content">
+                <div className="container-fluid">
+                    <div className="row">
+                        <HospitalSearch searchValue={filter.search} searchName={onHandleSearch}/> 
+                        {loadingPage? 
+                        <div className={classes.loadingSpin} style={{margin:'0 auto'}}>
+                            <Spin size="large"/>
+                            <Spin size="large"/>
+                            <Spin size="large"/>
+                        </div>:
+                        <div style={{display: 'flex', flexDirection:"column", margin: '0 auto'}}>
+                            {/* <h4>{`${defaultData.length} bệnh viện được tìm thấy`} </h4> */}
+                            <HospitalList data={renderData}/>
+                            <Pagination 
+                                className={classes.pagination}
+                                defaultCurrent={queryParams.page}
+                                defaultPageSize={3}
+                                total={defaultData.length} 
+                                onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
+                            />
+                        </div>}
+                    </div>
                 </div>
-                :<>
-                    <HospitalList data={renderData}/>
-                    <Pagination 
-                        className={classes.pagination}
-                        defaultCurrent={queryParams.page}
-                        defaultPageSize={3}
-                        total={defaultData.length} 
-                        onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
-                    />
-                </>
-                }
-            </Card>
+            </div>
+            {/* <Card> */}
+                
+            {/* </Card> */}
         </>
     )
 }

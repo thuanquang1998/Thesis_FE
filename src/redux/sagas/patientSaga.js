@@ -5,11 +5,13 @@ import {
     GET_VERIFY_CODE, GET_VERIFY_SMS,
     LOGOUT_PATIENT, SET_CURRENT_USER, CLEAR_CURRENT_USER, 
     SET_CONFIRM_BOOKING, MAKING_APPOINTMENT,
-    GET_SCHEDULE_PATIENT
+    GET_SCHEDULE_PATIENT,
+    SET_CURRENT_HOSPITAL
 } from '../actions/patientActions';
 import Swal from 'sweetalert2';
 
 import patientAPI from '../../api/patientApi';
+import adminAPI from '../../api/adminAPI';
 import {SwalAlert, SwalAlertBooking} from '../../utils/alert';
 
 export default function* watchAsyncPatientActions(){
@@ -20,6 +22,8 @@ export default function* watchAsyncPatientActions(){
     yield takeEvery ( SET_CONFIRM_BOOKING, confirmBooking )
     yield takeEvery ( MAKING_APPOINTMENT, make_appointment )
     yield takeEvery ( GET_SCHEDULE_PATIENT, get_schedule_patient )
+    yield takeEvery ( SET_CURRENT_HOSPITAL, set_current_hospital )
+
 
 }
 function*  getAllDoctors(){
@@ -134,6 +138,20 @@ function* get_schedule_patient({payload}){
             // SwalAlert('Success', 'get_schedule_patient','success')
             yield put({type: GET_SCHEDULE_PATIENT, payload:response.data});
         }
+    }
+    catch(err){
+        console.log(err)    
+    }
+}
+function* set_current_hospital({payload}){
+    console.log('payload set_current_hospital:>> ', payload);
+    try{
+        const response = yield call(adminAPI.get_hospital_info, payload)
+        if(response.error) throw new Error('error')
+        
+        console.log('response set_current_hospital:>> ', response);
+        // SwalAlert('Success', 'get_schedule_patient','success')
+        yield put({type: SET_CURRENT_HOSPITAL, payload:response.data.data[0]});
     }
     catch(err){
         console.log(err)    

@@ -1,11 +1,14 @@
 import { Button, Card, Col, Row } from 'antd';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
-
+import {set_current_hospital} from '../../../../../redux/actions/patientActions';
 const HospitalItem = (props) => {
+    const dispatch = useDispatch();
     const data = props.data;
-    console.log('data :>> ', data);
-    // const address = props.data.address.number +', '+props.data.address.street+', '+props.data.address.ward+', '+props.data.address.district+', '+props.data.address.city
+    const handleShowHospital = () => {
+        // dispatch(set_current_hospital(data.id));
+    }
     return (
         <Card style={{marginTop:"30px", borderRadius:"10px", boxShadow:"5px 5px 13px rgba(0, 0, 0, 0.1)"}}>
             <Row> 
@@ -27,7 +30,7 @@ const HospitalItem = (props) => {
                         </Col>
                     </Row>
                     {/* <Link to='/patient/cosoyte/profile'> */}
-                        <Button type="primary" style={{position:"relative", left:"40%"}}>
+                        <Button type="primary" style={{position:"relative", left:"40%"}} onClick={handleShowHospital}>
                             <Link 
                                     to={{
                                         pathname:`/chi-tiet-benh-vien/${data.id}`,

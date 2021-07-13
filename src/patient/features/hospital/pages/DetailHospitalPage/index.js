@@ -1,34 +1,119 @@
 import PhoneIcon from '@material-ui/icons/Phone';
 import RoomIcon from '@material-ui/icons/Room';
-import { Card, Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Card, Col, Row, Pagination } from 'antd';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import backgroundHospital from '../../../../assets/img/hospital_background.jpg';
 import logoHospital from '../../../../assets/img/hospital_logo.png';
 import DoctorList from '../../../doctor/components/DoctorList';
 import './style.css';
+import queryString from 'query-string';
+import HospitalFilter from './HospitalFilter';
+import { makeStyles } from '@material-ui/core/styles';
+import LoadingTop from '../../../../components/loadingTop';
 
+const useStyles = makeStyles((theme) => ({
+    pagination: {
+        marginTop:"30px",
+        textAlign: 'center',
+        '& li': {
+            borderRadius: "50%",
+        },
+        '& li button': {
+            border: 'none !important'
+        },
+        '& .ant-pagination-item-link': {
+            background: 'none'
+        }
+    }
+  }));
 
 const DetailHospitalPage = () => {
+    const patient = useSelector(state=>state.patient);
+
+    const classes = useStyles();
+
     const location = useLocation();
+    const history = useHistory();
+    const data = location.state;
+
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
     const [renderDoctor, setRenderDoctor] = useState([]);
-    const data = location.state;
-    // const address = data.address.number +', '+data.address.street+', '+data.address.ward+', '+data.address.district+', '+data.address.city
+    const [totalDoctor, setTotalDoctor] = useState([]);
+
+    const [info, setInfo] = useState({});
+
+    const [filter, setFilter] = useState({
+        search:'',
+        sort: '',
+        page: 1, 
+        limit: 6
+    });
+
+
+
     useEffect(()=>{
+        const {search, sort, page, limit} = filter;
+        const id=location.pathname.split("/")[2];
+        const findHos = appState.listAllHospitals.data.filter(item=>item.id===id);
+        setInfo(findHos[0]);
+
         let _renderData = [];
         if(loadingData===0 && appState.listAllDoctors.length!==0) {
             const _doctor = [...appState.listAllDoctors];
             _renderData = _doctor.filter((item,idx)=>{
-                return item.hospital_info._id.toLowerCase().includes(data.id.toLowerCase())===true;
+                return item.hospital_info._id.toLowerCase().includes(id.toLowerCase())===true;
             })
         } else {
             _renderData=[];
         }
-        setRenderDoctor(_renderData);
-    },[appState])
+
+        // filter and sort
+        const dataName = _renderData.filter(item=>{
+            const check = item.fullName.toLowerCase().includes(search.toLowerCase());
+            console.log('check :>> ', check);
+            console.log('item.fullName :>> ', item.fullName);
+            console.log('search :>> ', search);
+            return check;
+        });
+        const dataSort = dataName.filter(item=>item.spec_detail._id.includes(sort));
+
+        // pagination
+        let min = 0;
+        let max = 0;
+        if (page===1){
+            min = 0;
+            max = limit;
+        } else {
+            min = limit*(page-1);
+            max = limit*page;
+        }
+        const paginationData = dataSort.slice(min, max);
+        setTotalDoctor(dataSort);
+        setRenderDoctor(paginationData);
+    },[location, filter])
+    const onSearchSpec = (data) => {
+        setFilter({
+            ...filter,
+            sort: data,
+        })
+    }
+    const onSearchName = (data) => {
+        console.log('data onSearchName:>> ', data);
+        setFilter({
+            ...filter,
+            search: data,
+        })
+    }
+    const handlePageChange = (e, pageSize) => {
+        setFilter({
+            ...filter,
+            page: e,
+            limit: pageSize,
+        })
+    }
     return (
         <div>
             <div className="breadcrumb-bar">
@@ -39,10 +124,10 @@ const DetailHospitalPage = () => {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Trang chủ</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page"><Link to='/danh-sach-benh-vien'>Danh sách phòng khám</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">{data.name}</li>
+                                    <li className="breadcrumb-item active" aria-current="page">{info.name}</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">{data.name}</h2>
+                            <h2 className="breadcrumb-title">{info.name}</h2>
                         </div>
                     </div>
                 </div>
@@ -62,7 +147,7 @@ const DetailHospitalPage = () => {
                                     </div>
                                 </Col>
                                 <Col xs={{span:14}} sm={{span:17}} md={{span:19}} lg={{span:20}}>
-                                    <h3 className="title">{data.name}</h3>
+                                    <h3 className="title">{info.name}</h3>
                                 </Col>
                             </Row>
                         </div>
@@ -73,11 +158,11 @@ const DetailHospitalPage = () => {
                                     <ul style={{listStyleType:"none", paddingLeft:"5px"}}>
                                         <li>
                                             <span><RoomIcon style={{color:"#17a6df", marginRight:"10px"}}/></span>
-                                            {data.address||""}
+                                            {info.address||""}
                                         </li>
                                         <li>
                                             <span><PhoneIcon style={{color:"#17a6df", marginRight:"10px"}}/></span>
-                                           {data.phone||""}
+                                           {info.phone||""}
                                         </li>
                                     </ul> 
                                 </Card> 
@@ -85,15 +170,31 @@ const DetailHospitalPage = () => {
                                     <p style={{fontSize:"17px"}}>Chúng tôi là 1 phòng khám đa khoa tọa lạc tại 26-28, Tăng Bạt Hổ, P.12, Q.5, TPHCM. Với đầy đủ trang thiết bị cận lâm sàng ( X-Quang, Siêu âm, xét nghiệm máu, nội soi...), máy tập vật lý trị liệu, và có cả phòng ốc khang trang cho khách xa nghỉ lại.   
                                         Với sứ mệnh “y đức trọn niềm tin” Khánh Minh sẽ là nơi đáng tin cậy để chăm sóc sức khỏe cho gia đình bạn và sẵn sàng đồng hành chia sẽ những giải pháp bảo vệ sức khỏe cho cả nhà bạn!!!  
                                         Cám ơn sự tin tưởng của quí khách, Khánh Minh luôn làm tròn Y Đức!</p>
-                                    <p>{data.about}</p>
+                                    <p>{info.about}</p>
                                     
                                 </Card> 
                         </div>
                         <div className="col-md-12 col-lg-8 col-xl-9">
-                            <Card>
-                                Search form
-                            </Card>
-                            <DoctorList doctors={renderDoctor}/>
+                            <HospitalFilter 
+                                idHos={info.id} 
+                                onSearchName={onSearchName}
+                                onSearchSpec={onSearchSpec}
+                            />
+                            <div >
+                                {renderDoctor.length===0?
+                                    <div style={{minHeight:"300px", margin:"0 auto"}}>
+                                        <h3 style={{margin:'0 auto'}}>Bệnh viện hiện không có bác sĩ</h3>
+                                    </div>
+                                    :<DoctorList doctors={renderDoctor}/>
+                                }
+                            </div>
+                            <Pagination 
+                                className={classes.pagination}
+                                defaultCurrent={filter.page}
+                                defaultPageSize={6}
+                                total={totalDoctor.length} 
+                                onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
+                            />
                         </div>
                     </div>
                 </div>

@@ -57,19 +57,21 @@ function ListDoctorPage(props) {
         const params = queryString.parse(location.search);
         return {
             ...params,
-            page: 1,
-            limit: 6
+            page: Number.parseInt(params.page) || 1, 
+            limit: Number.parseInt(params.limit) || 6,
         }
     },[location.search]);
 
     const [productList, setProductList] = useState([]);
     const [loading, setLoading] =  useState(true);
     const [listDoctor, setListDoctor] = useState([]);
+    const [totalData, setTotalData] = useState([]);
     const [label, setLabel] = useState({});
 
     useEffect( () => {
         setLoadingPage(true);
         let _renderData = [];
+        let _totalData = [];
         const label = {
             ck:"",
             bv:"",
@@ -79,10 +81,13 @@ function ListDoctorPage(props) {
             const _tenBs = tenBs || "";
             const _bv = bv?bv==='all-bv'?'':bv:'';
             const _ck = ck?ck==='all-ck'?'':ck:'';
-
             const _data = [...listAllDoctors];
-            console.log('_data :>> ', _data);
-            const new_list_name = _data.filter((item,idx)=>{
+            
+            // check null Schedule
+            const _dataUnNull = _data.filter(x=>x.timeWorkIsNull===false);
+
+            // filter
+            const new_list_name = _dataUnNull.filter((item,idx)=>{
                 return item.fullName.toLowerCase().includes(_tenBs.toLowerCase())===true;
             })
             const new_list_bv = new_list_name.filter((item,idx)=> {
@@ -91,25 +96,27 @@ function ListDoctorPage(props) {
             const new_list_ck = new_list_bv.filter((item,idx)=> {
                 return item.spec_detail?item.spec_detail?._id.toLowerCase().includes(_ck.toLowerCase())===true:true;
             })
-            // let min = 0;
-            // let max = 0;
-            // if (page===1){
-            //     min = 0;
-            //     max = limit;
-            // } else {
-            //     min = limit*(page-1);
-            //     max = limit*page;
-            // }
-            // const temp = new_list_ck.slice(min, max);
-            const new_doctors = new_list_ck.filter(x=>x.timeWorkIsNull===false);
-            _renderData = new_doctors;
+            _totalData=[...new_list_ck];
 
+            // pagination
+            let min = 0;
+            let max = 0;
+            if (page===1){
+                min = 0;
+                max = limit;
+            } else {
+                min = limit*(page-1);
+                max = limit*page;
+            }
+            _renderData = new_list_ck.slice(min, max);
         } else {
             _renderData = [];
+            _totalData= [];
         }
         setTimeout(() => {
             setLoadingPage(false);
         }, 500);
+        setTotalData([..._totalData])
         setListDoctor(_renderData);
     }, [queryParams, loadingData])
 
@@ -175,7 +182,7 @@ function ListDoctorPage(props) {
                         <div className="col-md-12 col-lg-8 col-xl-9">
                             <Card className={classes.card}>
                                 {/* Title */}
-                                <h2>{`Đã tìm thấy: ${listDoctor.length} bác sĩ`}</h2>
+                                <h2>{`Đã tìm thấy: ${totalData.length} bác sĩ`}</h2>
                                 {/* View */}
                                 <FilterViewer filters={queryParams} onChange={handleFilterViewer}/>
                                 {/* list */}
@@ -186,13 +193,15 @@ function ListDoctorPage(props) {
                                     }
                                 </div>
                                 
-                                <Pagination 
-                                    className={classes.pagination}
-                                    defaultCurrent={1}
-                                    defaultPageSize={3}
-                                    total={20} 
-                                    onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
-                                />
+                                <div style={{marginTop:"30px"}}>
+                                    <Pagination 
+                                        className={classes.pagination}
+                                        defaultCurrent={queryParams.page}
+                                        defaultPageSize={6}
+                                        total={totalData.length} 
+                                        onChange={(page, pageSize)=>handlePageChange(page, pageSize)}
+                                    />
+                                </div>
                             </Card>
                         </div>
                     </div>

@@ -7,7 +7,6 @@ const { Option } = Select;
 
   
 function ProductFilter({filters, onChange}) {
-
     const [form] = Form.useForm();
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
@@ -15,7 +14,7 @@ function ProductFilter({filters, onChange}) {
     const [loadingPage, setLoadingPage] = useState(true);
     const [listData, setListData] = useState({
         hospitals:[],
-        doctors:[]
+        specialities:[]
     })
     useEffect(()=> {
         if(loadingData===0 && appState.listAllSpecials.length !== 0){
@@ -41,7 +40,7 @@ function ProductFilter({filters, onChange}) {
     return (
         <div className="card search-filter" style={{marginBottom:"40px", borderRadius:"15px"}}>
             <div className="card-header" style={{borderRadius:"15px"}}>
-                <h4 className="card-title mb-0">Lọc</h4>
+                <h4 className="card-title mb-0">Lọc danh sách</h4>
             </div>
             <div className="card-body">
                 <Form
@@ -85,7 +84,7 @@ function ProductFilter({filters, onChange}) {
                                 </Select>}
                         </Form.Item>
                         <Form.Item name="ck" label="Tìm theo chuyên khoa:" className="search__form--item">
-                            {loadingPage?
+                            {/* {loadingPage?
                                 <Select
                                     placeholder="Tìm theo chuyên khoa"
                                 >
@@ -93,13 +92,23 @@ function ProductFilter({filters, onChange}) {
                                 </Select>
                                 :<Select
                                     placeholder="Tìm theo chuyên khoa"
+                                    loading={loadingPage}
                                 >
                                     <Option value="all-ck">Tất cả</Option>
                                     {listData.specialities.map(item=>(
                                         <Option key={item.key} value={item._id}>{item.name}</Option>
                                     ))}
                                 </Select>
-                            }
+                            } */}
+                            <Select
+                                    placeholder="Tìm theo chuyên khoa"
+                                    loading={loadingPage}
+                                >
+                                    <Option value="all-ck">Tất cả</Option>
+                                    {listData.specialities.map(item=>(
+                                        <Option key={item.key} value={item._id}>{item.name}</Option>
+                                    ))}
+                                </Select>
                         </Form.Item>
                         <Form.Item>
                             <Button
@@ -110,9 +119,9 @@ function ProductFilter({filters, onChange}) {
                                     form.resetFields();
                                 }}
                             >
-                                Clear
+                                Nhập lại
                             </Button>
-                            <Button type="primary" htmlType="submit">
+                            <Button htmlType="submit" style={{background: '#20c0f3'}}>
                                 Tìm kiếm
                             </Button>
                         </Form.Item>

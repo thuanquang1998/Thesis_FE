@@ -1,40 +1,114 @@
-import { Button, Card, Col, Rate, Row, Tabs } from 'antd'
+import { Button, Card, Col, Rate, Row, Tabs, Form } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import React, {useState, useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import ReactQuill from "react-quill"
 import { Link, useHistory } from 'react-router-dom'
+import patientAPI from '../../../../../api/patientApi'
 import logoDoctor from '../../../../assets/img/bsnam.jpg'
 import departLogo from '../../../../assets/img/depart.png'
 import hospitalLogo from '../../../../assets/img/hospital.png'
 import location from '../../../../assets/img/location.png'
 import price from '../../../../assets/img/price.png'
+import Swal from 'sweetalert2';
 import './style.css'
-import patientAPI from '../../../../../api/patientApi';
-const { TabPane } = Tabs;
+import { useSnackbar } from 'notistack';
+import LoadingTop from '../../../../../doctor/components/loadingTop';
+
 const DetailDoctorPage = (props) => {
+    const { enqueueSnackbar } = useSnackbar();
+
     const history = useHistory();
+    const patient = useSelector(state=> state.patient);
     const data = history.location.state.data;
     const [reviewData, setReviewData] = useState([]);
     const [loadingReview, setLoadingReview] = useState(true);
+    const [loadingPage, setLoadingPage] = useState(true);
+    const [dataReview, setDataReview] = useState({
+        star_num: null,
+        comment: null,
+    })
+    const [disableButton, setDisableButton] = useState(true);
+    useEffect(()=> {
+        const {star_num, comment} = dataReview;
+        if(star_num!==null&&comment!==null) {
+            setDisableButton(false)
+        }
+    },[dataReview])
     useEffect(()=> {
         getReviewDoctors(data._id);
     },[])
     const getReviewDoctors = async (id) => {
+        setLoadingPage(true);
         try {
             const response = await patientAPI.get_doctor_reviews(id);
             if(response.error) throw new Error("Can't get getReviewDoctors")
             console.log('response getReviewDoctors:>> ', response);
             setReviewData([...response.data]);
             setLoadingReview(false);
+            setLoadingPage(false);
         } catch (error) {
             console.log('error :>> ', error);
+            setLoadingPage(false);
         }
     }
     // check login
-    const submitReviewData = async (data) => {
-
+    
+    const handleReview = () => {
+        if (patient.isLoggedIn === true) {
+            // call api submit review
+            const _data = {
+                ...dataReview,
+                doctorId: data._id,
+            }
+            console.log('dataReview handleReview:>> ', _data);
+            submitReviewApi(_data);
+            setLoadingPage(true);
+            setDataReview({
+                star_num: null,
+                comment: null,
+            })
+        } else {
+            Swal.fire({
+                title: "Thông báo",
+                text: "Bạn cần đăng nhập để thực hiện chức năng này.",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Đăng nhập",
+                cancelButtonText: "Hủy"
+              })
+            .then((result) => {
+                if (result.value) {
+                    history.push({
+                        pathname: `/dang-nhap`,
+                    })
+                } 
+            })
+            .catch((error) => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Opps...",
+                    text: `Something went wrong!, ${error.message}`
+                });
+            });
+        }
+    }
+    const submitReviewApi = async (data) => {
+        try {
+            const response = await patientAPI.create_review(data);
+            if(response.error) throw new Error('submitReviewApi error');
+            enqueueSnackbar('Đánh giá thành công', {variant: 'success'});
+            getReviewDoctors(data._id);
+        } catch (error) {
+            console.log(`error`, error);
+            enqueueSnackbar('Đánh giá thành công', {variant: 'success'})
+        }
     }
     return (
         <div>
+            {loadingPage && <LoadingTop/>}
             {/* breadcrumb */}
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
@@ -97,44 +171,23 @@ const DetailDoctorPage = (props) => {
                         </Row>
                     </Card>
                     {/* new content */}
-                    <Card className="doctor--profile__intro">
-                        <Tabs defaultActiveKey="1" >
-                            <TabPane tab="Giới thiệu" key="1">
-                                Giới thiệu
-                                Bác sĩ Chuyên khoa I HUỲNH THANH HẢI Là thành viên trong nhóm can thiệp mạch vành của Bệnh viện Thống Nhất. Với hơn 30 năm kinh nghiệm điều trị bệnh tim mạch, nội tổng quát.
-                                Quá trình học vấn:
-                                BS CK I Nội tổng quát, Siêu âm tim mạch máu, Nội soi tiêu hóa
-                                Quá trình công tác:
-                                Bác sĩ khoa Nội tim mạch bệnh viện Thống Nhất TP.HCM
-                                Trưởng khoa Nội bệnh viện Vũ Anh TP.HCM
-                                Trưởng khoa Nội bệnh viện Phúc An Khang TP.HCM
-                                Trưởng khoa Hồi sức cấp cứu tại bệnh viện Đa khoa Tân Hưng TP.HCM
-                                Điểm nổi bật:
-                                Bác sĩ Huỳnh Thanh Hải từng tham gia các lớp học siêu âm mạch máu, lớp can thiệp mạch vành tại Singapore.
-                                Nhận tư vấn miễn phí và miễn phí đo điện tim cho khách hàng 50 tuổi trở lên.
-                                Nhận khám và điều trị tại nhà.
-                                Nhận khám và tư vấn cho người nước ngoài (ngôn ngữ tiếng Anh).
-                                Trang thiết bị phòng khám:
-                                Phòng khám ngoài giờ của bác sĩ Hải có đầy đủ các trang thiết bị như: máy đo điện tim, máy đo huyết áp, máy đo đường huyết, máy phun khí dung,...hỗ trợ trong việc tư vấn và điều trị các bệnh lý về tim mạch, tiểu đường, tiêu hóa, hô hấp,...
-                            </TabPane>
-                            <TabPane tab="Vị trí" key="2">
-                                <div class="mapouter" style={{position:"relative", textAlign:'center',margin:'0 auto',width:'600px', height:"400px"}}>
-                                    <div class="gmap_canvas" style={{overflow:'hidden', background:'none', width:'100%', height:'100%'}}>
-                                        <iframe 
-                                            className="gmap_iframe" 
-                                            style={{width:'100%', height:'100%'}} 
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.490720504262!2d106.65472031496678!3d10.773677562190034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ec114d1acab%3A0x850da53a5df7f2e2!2zMjczIEzDvSBUaMaw4budbmcgS2nhu4d0LCBQaMaw4budbmcgMTUsIFF14bqtbiAxMSwgVGjDoG5oIHBo4buRIEjhu5MgQ2jDrSBNaW5oLCBWaWV0bmFt!5e0!3m2!1sen!2s!4v1610375720290!5m2!1sen!2s">
-                                        </iframe>
-                                        </div>
-                                </div>
-                            </TabPane>
-                            <TabPane tab="Đánh giá" key="3">
-                                <h4 style={{display:"none"}}>Chưa có đánh giá </h4>
+                    <div >
+                        <Row gutter={[24,8]}>
+                            <Col sm={{span:24}} md={{span:13}}>
+                                <Card className="doctor--profile__intro" style={{minHeight:"350px"}}>
+                                    <h4>Giới thiệu</h4>
+                                    <ReactQuill value={`<p>${data.about||'Là một bác sĩ giàu kinh nghiệm. Có kinh nghiệm công tác lâu năm trong lĩnh vực y tế'}</p>`} readOnly={true} theme={"bubble"} />
+                                </Card>
+                            </Col>
+                            <Col sm={{span:24}} md={{span:11}}>
+                                <Card className="doctor--profile__intro" style={{minHeight:"350px"}}>
+                                    <h4>Đánh giá</h4>
+                                    <h4 style={{display:"none"}}>Chưa có đánh giá </h4>
                                 {reviewData.map((item,index)=>(
                                     <div className="review__item" key={index}>
                                         <div className="review__item--header">
                                             <div className="review__header--left"><i class="far fa-user"></i></div>
-                                            <div className="review__header--right">{item.patient_name} <span>Đã khám bệnh tại hệ thống</span></div>
+                                            <div className="review__header--right">{item.patient_name} <span>đã nhận xét</span></div>
                                         </div>
                                         <div className="review__item--rating"><Rate value={item.rate.star_num}/></div>
                                         <div className="review__item--comment"><p>{item.rate.comment}</p></div>
@@ -142,14 +195,19 @@ const DetailDoctorPage = (props) => {
                                 ))}
                                
                                 <Card>
-                                    <h4>Nhận xét</h4>
-                                    <Rate value={0}/>
-                                    Bạn đã sử dụng dịch vụ của Bác sĩ Chuyên khoa I HUỲNH THANH HẢI. Hãy chia sẽ những nhận xét của bạn.
-                                   <TextArea></TextArea>
+                                    
+                                            <Rate value={dataReview.star_num===null?0:dataReview.star_num} onChange={(e)=>setDataReview({...dataReview, star_num:e})}/>
+                                        
+                                        Bạn đã sử dụng dịch vụ của {data.title} {data.fullName}. Hãy chia sẽ những nhận xét của bạn.
+                                        
+                                            <TextArea value={dataReview.comment===null?"":dataReview.comment} onChange={(e)=>setDataReview({...dataReview, comment:e.target.value})}></TextArea>
+                                        <Button loading={loadingPage} type="primary" onClick={handleReview} disabled={disableButton}>Gửi</Button>
                                 </Card>
-                            </TabPane>
-                        </Tabs>
-                    </Card>
+                                </Card>
+                            </Col>
+                        </Row>
+                        
+                    </div>
                 </div>
             </div>
 

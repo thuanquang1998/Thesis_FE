@@ -82,13 +82,13 @@ const Header = (props) => {
                 Cơ sở y tế
               </NavLink>
             </li>
-            <li className={`has-submenu ${url === "/news" ? "active" : ""}`}>
+            {/* <li className={`has-submenu ${url === "/news" ? "active" : ""}`}>
               <a href="#0">
                 Tin y tế<i className="fa fa-angle-down" aria-hidden="true"></i>
               </a>
-            </li>
+            </li> */}
             <li className="login-link">
-              <Link to="/">Login / Signup</Link>
+              <Link to="/">Đăng nhập</Link>
             </li>
           </ul>
         </div>

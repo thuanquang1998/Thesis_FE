@@ -1,16 +1,12 @@
-import { Button } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import LoadingTop from '../../components/loadingTop'
 import HomeSearch from '../../components/search'
 import Advertisement from './advertisement'
-import HomeBlog from './blog'
 import HomeDepart from './carousel-depart'
 import HomeBookDoctor from './carousel-doctor/index'
 import HomeHospital from './carousel-hospital'
 const Home = () => {
-    const {enqueueSnackbar} = useSnackbar();
     const appState = useSelector(state=>state.app);
     const {loadingData, listAllSpecials, listAllHospitals, listAllDoctors}  = appState;
 
@@ -33,9 +29,6 @@ const Home = () => {
             }, 500);
         }
     },[loadingData])
-    const showNoti = () => {
-        enqueueSnackbar('AAAAAAAAAAA', {variant: 'success'})
-    }
     return(
         <div>
             {loadingPage?
@@ -44,16 +37,15 @@ const Home = () => {
                 <HomeSearch/>
                 <div style={{height:"100 vh"}}></div>
                 <Advertisement/>
-                <HomeBlog/>
+                {/* <HomeBlog/> */}
             </div>
             :<div className="main-wrapper">
                 <HomeSearch/>
-                <Button onClick={showNoti}>Show notion</Button>
                 <HomeDepart data={listData.specialities}/>
                 <HomeBookDoctor data={listData.doctors}/>
                 <HomeHospital data={listData.hospitals}/>
                 <Advertisement/>
-                <HomeBlog/>
+                {/* <HomeBlog/> */}
             </div>
         }
 

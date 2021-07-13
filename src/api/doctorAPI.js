@@ -7,6 +7,7 @@ class doctorsAPI{
     register(data){
         return http.post('users/sign-up',data).then(res=>data).catch(err=> err.response.data)
     }
+    // load tất lịch khám của bác sĩ
     get_doctor_appoitmant(id) {
         const tokenObj = localStorage.getItem('currentDoctor');
         const _token = JSON.parse(tokenObj);
@@ -17,6 +18,12 @@ class doctorsAPI{
         })
         .then(res=> res.data)
         .catch(err => err.response.data)
+    }
+    // load lịch khám theo id
+    get_appointment_by_id(id) {
+        return http.get(`appointment/${id}/get`)
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
     }
     // load lịch làm việc của bác sĩ
     get_doctor_timework(id) {

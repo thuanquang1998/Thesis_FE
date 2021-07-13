@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from "react-slick";
 import iconHospital from '../../../assets/img/icon_hospital.jpg';
+import {Link} from 'react-router-dom'
 import './style.css';
 
 const settings = {
@@ -37,14 +38,19 @@ const settings = {
 
 
 const CardHospital = (props) => {
-    const {data} = props.data;
+    const {data} = props;
     return (
-        <a href={`/chi-tiet-benh-vien/${props.data?.id}`}>
+        <Link 
+          to={{
+            pathname:`/chi-tiet-benh-vien/${data.id}`,
+            state: data 
+          }}
+        >
            <div className="feature-item text-center" style={{textAlign: 'center'}}>
                 <img src={props.data && props.data.logo} className="img-fluid" alt="Feature" />
                 <p>{props.data && props.data.name}</p>
             </div>
-        </a>
+        </Link>
     )
 }
 const HomeHospital = (props) => {

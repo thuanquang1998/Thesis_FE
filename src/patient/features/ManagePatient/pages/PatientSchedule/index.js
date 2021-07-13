@@ -11,7 +11,7 @@ import LoadingTop from '../../../../components/loadingTop';
 // import { get_schedule_patient } from '../../../../../redux/actions/patientActions';
 import PatientSidebar from '../../components/PatientSideBar';
 import ScheduleCurrent from '../../components/ScheduleCurrent';
-
+import ChangeSchedule from '../../components/ChangeSchedule';
 
 function PatientSchedule(props) {
     const {enqueueSnackbar} = useSnackbar();
@@ -21,14 +21,21 @@ function PatientSchedule(props) {
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingPage, setLoadingPage] = useState(true);
 
+
+    const [modalReExam, setModalReExam] = useState({
+        visible: false,
+        data: {},
+    })
     useEffect(() => {
         get_schedule_patient(patientInfo);
     }, [])
 
     const get_schedule_patient = async (patientInfo) => {
+        console.log("ddddddddddd", patientInfo);
         setLoadingPage(true);
         try {
             const response = await patientAPI.get_schedule(patientInfo.id);
+            console.log('response :>> ', response);
             if (response.error) throw new Error(response.errors[0].message)
             const _data = response.data.map(x=>{
                 const { appointmentInfo, patientInfo} = x;
@@ -102,6 +109,69 @@ function PatientSchedule(props) {
         } catch (error) {
 			console.log('error.message :>> ', error.message);
         	enqueueSnackbar('Xóa lịch khám không thành công.', {variant: 'error'})
+            setLoadingPage(false)
+        }
+    }
+
+    const changeSchedule = async (record) => {
+        console.log('record :>> ', record);
+        // check condition
+        let currentTime = moment();
+        const  check1 = moment(record.dateCheck).isAfter(currentTime);
+        const check2 = record.status!=="uncheck"?true:false;
+        const check = check1&&check2;
+        if(check) {
+			Swal.fire({
+				icon: "error",
+                title: "Không thể đổi lịch khám này.",
+	 			text: "Chỉ được đổi lịch khám trước 1 ngày."
+			});
+		} else {
+			Swal.fire({
+				icon: "info",
+                title: "Xác nhận đổi lịch khám?",
+				// text: "Lịch khám sẽ bị xóa khỏi hệ thống.",
+				showCancelButton: true,
+				cancelButtonColor: "#3085d6",
+				confirmButtonColor: "#d33",
+				confirmButtonText: "Đổi",
+				cancelButtonText: "Hủy"
+			})
+			.then((result) => {
+				if (result.value) {
+					// cancelScheduleMethod(record.id);
+                    console.log("goi ham doi lich");
+                    setModalReExam({
+                        ...modalReExam,
+                        visible: true,
+                        data: {...record}
+                    })
+				} 
+			})
+			.catch((error) => {
+				console.log('error.message :>> ', error.message);
+			});
+		}
+    }
+    const handleChangeSchedule = async (value) => {
+        setLoadingPage(true);
+        console.log('value change_schedule:>> ', value);
+        try {
+            const response = await patientAPI.change_schedule(value);
+            console.log('response :>> ', response);
+            if(response.error) throw new Error(`${response.status}`);
+            setTimeout(() => {
+                enqueueSnackbar('Đổi lịch khám thành công.', {variant: 'success'});
+                get_schedule_patient(patientInfo);
+                setLoadingPage(false)
+            }, 300);
+        } catch (error) {
+            console.log('error :>> ', error.message);
+            if(error.message==="401") {
+                enqueueSnackbar('Bạn chỉ được đổi lịch khám 1 lần.', {variant: 'error'});
+            } else {
+                enqueueSnackbar('Đổi lịch khám không thành công.', {variant: 'error'});
+            }
             setLoadingPage(false)
         }
     }
@@ -183,6 +253,7 @@ function PatientSchedule(props) {
             ),
 		},		
 	]
+    console.log('listSchedule :>> ', listSchedule);
     return (
         <>
             {loadingPage && <LoadingTop/>}
@@ -211,10 +282,25 @@ function PatientSchedule(props) {
                             <ScheduleCurrent 
                                 data={listSchedule}
                                 cancelSchedule={cancelSchedule}
-                                changeSchedule={()=>{}}
+                                changeSchedule={changeSchedule}
                             />
-                            
                         </Col>
+                        <ChangeSchedule
+                            modalData={modalReExam}
+                            handleOk={()=>{
+                                setModalReExam({
+                                    ...modalReExam,
+                                    visible: !modalReExam.visible,
+                                })
+                            }}
+                            handleClose={()=>{
+                                setModalReExam({
+                                    ...modalReExam,
+                                    visible: !modalReExam.visible,
+                                })
+                            }}
+                            handleChangeSchedule={handleChangeSchedule}
+                        />
                     </Row>
                 </div>
             </div>

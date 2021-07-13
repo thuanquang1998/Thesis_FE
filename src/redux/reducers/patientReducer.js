@@ -4,6 +4,7 @@ import {
     SET_CURRENT_USER, CLEAR_CURRENT_USER,
     SET_CONFIRM_BOOKING,
     GET_SCHEDULE_PATIENT,
+    SET_CURRENT_HOSPITAL
 } from '../actions/patientActions';
 
 
@@ -18,7 +19,7 @@ const initialState={
     confirmBooking: false,
     directorUrl: '',
     error: '',
-    
+    currentHospital:{},
 }
 
 export const patientReducer = (state = initialState , action) =>{
@@ -70,7 +71,11 @@ export const patientReducer = (state = initialState , action) =>{
                 ...state,
                 schedulePatient: action.payload
             }
-            
+        case SET_CURRENT_HOSPITAL:
+            return {
+                ...state,
+                currentHospital: action.payload
+            }
         
         default:
             return state

@@ -38,7 +38,7 @@ const Advertisement  = () => {
                                     <h4>ĐÚNG NGƯỜI ĐÚNG BỆNH</h4>
                                 </div>
                                 <div className="chooseContent">
-                                    <p>Đầy đủ các chuyên khoa, thông tin bác sĩ chi tiết, các bài hướng dẫn dễ hiểu, người bệnh dễ dàng lựa chọn bác sĩ phù hợp.</p>
+                                    <p>Đầy các chuyên khoa, thông tin bác sĩ chi tiết, các bài hướng dẫn dễ hiểu, người bệnh dễ dàng lựa chọn bác sĩ phù hợp.</p>
                                 </div>
                             </div>
                         </Col>

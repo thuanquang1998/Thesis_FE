@@ -8,8 +8,7 @@ function DoctorList({ doctors = [] }) {
     useEffect(()=> {
         if (doctors.length !==0) {
             const _doctors = [...doctors];
-            const new_doctors = _doctors.filter(x=>x.timeWorkIsNull===false);
-            setRenderData(new_doctors);
+            setRenderData(doctors);
         } else {
             setRenderData([])
         }

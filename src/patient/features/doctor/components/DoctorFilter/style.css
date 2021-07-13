@@ -41,6 +41,6 @@
 
 .search__form--item {
     width: 95% !important;
-    font-weight: 700;
+    /* font-weight: 700; */
     font-size: 18px !important;
 }

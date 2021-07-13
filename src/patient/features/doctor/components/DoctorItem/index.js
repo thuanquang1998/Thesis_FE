@@ -58,13 +58,13 @@ const DoctorItem = (props) => {
         <div>
             <div className="profile-widget" style={{minWidth:"280px", maxWidth:"400px", margin:"0 auto"}}>
                 <div className="doc-img">
-                    <Link to={`/danh-sach-bac-si/${props.data?.id}`}>
+                    <Link>
                         <img className="img-fluid" alt="User" src={data.avatar?data.avatar:img} />
                     </Link>
                 </div>
                 <div className="pro-content">
                     <h3 className="title">
-                    <Link to={`/danh-sach-bac-si/${props.data?.id}`}>
+                    <Link>
                         <p className="chucDanh">{data.title}</p>
                         <p className="tenBs">{data.fullName}</p>
                     </Link> 

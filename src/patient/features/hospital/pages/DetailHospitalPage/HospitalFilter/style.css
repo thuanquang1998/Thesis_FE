@@ -37,6 +37,12 @@
     border-top-right-radius: 55px !important;
     border-bottom-right-radius: 55px !important;
 }
+.search-input .ant-select-selector {
+    border-radius: 25px !important;
+}
+.search-input .ant-select-single {
+    width: 100%;
+}
 .ant-input-group-addon button {
     border-radius: 40px !important;
     margin-right: 10px;

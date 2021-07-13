@@ -121,7 +121,7 @@ function BookingForm(props) {
         }
         onSubmitForm(newData);
     }
-    
+    console.log('setListDateValid :>> ', setListDateValid);
     return (
         <Form
             labelCol={{

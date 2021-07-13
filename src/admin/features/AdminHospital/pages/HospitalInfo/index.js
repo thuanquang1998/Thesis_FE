@@ -9,7 +9,7 @@ import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css';
 import { get_hospital_byId } from '../../../../../redux/actions/adminActions'
 import { useHistory } from 'react-router'
-
+import UpdateHospital from '../../components/UpdateHospital';
 
 const HospitalInfo = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
@@ -24,7 +24,12 @@ const HospitalInfo = () => {
 	console.log(history,"history");
   
 	const [showModal, setShowModal] = useState(false)
-	const [initialData, setInitialData] = useState(null)
+	const [initialData, setInitialData] = useState(null);
+
+	const [modalData, setModalData] = useState({
+        visible: false,
+        data: {},
+    })
 	//**************** handle modal ***********************
 	const handleEditInfo = () => {
 		setShowModal(true)
@@ -58,7 +63,7 @@ const HospitalInfo = () => {
 								</ul>
 							</div>
 							<div className="col-sm-5 col">
-							    <a href="#0" className="btn btn-primary float-right mt-2" onClick={handleEditInfo}>
+							    <a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>setModalData({...modalData, visible:true})}>
 								    Chỉnh sửa thông tin
                                 </a>
 						    </div>
@@ -117,7 +122,21 @@ const HospitalInfo = () => {
 										{hospitalInfo.about}
 									</div>
 								</Col>
-								
+								<UpdateHospital
+									modalData={modalData}
+									handleOk={()=>{
+										setModalData({
+											...modalData,
+											visible: !modalData.visible,
+										})
+									}}
+									handleClose={()=>{
+										setModalData({
+											...modalData,
+											visible: !modalData.visible,
+										})
+									}}
+								/>
 								<Modal
 								visible={showModal}
 								title="Xác nhận thông tin"

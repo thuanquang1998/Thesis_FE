@@ -5,16 +5,40 @@ import {useDispatch, useSelector} from 'react-redux'
 import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SidebarNav from '../../../../components/SideBar';
-import { get_specialities_system } from '../../../../../redux/actions/adminActions';
+import LoadingTop from '../../../../components/loadingTop';
+import adminAPI from '../../../../../api/adminAPI';
+import CreateSpec from './CreateSpec';
+import { useSnackbar } from 'notistack';
 
 const SpecialitiesRoot = () => {
-	const dispatch = useDispatch()
+    const { enqueueSnackbar } = useSnackbar();
+
 	const [show, setShow] = useState(null)
-	const specialities = useSelector(state=>state.admin.specialities_system)
-	console.log('specialities :>> ', specialities);
+	
+	const [specSystem, setSpecSystem] = useState([]);
+	const [loadingPage, setLoadingPage] = useState(true);
+
+	const [modalData, setModalData] = useState({
+        visible: false,
+        data: {},
+    })
 	useEffect(()=> {
-		dispatch(get_specialities_system())
+		// dispatch(get_specialities_system())
+		get_specialities_system();
 	},[])
+	const get_specialities_system = async () => {
+		setLoadingPage(true);
+		try {
+			const response = await adminAPI.get_speacialities();
+			if(response.error) throw new Error("error");
+			console.log('response :>> ', response);
+			setSpecSystem(response.data);
+			setLoadingPage(false);
+		} catch (error) {
+			console.log('error get_specialities_system:>> ', error);
+			setLoadingPage(false);
+		}
+	}
 
 	const new_columns = [
 		{
@@ -30,38 +54,47 @@ const SpecialitiesRoot = () => {
 		{
 			title: 'Số bác sĩ',
 			render: (text, record) => (            
-			  <h4 className="table-avatar">
-				{Math.random(1,10),1}
-			  </h4>
-			), 
-		},
-		{
-			title: 'Số bác sĩ',
-			render: (text, record) => (            
-				<Tag color="green">Đã kích hoạt</Tag>
+			  record.num_doctor
 			), 
 		},
 		{
 		title: 'Sự kiện',
 		render: (text, record) => (
 			<div className="actions">
-				<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>handleShow('edit')}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a>
-				<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>handleShow('delete')}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
+				<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>{}}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a>
+				<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>{}}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
 			</div>
 		),
 		},		
       ]	
 
-	const handleClose = () => {
-		setShow(false)	
+	const submitCreateSpec = async (data) => {
+		setLoadingPage(true);
+		// call api
+		createApi(data);
 	}
+	const createApi = async (data) => {
+		try {
+			const response = await adminAPI.create_spec_root(data);
+			if(response.error) throw new Error(response.status);
+            enqueueSnackbar('Thêm chuyên khoa thành công', {variant: 'success'})
+			get_specialities_system();
 
-	const handleShow = (id) =>{
-		setShow(id)
+		} catch (error) {
+			console.log('error submitCreateSpec:>> ', error);
+			if(error==="403"){
+				enqueueSnackbar('Tên chuyên khoa đã tồn tại.', {variant: 'error'})
+			} else {
+				enqueueSnackbar('Tên chuyên khoa đã tồn tại.', {variant: 'error'})
+			}
+		}
+		setLoadingPage(false);
 	}
+	
 	return(
 		<>
 		<SidebarNav />
+		{loadingPage && <LoadingTop/>}
 		<div className="page-wrapper">
 			<div className="content container-fluid">
 				<div className="page-header">
@@ -74,7 +107,7 @@ const SpecialitiesRoot = () => {
 							</ul>
 						</div>
 						<div className="col-sm-5 col">
-							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>handleShow('create')}>
+							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>setModalData({...modalData, visible:true})}>
 								Thêm chuyên khoa</a>
 						</div>
 					</div>
@@ -88,80 +121,32 @@ const SpecialitiesRoot = () => {
 				}>
 					<Table className="table-striped"
 						columns={new_columns}                 
-						dataSource={specialities}
+						dataSource={specSystem}
 						ascend={true}
 						style = {{overflowX : 'auto'}}
 						rowKey={record => record.id}
 						showSizeChanger={true} 
+						loading={loadingPage}
 					/>
 				</Card>
+				<CreateSpec
+					modalData={modalData}
+					handleOk={()=>{
+						setModalData({
+							...modalData,
+							visible: !modalData.visible,
+						})
+					}}
+					handleClose={()=>{
+						setModalData({
+							...modalData,
+							visible: !modalData.visible,
+						})
+					}}
+					submitCreateSpec={submitCreateSpec}
+				/>
 			</div> 
-			{/* Create Modal */}
-			<Modal show={show === 'create'} onHide={handleClose} centered>
-				<Modal.Header closeButton>
-					<Modal.Title><h5 className="modal-title">Thêm chuyên khoa</h5></Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-				<form>
-						<div className="row form-row">
-							<div className="col-12 col-sm-6">
-								<div className="form-group">
-									<label>Tên chuyên khoa</label>
-									<input type="text" className="form-control" />
-								</div>
-							</div>
-							<div className="col-12 col-sm-6">
-								<div className="form-group">
-									<label>Logo chuyên khoa</label>
-									<input type="file"  className="form-control" />
-								</div>
-							</div>
-							
-						</div>
-						<button type="submit" className="btn btn-primary btn-block">Lưu thay đổi</button>
-					</form>
-				</Modal.Body>
-			</Modal>
-			{/* Create Modal */}
-			{/* Edit Modal */}
-			<Modal show={show === 'edit'} onHide={handleClose} centered>
-				<Modal.Header closeButton>
-					<Modal.Title><h5 className="modal-title">Sửa chuyên khoa</h5></Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-				<form>
-						<div className="row form-row">
-							<div className="col-12 col-sm-6">
-								<div className="form-group">
-									<label>Tên chuyên khoa</label>
-									<input type="text" className="form-control" />
-								</div>
-							</div>
-							<div className="col-12 col-sm-6">
-								<div className="form-group">
-									<label>Logo chuyên khoa</label>
-									<input type="file"  className="form-control" />
-								</div>
-							</div>
-							
-						</div>
-						<button type="submit" className="btn btn-primary btn-block">Lưu thay đổi</button>
-					</form>
-				</Modal.Body>
-			</Modal>
-			{/* Edit Modal */}
-			{/* Delete Modal */}
-			<Modal show={show === 'delete'} onHide={handleClose} centered>
-				<Modal.Body className="text-center">
-					<div className="form-content p-2">
-						<h4 className="modal-title">Xóa chuyên khoa</h4>
-						<p className="mb-4">Bạn có chắc muốn xóa chuyên khoa này?</p>
-						<button type="button" className="btn btn-primary">OK </button>
-						<button type="button" className="btn btn-danger" data-dismiss="modal" onClick={handleClose}>Đóng</button>
-					</div>
-				</Modal.Body>
-			</Modal>
-			{/* Delete Modal */}
+			
 		</div>
 	</>         
 	)
