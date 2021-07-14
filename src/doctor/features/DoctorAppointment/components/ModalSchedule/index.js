@@ -7,7 +7,7 @@ function ModalSchedule(props) {
     return (
         <Modal 
             title="Xem lịch khám" 
-            width={1000}
+            width={600}
             visible={modalData.visible} 
             onOk={handleOk} 
             onCancel={handleClose}

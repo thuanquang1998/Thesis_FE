@@ -6,6 +6,8 @@ import ModalSchedule from '../../../../../doctor/features/DoctorAppointment/comp
 import ChangeSchedule from '../ChangeSchedule';
 import { useHistory } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
+import doctorAPI from '../../../../../api/doctorAPI';
+import ViewResultSchedule from '../ViewResultSchedule';
 const { Option } = Select;
 
 function ScheduleCurrent(props) {
@@ -21,6 +23,10 @@ function ScheduleCurrent(props) {
     })
     // modal view schedule
     const [modalData, setModalData] = useState({
+        visible: false,
+        data: {},
+    })
+    const [modalResult ,setModalResult] = useState({
         visible: false,
         data: {},
     })
@@ -181,14 +187,7 @@ function ScheduleCurrent(props) {
                 <div className="actions">
                     {record.status==="checked"?
                         <Button 
-                            onClick={()=>{
-                                const data = record;
-                                // setModalReExam({
-                                //     ...modalReExam,
-                                //     visible: true,
-                                //     data: {...data}
-                                // })
-                            }} 
+                            onClick={()=>onViewResult(record.id)} 
                             type="primary" 
                             style={{marginRight:"5px"}}
                         >
@@ -237,7 +236,26 @@ function ScheduleCurrent(props) {
             ),
 		},		
 	]
-    
+    const onViewResult  = (id) => {
+        getCheckedAppointment(id);
+    }
+    const getCheckedAppointment = async (id) => {
+        try {
+            const response = await doctorAPI.get_checked_appointment(id);
+            if(response.error) throw new Error("error");
+            // convert data schedule
+            // const _data = {
+            //     doctorName: response.data.appointmentInfo
+            // }
+            setModalResult({
+                ...modalResult,
+                visible: true,
+                data: {...response.data}
+            })
+        } catch (error) {
+            console.log('error :>> ', error);
+        }
+    }
     return (
         <div>
             <Card>
@@ -303,6 +321,21 @@ function ScheduleCurrent(props) {
                     setModalData({
                         ...modalData,
                         visible: !modalData.visible,
+                    })
+                }}
+            />
+            <ViewResultSchedule
+                modalData={modalResult}
+                handleOk={()=>{
+                    setModalResult({
+                        ...modalResult,
+                        visible: !modalResult.visible,
+                    })
+                }}
+                handleClose={()=>{
+                    setModalResult({
+                        ...modalResult,
+                        visible: !modalResult.visible,
                     })
                 }}
             />

@@ -4,6 +4,8 @@ import DoctorSidebar from '../../../../components/DoctorSideBar';
 import { Link } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import './style.css'
+import moment from 'moment';
 
 const { Option } = Select;
 const INIT_DATA = {
@@ -21,6 +23,7 @@ const INIT_DATA = {
 }
 function InfoSchedule(props) {
     const {data} = props;
+    const {patientInfo, appointmentInfo} = data;
     const [initData, setInitData] = useState({...INIT_DATA});
     const [loadingInitData, setLoadingInitData] = useState(true)
     
@@ -50,132 +53,55 @@ function InfoSchedule(props) {
     
     
     return (
-        <div>
-            <Card>
-                {!loadingInitData &&
-                <Form
-                    labelCol={{
-                        span: 8,
-                    }}
-                    wrapperCol={{
-                        span: 24,
-                    }}
-                    layout="vertical"
-                    size="large"
-                    initialValues={
-                        initData
-                    }
-                >   
-                    <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Thông tin bệnh nhân:</h4>
-                    <Row style={{width: '100%' }} gutter={[8,8]}>
-                        <Col xs={{span:12}} sm={{span:12}} md={{span:12}}>
-                            <Form.Item 
-                                name="name"
-                                label="Tên bệnh nhân"
-                            >
-                                <Input disabled/>
-                            </Form.Item> 
-                            <Form.Item 
-                                name="phone"
-                                label="Số điện thoại"
-                            >
-                                <Input disabled/>
-                            </Form.Item> 
-                           
-                        </Col>
-                        <Col xs={{span:12}} sm={{span:12}} md={{span:12}}>
-                            <Form.Item 
-                                name="sex"
-                                label="Giới tính"
-                            >
-                                <Input disabled/>
-                            </Form.Item> 
-                            <Form.Item 
-                                name="address"
-                                label="Địa chỉ"
-                            >
-                                <Input.TextArea multiple disabled/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Thông tin lịch khám:</h4>
-                    <Row style={{width: '100%' }} gutter={[8,8]}>
-                        <Col xs={{span:12}} sm={{span:12}} md={{span:12}}>
-                            <Form.Item 
-                                name="doctorName"
-                                label="Bác sĩ"
-                            >
-                                <Input disabled/>
-                            </Form.Item> 
-                            <Form.Item 
-                                name="typeSchedule" 
-                                label="Loại lịch khám"
-                            >
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
-                        <Col xs={{span:12}} sm={{span:12}} md={{span:12}}>
-                            <Form.Item 
-                                name="hospital"
-                                label="Bệnh viện"
-                            >
-                                <Input disabled/>
-                            </Form.Item> 
-                            <Form.Item 
-                                name="addressHospital"
-                                label="Địa chỉ"
-                            >
-                                <Input.TextArea multiple disabled/>
-                            </Form.Item> 
-                        </Col>
-                    </Row>
-                    {initData && <div></div>}
-                    <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Kết quả khám lần trước:</h4>
-                    <Row style={{width: '100%' }} gutter={[8,8]}>
-                        <Col xs={{span:12}} sm={{span:12}} md={{span:12}}>
-                            <Form.Item 
-                                name={["clinical","heartbeat"]}
-                                label="Bác sĩ"
-                            >
-                                <Input/>
-                            </Form.Item> 
-                            <Form.Item 
-                                name={["clinical","temperature"]}
-                                label="Phòng khám"
-                            >
-                                <Input/>
-                            </Form.Item> 
-                            <Form.Item 
-                                name={["clinical","weight"]}
-                                label="Ngày lập khám"
-                            >
-                                <Input/>
-                            </Form.Item> 
-                        </Col>
-                        <Col xs={{span:12}} sm={{span:12}} md={{span:12}}>
-                            <Form.Item 
-                                name={["clinical","bloodPressure"]}
-                                label="Loại lịch khám"
-                            >
-                                <Input/>
-                            </Form.Item>
-                            <Form.Item 
-                                name={["clinical","breathing"]} 
-                                label="Tái khám"
-                            >
-                                <Input/>
-                            </Form.Item>
-                            <Form.Item 
-                                name={["clinical","height"]}
-                                label="Chiều cao"
-                            >
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>}
-            </Card>
-     
+        <div className="info-schedule">
+            <Row gutter={[20,20]}>
+                <Col span={24} style={{textAlign:'center'}}>
+                    <p className="titlee">Thông tin bệnh nhân:</p>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bệnh nhân:</div>
+                        <div className="col-sm-8 text-sm-left" >{patientInfo.name||""}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Ngày sinh</div>
+                        <div className="col-sm-8 text-sm-left">{moment(patientInfo.birthDay).format('DD-MM-YYYY')}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
+                        <div className="col-sm-8 text-sm-left">{patientInfo.address}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Số điện thoại liên hệ</div>
+                        <div className="col-sm-8 text-sm-left">{patientInfo.phone}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Giới tính</div>
+                        <div className="col-sm-8 text-sm-left">{patientInfo.gender==="male"?"Nam":"Nữ"}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Lý do khám</div>
+                        <div className="col-sm-8 text-sm-left">{patientInfo.medicalRecordSumanry}</div>
+                    </div>
+                </Col>
+                <Col span={24} style={{textAlign:'center'}}>
+                    <p className="titlee">Thông tin lịch khám:</p>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bệnh viện</div>
+                        <div className="col-sm-8 text-sm-left">{appointmentInfo.location.hospitalName}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
+                        <div className="col-sm-8 text-sm-left">{appointmentInfo.location.hospitalAddress}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bác sĩ</div>
+                        <div className="col-sm-8 text-sm-left">{appointmentInfo.doctorName}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Phòng</div>
+                        <div className="col-sm-8 text-sm-left">{appointmentInfo.location.room}</div>
+                    </div>
+                </Col>
+            </Row>
         </div>
     );
 }

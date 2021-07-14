@@ -68,7 +68,7 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={Specialities} path="/admin/hospital/chuyen-khoa" exact/>
                         <PrivateRouteAdmin component={Reviews} path="/admin/hospital/danh-gia" exact/>
                         <PrivateRouteAdmin component={CreateDoctor} path="/admin/hospital/nhan-vien/them" exact/>
-                        <PrivateRouteAdmin component={ScheduleWork} path="/admin/hospital/lich-lam-viec" exact/>
+                        <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/hospital/lich-lam-viec" exact/>
                         <PrivateRouteAdmin component={AgentTest} path="/admin/hospital/agent" exact/>
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/hospital/lich-lam-viec/:id" exact/>
 

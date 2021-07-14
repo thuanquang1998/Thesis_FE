@@ -1,6 +1,6 @@
 import { Button, Card, Col, DatePicker, Form, Input, Radio, Row, Select, Steps } from 'antd'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import ReactQuill from 'react-quill' // ES6
 import { Link, useHistory } from 'react-router-dom'
 import adminAPI from '../../../../../api/adminAPI'
@@ -30,6 +30,10 @@ const CreateDoctor = () => {
     const [ loadingPage, setLoadingPage ] = useState(false);
     const [ listSpec, setListSpec ] = useState([]);
 
+
+    const [fileAvatar, setFileAvatar] = useState(null);
+    const fileInput = useRef(null);
+
     const [ submitData, setSubmitData ] = useState({...INIT_DATA})
 
     useEffect(()=> {
@@ -52,6 +56,12 @@ const CreateDoctor = () => {
         })()
     },[])
 
+    const onChangeAvatar = () => {
+        let { current } = fileInput;
+        let file = current.files;
+        setFileAvatar(file[0])
+    }
+
     const create_hos = async (data) => {
         try {
             const response = await adminAPI.create_hospital(data);
@@ -62,8 +72,10 @@ const CreateDoctor = () => {
     }
     
     const onHandleSubmitForm = (data) => {
+        const _submitData = new FormData();
+        _submitData.append("image", fileAvatar);
+
         const _data = {
-            ...submitData,
             hopitalId: JSON.parse(localStorage.getItem('currentAdmin')).hospital.id,
             fullName: data.fullName,
             sex: data.sex,
@@ -74,9 +86,12 @@ const CreateDoctor = () => {
             about: "Là một bác sĩ giỏi, tận tâm, có trách nhiệm.",
             title: data.title,
         }
-        
-        console.log('_data :>> ', _data);
-        // createDoctor(_data)
+
+        for (const x in _data) {
+            _submitData.append(`${x}`, _data[x]);
+        }
+        console.log('_submitData :>> ', _submitData);
+        createDoctor(_submitData)
     }
     const createDoctor = async (data) => {
         setLoadingPage(true)
@@ -84,7 +99,8 @@ const CreateDoctor = () => {
             const response = await adminAPI.create_doctor(data);
             console.log('response :>> ', response);
             if(response.error) throw new Error(response.errors[0].message);
-            enqueueSnackbar('Tạo bác sĩ thành công', {variant: 'success'})
+            enqueueSnackbar('Tạo bác sĩ thành công', {variant: 'success'});
+            // reset form
             history.push('/admin/hospital/nhan-vien')
 
         } catch (error) {
@@ -167,8 +183,13 @@ const CreateDoctor = () => {
                             </Col>
                             <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                                 <Form.Item name="avatar" label="Ảnh đại diện:" >
-                                    {/* <Input className="input" placeholder="Email"/> */}
-                                    <input type="file"/>
+                                    <input 
+                                        // multiple
+                                        type="file" 
+                                        accept="image/png, image/jpeg"
+                                        ref={fileInput}
+                                        onChange={onChangeAvatar}
+                                    />
                                 </Form.Item>
                                 <Form.Item name="title" label="Chức danh:" rules={[{required: true, message: 'Nhập chức danh'}]}>
                                     <Input className="input" placeholder="Bác sĩ"/>

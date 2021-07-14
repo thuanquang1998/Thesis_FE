@@ -6,7 +6,7 @@ import ReExamination from '../ReExamination';
 import { useHistory } from 'react-router-dom';
 
 function ScheduleCurrent(props) {
-    const {status, changeStatus} = props;
+    const {status, changeStatus, viewSchedule} = props;
     const history = useHistory();
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
@@ -106,6 +106,7 @@ function ScheduleCurrent(props) {
         }
         return <Tag style={{ backgroundColor: `${color}` }}>{str}</Tag>
     }
+   
     const columns = [
         {
 			title: 'Bệnh nhân',
@@ -159,14 +160,12 @@ function ScheduleCurrent(props) {
                         :
                         <>
                             <Button 
-                                onClick={()=>{
-                                    const data = record.fullData;
+                                onClick={()=>
                                     setModalData({
-                                        ...modalData,
-                                        visible: true,
-                                        data: {...data}
-                                    })
-                                }} 
+                                    ...modalData,
+                                    visible: true,
+                                    data: {...record.fullData}
+                                })} 
                                 type="primary" 
                                 style={{marginRight:"5px"}}
                             >

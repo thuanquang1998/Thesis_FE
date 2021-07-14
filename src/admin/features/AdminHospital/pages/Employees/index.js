@@ -121,11 +121,8 @@ const Employees = () => {
 							columns={new_columns}
 							dataSource={listEmployees} 
 							loading={loadingPage}
-							/>
-							<br />
-							<div className="d-flex flex-row-reverse">
-							</div>
-							<br />
+							pagination={{position:["bottomCenter"]}}
+						/>
 					</Card>
                 </div>
 				

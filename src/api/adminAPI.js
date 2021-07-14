@@ -91,8 +91,14 @@ class adminAPI{
 
     // create new spec
     create_spec_root(data) {
-        console.log("2222222222222222222");
         return http.post('/spec/create', data).then(res=> res.data).catch(err=> err.response.data)
+    }
+
+    // lay review cuar benh vient
+    get_review_hospital(id){
+        return http.get(`hospitals/${id}/doctor_rate`)
+            .then(res=>res.data)
+            .catch(err => err.response.data)
     }
 
 

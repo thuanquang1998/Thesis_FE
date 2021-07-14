@@ -96,6 +96,12 @@ const DoctorAppointment = (props) =>{
             currentStatus: 2,
         });
     }
+
+    const viewSchedule = (id) => {
+        // setLoadingPage(true);	
+		// getScheduleById(id);
+    }
+   
     return(
         <div>
             {loadingPage && <LoadingTop/>}
@@ -138,6 +144,7 @@ const DoctorAppointment = (props) =>{
                                         status={reExam.currentStatus}
                                         changeStatus={changeStatusCurrentSchedule}
                                         reExamSuccess={handleReExamSuccess}
+                                        viewSchedule={viewSchedule}
                                     />
                                 </TabPane>
                                 <TabPane tab="Lịch khám sắp diễn ra" key="4">

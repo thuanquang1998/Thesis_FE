@@ -1,5 +1,4 @@
-import { Card } from '@material-ui/core'
-import { Badge, Button, Table, Tag } from 'antd'
+import { Badge, Button, Table, Tag, Card } from 'antd'
 import React, {useState, useEffect} from 'react'
 import SidebarNav from '../../../../components/SideBar'
 import AddEmployee from '../../components/Modal/AddEmployee';
@@ -8,6 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import LoadingTop from '../../../../components/loadingTop';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import maleLogo from   '../../../../assets/img/male_logo.png';
+import femaleLogo from '../../../../assets/img/female_logo.png';
+import FilterDoctorAdmin from '../../components/FilterDoctorAdmin';
+
 
 const ScheduleWork = () => {
 	const history = useHistory();
@@ -15,24 +18,45 @@ const ScheduleWork = () => {
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [listEmployees, setListEmployees] = useState([]);
 
+	const [filter, setFilter] = useState({
+		searchName: "",
+		searchSpec: "",
+	})
+
 	useEffect(()=> {
+		const {searchName, searchSpec} = filter;
+		
 		(async ()=>{
 			try {
 				const response = await adminAPI.get_doctors_of_hospital(hospitalInfo.id);
 				if(response.error) throw new Error(response.errors[0].message);
 				const {data} = response.data;
 				const _data = data.map(item=>{
+					console.log('item :>> ', item);
 					const _item = {
 						name: item.fullName,
 						specialization: item.spec_detail.name,
+						spec_id: item.spec_detail._id,
 						id: item._id,
 						phone: item.phone,
 						email: item.email,
-						typeAccount: 'Bác sĩ'
+						typeAccount: 'Bác sĩ',
+						sex: item.sex,
 					}
 					return _item;
 				})
-				setListEmployees(_data)
+				// filterData
+				const filterName = _data.filter(item=>{
+					const _search = searchName||"";
+					const checkName = item.name.toLowerCase().includes(_search.toLowerCase());
+					return checkName;
+				})
+				const filterSpec = filterName.filter(item=>{
+					const checkName = item.spec_id.toLowerCase().includes(searchSpec.toLowerCase());
+					return checkName;
+				})
+				// const data
+				setListEmployees(filterSpec)
 			} catch (error) {
 				console.log(`error.message`, error.message)
 			}
@@ -41,7 +65,11 @@ const ScheduleWork = () => {
 			}, 300);
 		})();
 		
-	},[])
+	},[filter])
+	const filterData = (list, filter) => {
+		const _list = [...list];
+		const filterName = _list.name.toLowerCase().includes()
+	}
 
 	const handleViewSchedule = (record) => {
 		console.log('record :>> ', record);
@@ -64,8 +92,16 @@ const ScheduleWork = () => {
 			dataIndex:'name',
 			render: (text, record) => (
 				<div>
-					<i className='fa fa-user' style={{fontSize:'20px', marginRight:'10px'}}></i>
-					<span>{text}</span>
+					{record.sex==="male"?
+						<div style={{width:'25px', height:"25px", float: 'left'}}>
+							<img src={maleLogo} alt="male" style={{width:'100%', height:'100%'}}/>
+						</div>:
+						<div style={{width:'25px', height:"25px", float: 'left'}}>
+							<img src={femaleLogo} alt="female" style={{width:'100%', height:'100%'}}/>
+						</div>
+					}
+					{/* <i className='fa fa-user' style={{fontSize:'20px', marginRight:'10px'}}></i> */}
+					<span style={{fontWeight:"500", marginLeft:"10px"}}>{text}</span>
 				</div>
 			),
           	fixed: 'left',
@@ -86,13 +122,6 @@ const ScheduleWork = () => {
 		  key:'email1'
         },
         {
-          title: 'Loại tài khoản',
-		  dataIndex: 'typeAccount',
-		  key:'typeAccount1', 
-		  render: (text) => text==='Bác sĩ'?(<Tag color="green">{text}</Tag>):(<Tag color="purple">{text}</Tag>),
-		//   sorter: (a, b) => 
-        },
-        {
           title: 'Lịch làm việc',
           key: 'id1',
           render: (text, record) => (
@@ -103,7 +132,15 @@ const ScheduleWork = () => {
           fixed: 'right',
           width: 170,
         },
-      ]
+    ]
+	const handleSearchName  = (data) => {
+		setFilter({...filter, searchName: data});
+		setLoadingPage(true);
+	}
+	const handleSearchSpec  = (data) => {
+		setFilter({...filter, searchSpec: data});
+		setLoadingPage(true);
+	}
     return (
         <>
             <SidebarNav/>
@@ -113,10 +150,10 @@ const ScheduleWork = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-7 col-auto">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách bác sĩ</h3>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách lịch làm việc</h3>
 								<ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
-									<li className="breadcrumb-item active">Danh sách bác sĩ</li>
+									<li className="breadcrumb-item active">Danh sách lịch làm việc</li>
 								</ul>
 							</div>
 							<div className="col-sm-5 col">
@@ -124,22 +161,22 @@ const ScheduleWork = () => {
 						    </div>
 						</div>
 					</div>
-                    
-                    <Card 
-						title={<>Danh sách nhân viên <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
-					>
+					<Card>
+						<FilterDoctorAdmin
+							onSearchName={handleSearchName}
+							onSearchSpec={handleSearchSpec}
+						/>
 						<Table
 							bordered={true}
 							columns={new_columns}
 							dataSource={listEmployees} 
 							loading={loadingPage}
 							rowKey="name"
+							pagination={{position:["bottomCenter"]}}
 						/>
-						<br />
-						<div className="d-flex flex-row-reverse">
-						</div>
-						<br />
 					</Card>
+
+					
                 </div>
 				
             </div>

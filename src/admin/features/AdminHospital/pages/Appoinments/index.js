@@ -1,7 +1,7 @@
-import { Badge, Button, Table, Tag, Form, Select, Row, Card, Col } from 'antd';
+import { Badge, Button, Table, Tag, Form, Select, Row, Card, Col, Modal } from 'antd';
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import { Modal } from 'react-bootstrap';
+// import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SidebarNav from '../../../../components/SideBar';
 import adminAPI from '../../../../../api/adminAPI';
@@ -9,17 +9,30 @@ import LoadingTop from '../../../../components/loadingTop';
 import { useSnackbar } from 'notistack';
 import Swal from "sweetalert2";
 import moment from 'moment';
-
+import FilterDoctorAdmin from '../../components/FilterDoctorAdmin';
 import logoDoctor from '../../../../assets/img/male_logo.png'
+import ModalSchedule from '../../../../../doctor/features/DoctorAppointment/components/ModalSchedule';
+import doctorAPI from '../../../../../api/doctorAPI';
 
 
 const Appoinments = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
+    const { enqueueSnackbar } = useSnackbar();
 	const [listSchedule, setListSchedule] = useState([]);
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [show, setShow] = useState(null);
 	const [viewItem, setViewItem] = useState({});
 
+	const [filter, setFilter] = useState({
+		searchName: "",
+		searchSpec: "",
+	})
+
+	// modal xem lịch
+	const [modalData, setModalData] = useState({
+        visible: false,
+        data: {},
+    })
 
 	useEffect(()=> {
 		const id = hospitalInfo._id;
@@ -30,9 +43,9 @@ const Appoinments = () => {
 		try {
 			const response = await adminAPI.get_appointment_of_hospital(id);
 			if(response.error) throw new Error(response.errors[0].message);
-			console.log('response.data :>> ', response.data);   
 			const _data = response.data.map(x=>{
 				const { appointmentInfo, patientInfo, bookerInfo} = x;
+				
 				const obj = {
 					id: x.id,
 					patient: patientInfo.name,
@@ -54,6 +67,8 @@ const Appoinments = () => {
 					genderPatient: patientInfo.gender,
 					phonePatient: patientInfo.phone,
 					medicalRecordSumanry: patientInfo.medicalRecordSumanry,
+
+					fullData: {...x}
 				}
 				return obj
 			}) 
@@ -64,18 +79,27 @@ const Appoinments = () => {
 		}
 	}
 
-	const handleClose = () => {
-		setShow(false)	
+	const handleViewSchedule = (id) => {
+		setLoadingPage(true);	
+		getScheduleById(id);
 	}
 
-	const handleShow = (id) =>{
-		setShow(id)
-	}
-
-	const handleViewItem = (data) => {
-		console.log('data :>> ', data);
-		setViewItem(data);
-		handleShow('view');
+	const getScheduleById =  async (id) => {
+		try {
+			const response = await doctorAPI.get_appointment_by_id(id);
+			if(response.error) throw new Error("error");
+			setModalData({
+				...modalData,
+				visible: true,
+				data: {...response.data}
+			})
+			setLoadingPage(false)
+		} catch (error) {
+			console.log('error :>> ', error);
+			setLoadingPage(false)
+			enqueueSnackbar('Lịch khám đã bị hủy', {variant: 'error'});
+			getListSchedule(hospitalInfo._id);
+		}
 	}
 
 	const columns = [	
@@ -123,12 +147,24 @@ const Appoinments = () => {
             title: 'Sự kiện',
             render: (text, record) => (
                 <div className="actions">
-                    <a href="#0" className="btn btn-sm bg-success-light" onClick={()=>handleViewItem(record)}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Xem</a>
+                    <a href="#0" 
+						className="btn btn-sm bg-success-light" 
+						onClick={()=>handleViewSchedule(record.id)}
+					>
+					<i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Xem
+					</a>
                 </div>
             ),
 		},		
 	]
-	
+	const handleSearchName  = (data) => {
+		setFilter({...filter, searchName: data});
+		setLoadingPage(true);
+	}
+	const handleSearchSpec  = (data) => {
+		setFilter({...filter, searchSpec: data});
+		setLoadingPage(true);
+	}
     return (
         <>
             <SidebarNav/>
@@ -151,6 +187,10 @@ const Appoinments = () => {
 						<Card 
 							title={<>Danh sách lịch khám <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
 						>
+							<FilterDoctorAdmin
+								onSearchName={handleSearchName}
+								onSearchSpec={handleSearchSpec}
+							/>
 							<Table className="table-striped"
 								columns={columns}                 
 								dataSource={listSchedule}
@@ -163,7 +203,23 @@ const Appoinments = () => {
 						</Card>
 					</div>
                 </div>
-				<Modal show={show === 'view'} onHide={handleClose} centered className="modal-xl">
+				<ModalSchedule
+					modalData={modalData}
+					handleOk={()=>{
+						setModalData({
+							...modalData,
+							visible: !modalData.visible,
+						})
+					}}
+					handleClose={()=>{
+						setModalData({
+							...modalData,
+							visible: !modalData.visible,
+						})
+					}}
+				/>
+
+				{/* <Modal show={show === 'view'} onHide={handleClose} centered className="modal-xl">
 					<Modal.Header closeButton>
 						<Modal.Title><h5 className="modal-title">Sửa chuyên khoa</h5></Modal.Title>
 					</Modal.Header>
@@ -227,7 +283,7 @@ const Appoinments = () => {
 						</Col>
 					</Row>
 				</Modal.Body>
-			</Modal>
+			</Modal> */}
             </div>
 
         </>

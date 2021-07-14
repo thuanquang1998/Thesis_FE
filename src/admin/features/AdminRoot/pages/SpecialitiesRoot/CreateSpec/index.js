@@ -54,7 +54,7 @@ function CreateSpec(props) {
                     label="Logo chuyên khoa"
                 >
                     <input 
-                        multiple
+                        // multiple
                         type="file" 
                         accept="image/png, image/jpeg"
                         ref={fileInput}

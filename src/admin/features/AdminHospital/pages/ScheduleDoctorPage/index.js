@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import StickyBox from "react-sticky-box";
-import {Card, DatePicker, Space, Modal, Popover, Select, Row, Col, Form} from 'antd';
-import moment from 'moment';
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { makeStyles } from '@material-ui/core/styles';
-import SidebarNav from '../../../../components/SideBar';
-import LoadingTop from '../../../../components/loadingTop';
+import { Card, Popover, Select } from 'antd';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import doctorAPI from '../../../../../api/doctorAPI';
-
+import adminAPI from '../../../../../api/adminAPI';
+import LoadingTop from '../../../../components/loadingTop';
+import SidebarNav from '../../../../components/SideBar';
+import FilterDoctorWork from './FilterDoctorWork';
 
 moment.updateLocale('en', {
         months : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
@@ -41,12 +40,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ScheduleDoctorPage = ({location}) =>{
-    const [dataDoctor, setDataDoctor] = useState(location.state.data);
-    const [listDoctor, setListDoctor] = useState(location.state.listDoctor);
-
-    const [loadingPage, setLoadingPage] = useState(false);
-    const [events, setEvents] = useState([]);
-
     const classes = useStyles();
     let formats = {
         dayFormat: (date, culture, localizer) =>
@@ -54,11 +47,78 @@ const ScheduleDoctorPage = ({location}) =>{
         weekdayFormat: (date, culture, localizer) =>
             localizer.format(date, 'dddd', culture),
     }
-    const localizer = momentLocalizer(moment)
-    useEffect(()=> {
-        getTimeWorks(dataDoctor.id);
-    },[])
+    const localizer = momentLocalizer(moment);
 
+    const [currentDoctor, setCurrentDoctor] = useState({});
+    
+    const [listDoctor, setListDoctor] = useState([]);
+    const [loadDoctor, setLoadDoctor] = useState(true);
+    const [listSpec, setListSpec] = useState([]);
+    const [loadSpec, setLoadSpec] = useState(true);
+
+    const [valueDoctor, setValueDoctor] = useState(null);
+    const [renderDoctor, setRenderDoctor] = useState([])
+
+    const [filter, setFilter] = useState({
+        spec: "",
+        doctor: "",
+    });
+
+    const [dataDoctor, setDataDoctor] = useState({id:"60537e1d206e99fe96d8d950"});
+    
+
+    const [loadingPage, setLoadingPage] = useState(false);
+    
+    const [events, setEvents] = useState([]);
+
+    
+    useEffect(()=> {
+        // getTimeWorks(dataDoctor.id);
+        getListSpec();
+        getListDoctor();
+    },[])
+    const getListSpec = async () => {
+        console.log('getListSpec');
+		try {
+            let _result = [];
+			const response = await adminAPI.get_spec_of_hospital(JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
+			if(!response.error){
+                _result = [...response.data];
+			}
+			else {
+                _result = [];
+			}     
+            setListSpec(_result);
+            setLoadSpec(false);
+		} catch (error) {
+            console.log('error.message :>> ', error.message);
+		}
+	}
+    const getListDoctor = async () => {
+        console.log('getListDoctor');
+        try {
+            const response = await adminAPI.get_doctors_of_hospital(JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
+            if(response.error) throw new Error(response.errors[0].message);
+            const {data} = response.data;
+            const _data = data.map(item=>{
+                const _item = {
+                    name: item.fullName,
+                    specialization: item.spec_detail.name,
+                    spec_id: item.spec_detail._id,
+                    id: item._id,
+                    phone: item.phone,
+                    email: item.email,
+                    typeAccount: 'Bác sĩ'
+                }
+                return _item;
+            })
+            setRenderDoctor(_data);
+            setListDoctor(_data);
+            setLoadDoctor(false)
+        } catch (error) {
+            console.log(`error.message`, error.message)
+        }
+    }
     const getTimeWorks = async (id) => {
         try {
             const response = await doctorAPI.get_doctor_timework(id);
@@ -87,15 +147,31 @@ const ScheduleDoctorPage = ({location}) =>{
         }, 300);
     }
 
-    const handleChangeDoctor = (e) => {
-        setLoadingPage(true);
-        const findDoctor = listDoctor.filter(x=>x.id===e);
-        setDataDoctor({
-            ...dataDoctor,
-            name: findDoctor[0].name,
-            id: findDoctor[0].id,
-        })
-        getTimeWorks(e);
+    const handleChangeSpec = (value) => {
+
+        setLoadDoctor(true);
+        let _listDoctor = [];
+        if(value==="all") {
+            _listDoctor = [...listDoctor];
+        } else {
+            _listDoctor = listDoctor.filter((item)=>{
+                const check = item.specialization===value;
+                return check;
+            });
+        }
+        setTimeout(() => {
+            setRenderDoctor(_listDoctor);
+            setLoadDoctor(false);
+        }, 500);
+        setValueDoctor(null);
+        setEvents([]);
+    }
+
+    const handleChangeDoctor = (value) => {
+        setValueDoctor(value);
+        // call api
+        console.log('value :>> ', value);
+        getTimeWorks(value);
     }
     return (
         <div className={classes.root}>
@@ -106,23 +182,33 @@ const ScheduleDoctorPage = ({location}) =>{
 					<div className="page-header">
 						<div className="row header-row" style={{width:"100%", height:"100%"}}>
 							<div className={`col-sm-7 col-auto`}>
-								<h3 className="page-title" style={{paddingTop:"20px"}}>{`Lịch làm việc Bác sĩ ${dataDoctor.name}`}</h3>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>{`Lịch làm việc Bác sĩ`}</h3>
 								<ul className="breadcrumb">
 									<li className="breadcrumb-item active">Lịch làm việc</li>
-									<li className="breadcrumb-item active">{`Lịch làm việc Bác sĩ ${dataDoctor.name}`}</li>
+									<li className="breadcrumb-item active">{`Lịch làm việc Bác sĩ`}</li>
 								</ul>
 							</div>
-							<div className={`${classes.selectDoctor}  col-sm-5 col`} style={{width:"100%", height:"100%"}}>
-                                <label style={{paddingTop:"20px"}}>chọn bác sĩ</label>
-                                <Select placeholder="Chọn bác sĩ" onChange={handleChangeDoctor} loading={loadingPage}>
-                                    {listDoctor.map((item,index)=>(
-                                        <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
-                                    ))}
-                                </Select>
-						    </div>
+                            <div className="col-sm-5 col">
+							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>console.log("thêm lịch")}>
+								Thêm lịch</a>
+						</div>
 						</div>
 					</div>
                     <Card>
+                        <h4>Tìm bác sĩ</h4>
+                        <FilterDoctorWork
+                            filter={filter}
+                            loadData={{
+                                loadSpec: loadSpec,
+                                loadDoctor: loadDoctor,
+                            }}
+                            listSpec={listSpec}
+                            listDoctor={renderDoctor}
+                            changeSpec={handleChangeSpec}
+                            changeDoctor={handleChangeDoctor}
+                            valueDoctor={valueDoctor}
+                        />
+                        <h4>Lịch làm việc bác sĩ</h4>
                         <Calendar
                             localizer={localizer}
                             events={events}
@@ -164,6 +250,7 @@ const ScheduleDoctorPage = ({location}) =>{
                             }}
                         />
                     </Card>
+                    
                 </div>
             </div>
         </div>
