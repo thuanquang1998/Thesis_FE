@@ -1,12 +1,15 @@
-import { Button, Col, Form, Input, Modal, Row, Radio, DatePicker } from 'antd';
-import React, {useState, useEffect, useRef} from 'react';
-import ReactQuill from 'react-quill' // ES6
+import { Button, Col, DatePicker, Form, Input, Modal, Radio, Row, Spin } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactQuill from 'react-quill'; // ES6
+import '../style.css';
 
 function UpdateProfileDoctor(props) {
-    const {modalData, handleOk, handleClose} = props;
+    const {modalData, handleOk, handleClose, initData} = props;
     const [about, setAbout] = useState(null);
     const [fileAvatar, setFileAvatar] = useState(null);
     const fileInput = useRef(null);
+    const [loadingAbout, setLoadingAbout] = useState(true);
+
 
     const handleQuillChange = (data) => {
         setAbout(data);
@@ -19,35 +22,43 @@ function UpdateProfileDoctor(props) {
     const onHandleSubmit = (data) => {
         // Create a test FormData object
         const submitData = new FormData();
-        submitData.append("files", fileAvatar);
         submitData.append("about", about);
         for (const x in data) {
             submitData.append(`${x}`, data[x]);
         }
-        // call api update
-        // ===
+        submitData.append("image", fileAvatar);
+
+        props.handleUpdateProfile(submitData);
     }
-    const updateDoctorProfile = async (data) => {
-        try {
-            console.log("updateDoctorProfile");
-        } catch (error) {
-            console.log('error updateDoctorProfile:>> ', error);
+    useEffect(() => {
+        if(modalData.visible) {
+            setAbout(initData.about);
+            setTimeout(() => {
+                setLoadingAbout(false);
+            }, 300);
         }
-    }
+    }, [modalData])
     return (
-        <div>
+        <div className="modalUpdateProfile">
             <Modal 
-                title="Cập nhật thông tin" 
+                title={
+                    <p 
+                        style={{
+                            margin: 0,
+                            fontSize: '20px !important',
+                            fontWeight: '600',
+                            color: "#00d0f1",
+                        }}
+                    >
+                        Cập nhật thông tin
+                    </p>}
                 width={1000}
                 visible={modalData.visible} 
                 onOk={handleOk} 
                 onCancel={handleClose}
-                footer={[
-                    <Button key="back" onClick={handleOk}>
-                    Ok
-                    </Button>
-                ]}
+                footer={null}
             >
+                {loadingAbout? <Spin></Spin>:
                  <Form
                     labelCol={{
                         span: 24,
@@ -58,14 +69,19 @@ function UpdateProfileDoctor(props) {
                     layout="vertical"
                     size="large"
                     onFinish={onHandleSubmit}
-                    // initialValues={initData}
-                    // initialValues={obj}
+                    initialValues={initData}
                 >   
                     <Row gutter={[8,8]}>
                         <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                             <Form.Item 
-                                name="name" 
+                                name="fullName" 
                                 label="Tên"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập tên',
+                                    }
+                                ]}
                             >
                                 <Input/>
                             </Form.Item>  
@@ -75,7 +91,7 @@ function UpdateProfileDoctor(props) {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Vui lòng chọn giờ',
+                                        message: 'Vui lòng nhập email',
                                     }
                                 ]}
                             >
@@ -104,7 +120,7 @@ function UpdateProfileDoctor(props) {
                                     }
                                 ]}
                             >
-                                <Radio.Group size="large">
+                                <Radio.Group size="large" className="updateDoctorRadio">
                                     <Radio.Button value="male">Nam</Radio.Button>
                                     <Radio.Button value="female">Nữ</Radio.Button>
                                 </Radio.Group>
@@ -113,12 +129,12 @@ function UpdateProfileDoctor(props) {
                         <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                             <Form.Item name="avatar" label="Ảnh đại diện:" >
                                 <input 
-                                    multiple
                                     type="file" 
                                     accept="image/png, image/jpeg"
                                     ref={fileInput}
                                     onChange={onChangeAvatar}
                                 />
+                                <a onClick={()=>setFileAvatar(null)}>Xóa</a>
                             </Form.Item>
                             <Form.Item 
                                 name="birthday" 
@@ -149,13 +165,27 @@ function UpdateProfileDoctor(props) {
                     <Form.Item label="Giới thiệu:" className="about">
                         <ReactQuill 
                             theme="snow"
+                            value={about}
                             onChange={handleQuillChange}
+                            // value={`<p>${initData.about}</p>`}
+                            // onChange={(value)=>props.onChangeAbout(value)}
                         />
                     </Form.Item>
-                    <Form.Item label="Giới thiệu:" className="about">
-                        <Button type="primary" htmlType="submit">Submit</Button>
+                    <Form.Item className="submitButton" style={{textAlign: 'center'}}>
+                        <Button
+                            type="primary" 
+                            htmlType="submit"
+                            style={{
+                                backgroundColor: "#00d0f1",
+                                border: "none",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        >
+                            Cập nhật
+                        </Button>
                     </Form.Item>
-                </Form>
+                </Form>}
             </Modal>
         </div>
     );

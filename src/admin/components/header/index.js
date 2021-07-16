@@ -32,6 +32,9 @@ const Header = (props) => {
         case 'hospital-admin':
           setUserName('Admin Hospital');
           break;
+        case 'agent':
+          setUserName('Nhân viên hỗ trợ');
+          break;
         default:
           setUserName('User')
           break;

@@ -6,6 +6,7 @@ import {set_current_hospital} from '../../../../../redux/actions/patientActions'
 const HospitalItem = (props) => {
     const dispatch = useDispatch();
     const data = props.data;
+    console.log('props.data :>> ', props.data);
     const handleShowHospital = () => {
         // dispatch(set_current_hospital(data.id));
     }
@@ -30,10 +31,10 @@ const HospitalItem = (props) => {
                         </Col>
                     </Row>
                     {/* <Link to='/patient/cosoyte/profile'> */}
-                        <Button type="primary" style={{position:"relative", left:"40%"}} onClick={handleShowHospital}>
+                        <Button type="primary" style={{position:"relative", left:"40%"}}>
                             <Link 
                                     to={{
-                                        pathname:`/chi-tiet-benh-vien/${data.id}`,
+                                        pathname:`/chi-tiet-benh-vien/${data._id}`,
                                         state: data 
                                     }}
                             >Đặt khám
@@ -56,7 +57,7 @@ const HospitalItem = (props) => {
                         >{data.about}</p>
                     <Link 
                         to={{
-                            pathname:`/chi-tiet-benh-vien/${data.id}`,
+                            pathname:`/chi-tiet-benh-vien/${data._id}`,
                             state: data
                         }}
                     >Xem thêm...</Link>

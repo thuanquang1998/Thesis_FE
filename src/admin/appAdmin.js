@@ -21,6 +21,8 @@ import DashboardSystem from './features/AdminRoot/pages/DashboardSystem/index'
 import HospitalsPage from './features/AdminRoot/pages/HospitalsPage'
 import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot'
 import AgentTest from './features/AdminHospital/pages/AgentTest'
+import Agent from './features/AgentHospital'
+import AgentBooking from './features/AgentHospital/page/AgentBooking';
 
 const AppAdmin =({match})=>{
     const dispatch = useDispatch();
@@ -46,7 +48,7 @@ const AppAdmin =({match})=>{
                                         <DashboardSystem/>:
                                         (accountType==='hospital-admin'?
                                             <DashboardHospital/>:
-                                            <SpecialitiesRoot/>
+                                            <Agent/>
                                         )
                                     )
                                 :<Redirect to='/admin/dang-nhap'/>
@@ -69,11 +71,11 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={Reviews} path="/admin/hospital/danh-gia" exact/>
                         <PrivateRouteAdmin component={CreateDoctor} path="/admin/hospital/nhan-vien/them" exact/>
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/hospital/lich-lam-viec" exact/>
-                        <PrivateRouteAdmin component={AgentTest} path="/admin/hospital/agent" exact/>
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/hospital/lich-lam-viec/:id" exact/>
 
                         {/* agent hospital */}
-
+                        <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/agent/lich-lam-viec" exact/>
+                        <PrivateRouteAdmin component={AgentBooking} path="/admin/agent/dat-lich" exact/>
 
                     </Switch>
                 </div>

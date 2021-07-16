@@ -1,74 +1,35 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import patientAPI from '../../../../../api/patientApi';
-import districtData from '../../../../assets/data/district';
-import provinceData from '../../../../assets/data/province';
-import wardData from '../../../../assets/data/ward';
+import React, { useState } from 'react';
+import districtData from '../../../../../assets/data/district';
+import provinceData from '../../../../../assets/data/province';
+import wardData from '../../../../../assets/data/ward';
 
-function BookingForm(props) {
-    const {submitData, onSubmitForm, doctorId} = props;
-    const initData = props.initData||{};
-    console.log('initData :>> ', initData);
-    const [dataSubmit, setDataSubmit] = useState({...submitData})
-    const currentTimeNumber = new Date().getTime();
-    const [listDateValid, setListDateValid] = useState([]);
+function BookingFormAgent(props) {
+
+    const [dataSubmit, setDataSubmit] = useState({
+        time:"",
+        room: "",
+        patientInfo: {
+            name: "",
+            phone: "",
+            age: "",
+            gender: "",
+            medicalRecordSumanry: "",
+            address: ""
+        }
+    })
     const [listTimeStep, setListTimeStep] = useState([]);
-     const temp = moment('2021-05-12T04:47:07.000Z', 'YYYY-MM-DD')
-    const obj = {
-        date: "1/1/2021",
-        time: "7:30-8:00",
-        name: "aaaa",
-        phone:"bbbb",
-        address: {
-            province: "Binh Dinh",
-            district: "Hoai An",
-            ward: "An Tuong Dong",
-            street: "mmm"
-        },
-        birthday: temp,
-    }
-    
-
    
     // state for address
     const [province, setProvince]= useState("");
     const [district, setDistrict] = useState("");
 
+    const [currentTime, setCurrentTime] = useState(null)
+
     // state Bookingfor
     const [bookingFor, setBookingFor] = useState(false)
-
-    useEffect(()=> {
-
-        getTimeWorks();
-    },[])
-
-    // get time working
-    const getTimeWorks = async () => {
-        try {
-            const res = await patientAPI.get_time_works(doctorId);
-            const abc = new Date(res.data.data[0].date);
-            const current = new Date();
-            if(!res.error && !res.data.isNull) {
-                const _listDate = res.data.data;
-                const _listDateValid = _listDate.filter(x=> {
-                    const itemTimeNumber =  new Date(x.date);
-                    const _itemTimeNumber = itemTimeNumber.getTime();
-                    const diff = _itemTimeNumber*1 - currentTimeNumber*1;
-                    return diff>0;
-                })
-                setListDateValid(_listDateValid);
-            } else {
-            }
-        } catch (error) {
-            return {
-                status: "error",
-                msg: error.message
-            }
-        }
-    }
-    
 
     const onChangeProvince = (value) => {
         setProvince(value)
@@ -76,10 +37,13 @@ function BookingForm(props) {
     const onChangeDistrict = (value) => {
         setDistrict(value)
     }
+
+
     
 
     const onChangeDate = (value) => {
-        const _dateChoosed = listDateValid.filter(x=>x.date===value);
+        setCurrentTime(null);
+        const _dateChoosed = props.listDateValid.filter(x=>x.date===value);
         let room_temp = '';
         let _listTimeSlot = [];
         if(_dateChoosed.length!==0) {
@@ -96,7 +60,6 @@ function BookingForm(props) {
    
     // submit data
     const onHandleSubmit = (data) => {
-        console.log('data :>> ', data);
         const _district = data.address.district.split(" ");
         const _province = data.address.province.split(" ");
         _district.splice(0,1);
@@ -105,23 +68,21 @@ function BookingForm(props) {
             name: data.name,
             phone: data.phone,
             birthDay: moment(data.birthday).format(),
+            age: 20,
             gender: data.gender,
             medicalRecordSumanry: data.medicalRecordSumanry||'',
             address: `${data.address.street}, ${data.address.ward}, ${_district.join(" ")}, ${_province.join(" ")}`
         }
-        const bookerInfo = {
-            name: data.name_represent||"",
-            phone: data.phone_represent||""
-        };
+        // const bookerInfo = {
+        //     name: data.name_represent||"",
+        //     phone: data.phone_represent||""
+        // };
         const newData = {
             ...dataSubmit,
             patientInfo, 
-            bookerInfo,
-            bookingFor: bookingFor,
         }
-        onSubmitForm(newData);
+        props.onSubmitForm(newData);
     }
-    console.log('setListDateValid :>> ', setListDateValid);
     return (
         <Form
             labelCol={{
@@ -133,8 +94,6 @@ function BookingForm(props) {
             layout="vertical"
             size="large"
             onFinish={onHandleSubmit}
-            initialValues={initData}
-            // initialValues={obj}
         >   
             <Row gutter={[8,8]}>
                 <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
@@ -148,18 +107,6 @@ function BookingForm(props) {
                             }
                         ]}
                     >
-                        {/* <DatePicker
-                            // defaultValue={moment("2015-01-01", "YYYY-MM-DD")}
-                            format={"YYYY-MM-DD"}
-                            disabledDate={(current)=>{
-                                const listGetTime = listDateValid.map(item =>{
-                                    const time = new Date(item.date);
-                                    return time.getTime();
-                                } )
-                                console.log('listGetTime :>> ', listGetTime);
-                                return listGetTime.includes(current.valueOf());
-                            }}
-                        /> */}
                         <Select 
                             className="province"
                             placeholder="Vui lòng chọn ngày khám" 
@@ -167,7 +114,7 @@ function BookingForm(props) {
                             className="chooseDay"
                             onChange={onChangeDate}
                         >
-                            {listDateValid.map((item, idx)=> {
+                            {props.listDateValid.map((item, idx)=> {
                                 return (<Select.Option key={idx} value={item.date}>{moment(item.date).format('DD/MM/YYYY')}</Select.Option>)
                             })}
                         </Select>
@@ -190,6 +137,7 @@ function BookingForm(props) {
                             style={{ width: 200, border:"none" }} 
                             className="chooseDay"
                             onChange={(value)=>setDataSubmit({...dataSubmit, time:value})}
+                            value={currentTime}
                         >
                             {listTimeStep.length!==0 && listTimeStep.map((step, idx)=> {
                                 return (<Select.Option key={idx} value={step.time}>{step.time}</Select.Option>)
@@ -199,48 +147,6 @@ function BookingForm(props) {
                 </Col>
             </Row>
             <hr/>
-            <div className="option">
-                <Radio.Group 
-                    onChange={(e=>setBookingFor(e.target.value))} 
-                    value={bookingFor}
-                >
-                    <Radio value={false} style={{color:"#1890ff", fontWeight:"600"}}>Đặt cho bản thân</Radio>
-                    <Radio value={true} style={{color:"#1890ff", fontWeight:"600"}}>Đặt cho người thân</Radio>
-                </Radio.Group>
-            </div>
-            {bookingFor === true && <div className="info-nguoithan">
-                <h4 style={{fontWeight:"600"}}>Thông tin người đặt lịch</h4>
-                <Row gutter={[8,8]}>
-                    <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-                        <Form.Item 
-                            name="name_represent" 
-                            label="Họ và tên người đặt lịch:"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập đầy đủ thông tin',
-                                }
-                            ]}
-                        >
-                            <Input className="input" placeholder="Họ và tên bệnh nhân (bắt buộc)"/>
-                        </Form.Item>
-                    </Col>
-                    <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-                        <Form.Item 
-                            name="phone_represent" 
-                            label="Số điện thoại người đặt lịch:"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập đẩy đủ thông tin',
-                                }
-                            ]}
-                        >
-                            <Input className="input" placeholder="Số điện thoại liện hệ (bắc buộc)"/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-            </div>}
             <div className="info-benhnhan">                     
                 <h4 style={{fontWeight:"600"}}>Thông tin bệnh nhân</h4>
                 <Row gutter={[8,8]}>
@@ -313,7 +219,7 @@ function BookingForm(props) {
                                 onChange={onChangeProvince}
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }    
+                                }
                                 showSearch
                             >
                                 {Object.entries(provinceData).map(entry=> {
@@ -409,4 +315,4 @@ function BookingForm(props) {
     );
 }
 
-export default BookingForm;
+export default BookingFormAgent;

@@ -94,6 +94,7 @@ const ScheduleDoctorPage = ({location}) =>{
             console.log('error.message :>> ', error.message);
 		}
 	}
+
     const getListDoctor = async () => {
         console.log('getListDoctor');
         try {
@@ -189,9 +190,10 @@ const ScheduleDoctorPage = ({location}) =>{
 								</ul>
 							</div>
                             <div className="col-sm-5 col">
-							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>console.log("thêm lịch")}>
-								Thêm lịch</a>
-						</div>
+                                <p>adfasd</p>
+                                <a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>console.log("thêm lịch")}>
+                                    Thêm lịch</a>
+                            </div>
 						</div>
 					</div>
                     <Card>

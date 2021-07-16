@@ -1,0 +1,10 @@
+.tabScheduleDoctor .ant-tabs-tab-active{
+    background: #00d0f1 !important;
+    border-radius: 25px;
+}
+.tabScheduleDoctor .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: white !important;
+}
+.tabScheduleDoctor .ant-tabs-ink-bar{
+    display: none;
+}

@@ -3,8 +3,9 @@ import TextArea from 'antd/lib/input/TextArea'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import ReactQuill from "react-quill"
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import patientAPI from '../../../../../api/patientApi'
+import doctorAPI from '../../../../../api/doctorAPI'
 import logoDoctor from '../../../../assets/img/bsnam.jpg'
 import departLogo from '../../../../assets/img/depart.png'
 import hospitalLogo from '../../../../assets/img/hospital.png'
@@ -21,14 +22,40 @@ const DetailDoctorPage = (props) => {
     const history = useHistory();
     const patient = useSelector(state=> state.patient);
     const data = history.location.state.data;
+    console.log('data :>> ', data);
     const [reviewData, setReviewData] = useState([]);
     const [loadingReview, setLoadingReview] = useState(true);
     const [loadingPage, setLoadingPage] = useState(true);
+
+    const [doctorInfo, setDoctorInfo] = useState({
+        about: "",
+    })
+
     const [dataReview, setDataReview] = useState({
         star_num: null,
         comment: null,
     })
     const [disableButton, setDisableButton] = useState(true);
+
+
+
+    useEffect(()=> {
+        setLoadingPage(true);
+        const id = history.location.state.data._id;
+        getDoctorById(id);
+    },[])
+    const getDoctorById = async (id) => {
+        try {
+            const response = await doctorAPI.get_doctors_by_id(id);
+            if(response.error) throw new Error("Error getDoctorById");
+            console.log('response :>> ', response);
+            setDoctorInfo({...response.data.data[0]});
+            setLoadingPage(false);
+        } catch (error) {
+            setLoadingPage(false);
+        }
+    }
+
     useEffect(()=> {
         const {star_num, comment} = dataReview;
         if(star_num!==null&&comment!==null) {
@@ -118,10 +145,10 @@ const DetailDoctorPage = (props) => {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Trang chủ</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page"><Link to='/danh-sach-bac-si'>Danh sách bác sĩ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">{`${data.title} ${data.fullName}`}</li>
+                                    <li className="breadcrumb-item active" aria-current="page">{`${doctorInfo.title} ${doctorInfo.fullName}`}</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">{`${data.title} ${data.fullName}`}</h2>
+                            <h2 className="breadcrumb-title">{`${doctorInfo.title} ${doctorInfo.fullName}`}</h2>
                         </div>
                     </div>
                 </div>
@@ -133,30 +160,30 @@ const DetailDoctorPage = (props) => {
                         <Row>
                             <Col sm={{span:4, offset:10}} md={{span:4,offset:0}} lg={{span:3}} className="logoDoctor">
                                 <div>
-                                    <img src={data.avatar_image||logoDoctor} alt="logo"/>
+                                    <img src={doctorInfo.avatar_image||logoDoctor} alt="logo"/>
                                 </div>
                             </Col>
                             <Col sm={{span:24}} md={{span:15}} className="infoDoctor">
                                 <h3 className="titlee">
-                                    {`${data.title} ${data.fullName}`}
+                                    {`${doctorInfo.title} ${doctorInfo.fullName}`}
                                 </h3>
                                 <Rate value={3} />
                                 <ul className="available-info">
                                     <li>
                                         <span><img src={departLogo} alt="Nội tiết"/></span>
-                                        <span>{data.spec_detail?.name}</span>
+                                        <span>{doctorInfo.spec_detail?.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={hospitalLogo} alt="Nội tiết"/></span>
-                                        <span>{data.hospital_info?.name}</span>
+                                        <span>{doctorInfo.hospital_info?.name}</span>
                                     </li>
                                     <li>
                                         <span><img src={location} alt="Nội tiết"/></span>
-                                        <span> {data.hospital_info?.address}</span>
+                                        <span> {doctorInfo.hospital_info?.address}</span>
                                     </li>
                                     <li>
                                         <span><img src={price} alt="Nội tiết"/></span>
-                                        <span>{data.price}</span>
+                                        <span>{doctorInfo.price}</span>
                                     </li>
                                 </ul>
                             </Col>
@@ -176,7 +203,11 @@ const DetailDoctorPage = (props) => {
                             <Col sm={{span:24}} md={{span:13}}>
                                 <Card className="doctor--profile__intro" style={{minHeight:"350px"}}>
                                     <h4>Giới thiệu</h4>
-                                    <ReactQuill value={`<p>${data.about||'Là một bác sĩ giàu kinh nghiệm. Có kinh nghiệm công tác lâu năm trong lĩnh vực y tế'}</p>`} readOnly={true} theme={"bubble"} />
+                                    <ReactQuill 
+                                        value={doctorInfo.about?doctorInfo.about:'<p>Là một bác sĩ giàu kinh nghiệm. Có kinh nghiệm công tác lâu năm trong lĩnh vực y tế</p>'} 
+                                        readOnly={true} 
+                                        theme={"bubble"} 
+                                    />
                                 </Card>
                             </Col>
                             <Col sm={{span:24}} md={{span:11}}>

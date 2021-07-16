@@ -2,6 +2,8 @@ import { Badge, Button, Card, Input, Table, Tabs } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ModalSchedule from '../ModalSchedule';
+import ScheduleSearch from '../ScheduleSearch';
+
 
 function SchedulePending(props) {
     const [listSchedule, setListSchedule] = useState([]);
@@ -10,24 +12,26 @@ function SchedulePending(props) {
         visible: false,
         data: {},
     })
-    const [filterSchedule, setFilterSchedule] = useState({
-        search: "",
-        status: 1,
-        currentPage: 1,
-    })
+    const [searchName, setSearchName] = useState(null);
+
     // handle outdate schedule
     useEffect(()=> {
-        const {search, status} = filterSchedule;
         const listData = [...props.data];
-        const listUncheck = listData.filter(item=>item.status==="checking");
-        const listScheduleSearch = listUncheck.filter(item=>{
-            const name = item.patient.toUpperCase();
-            const searchS = search.toUpperCase();
-            return name.includes(searchS)
-        });
-        setListSchedule(listScheduleSearch);
-        setLoadingSchedule(false);
-    },[props.data,filterSchedule])
+        const listChecking = listData.filter(item=>item.status==="checking");
+        let _result = [];
+        if(!searchName) {
+            _result=[...listChecking];
+        } else {
+            _result = listChecking.filter(item=> {
+                return item.patient.toLowerCase().includes(searchName.toLowerCase());
+            })
+        }
+        setTimeout(() => {
+            setLoadingSchedule(false);
+            setListSchedule(_result);
+        }, 400);
+    },[props.data,searchName]);
+
     const convertDateStringtoDate = (dateStr) => {
         const dateMomentObject = moment(dateStr, "DD/MM/YYYY");
         const dateObject = dateMomentObject.toDate();
@@ -87,17 +91,17 @@ function SchedulePending(props) {
             ),
 		},		
 	]
-    const onChangeSearch = (e) => {
-        setFilterSchedule({
-            ...filterSchedule,
-            search: e.target.value
-        })
+   
+    const handleSearchName = (data) => {
+        setLoadingSchedule(true);
+        setSearchName(data);
     }
     return (
         <div>
-            <Card>
-                <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
-                <Input placeholder="Tìm kiếm" onChange={onChangeSearch} value={filterSchedule.search}/>
+            <Card style={{borderRadius:"10px"}}>
+                <ScheduleSearch
+                    searchName={handleSearchName}
+                />
                 <Table className="table-striped"
                     columns={columns}                 
                     dataSource={listSchedule}

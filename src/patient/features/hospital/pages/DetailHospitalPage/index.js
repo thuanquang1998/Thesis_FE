@@ -42,6 +42,7 @@ const DetailHospitalPage = () => {
     const loadingData = appState.loadingData;
     const [renderDoctor, setRenderDoctor] = useState([]);
     const [totalDoctor, setTotalDoctor] = useState([]);
+    const [loadingPage, setLoadingPage] = useState(true);
 
     const [info, setInfo] = useState({});
 
@@ -57,7 +58,7 @@ const DetailHospitalPage = () => {
     useEffect(()=>{
         const {search, sort, page, limit} = filter;
         const id=location.pathname.split("/")[2];
-        const findHos = appState.listAllHospitals.data.filter(item=>item.id===id);
+        const findHos = appState.listAllHospitals.data.filter(item=>item._id===id);
         setInfo(findHos[0]);
 
         let _renderData = [];
@@ -73,9 +74,6 @@ const DetailHospitalPage = () => {
         // filter and sort
         const dataName = _renderData.filter(item=>{
             const check = item.fullName.toLowerCase().includes(search.toLowerCase());
-            console.log('check :>> ', check);
-            console.log('item.fullName :>> ', item.fullName);
-            console.log('search :>> ', search);
             return check;
         });
         const dataSort = dataName.filter(item=>item.spec_detail._id.includes(sort));
@@ -93,7 +91,11 @@ const DetailHospitalPage = () => {
         const paginationData = dataSort.slice(min, max);
         setTotalDoctor(dataSort);
         setRenderDoctor(paginationData);
-    },[location, filter])
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 300);
+    },[location, filter]);
+
     const onSearchSpec = (data) => {
         setFilter({
             ...filter,
@@ -116,6 +118,7 @@ const DetailHospitalPage = () => {
     }
     return (
         <div>
+            {loadingPage && <LoadingTop/>}
             <div className="breadcrumb-bar">
                 <div className="container-fluid">
                     <div className="row align-items-center">

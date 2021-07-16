@@ -2,6 +2,7 @@ import { Badge, Button, Card, Input, Table } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ModalSchedule from '../ModalSchedule';
+import ScheduleSearch from '../ScheduleSearch';
 
 function ScheduleOutDate(props) {
     const [listSchedule, setListSchedule] = useState([]);
@@ -10,26 +11,36 @@ function ScheduleOutDate(props) {
         visible: false,
         data: {},
     })
-    // handle outdate schedule
+
+    const [searchName, setSearchName] = useState(null);
+
     useEffect(()=> {
         const listData = [...props.data];
         const listUncheck = listData.filter(item=>item.status==="uncheck");
         const listOutDate = listUncheck.filter(item=> {
-             // handle time
             const dateFormat = convertDateStringtoDate(item.date);
             const currentDate = new Date();
             const compareDate = moment(currentDate).isAfter(dateFormat);
             return compareDate
         })
-        setListSchedule(listOutDate);
-        setLoadingSchedule(false);
-    },[props.data])
+        let _result = [];
+        if(!searchName) {
+            _result=[...listOutDate];
+        } else {
+            _result = listOutDate.filter(item=> {
+                return item.patient.toLowerCase().includes(searchName.toLowerCase());
+            })
+        }
+        setListSchedule(_result);
+        setTimeout(() => {
+            setLoadingSchedule(false);
+        }, 300);
+    },[props.data, searchName])
     const convertDateStringtoDate = (dateStr) => {
         const dateMomentObject = moment(dateStr, "DD/MM/YYYY");
         const dateObject = dateMomentObject.toDate();
         return dateObject
     }
-   
    
     const columns = [
         {
@@ -83,11 +94,16 @@ function ScheduleOutDate(props) {
             ),
 		},		
 	]
+    const handleSearchName = (data) => {
+        setSearchName(data);
+    }
     return (
         <div>
-            <Card>
-                <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
-                {/* <Input placeholder="Tìm kiếm" /> */}
+            <Card style={{borderRadius:"10px"}}>
+               
+                <ScheduleSearch
+                    searchName={handleSearchName}
+                />
                 <Table className="table-striped"
                     columns={columns}                 
                     dataSource={listSchedule}

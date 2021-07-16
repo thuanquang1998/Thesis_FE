@@ -42,7 +42,7 @@ const CardHospital = (props) => {
     return (
         <Link 
           to={{
-            pathname:`/chi-tiet-benh-vien/${data.id}`,
+            pathname:`/chi-tiet-benh-vien/${data._id}`,
             state: data 
           }}
         >

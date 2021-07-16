@@ -4,6 +4,8 @@ import moment from 'moment';
 import ModalSchedule from '../ModalSchedule';
 import ReExamination from '../ReExamination';
 import { useHistory } from 'react-router-dom';
+import ScheduleSearch from '../ScheduleSearch';
+
 
 function ScheduleCurrent(props) {
     const {status, changeStatus, viewSchedule} = props;
@@ -15,6 +17,10 @@ function ScheduleCurrent(props) {
         status: 1,
         currentPage: 1,
     })
+    const [searchName, setSearchName] = useState(null);
+    const [searchStatus, setSearchStatus] = useState(null);
+
+
     // modal view schedule
     const [modalData, setModalData] = useState({
         visible: false,
@@ -27,16 +33,18 @@ function ScheduleCurrent(props) {
 
 
     const onChangeStatus = (e) => {
+        setLoadingSchedule(true);
         setFilterSchedule({
             ...filterSchedule,
             status: e.target.value
         })
         changeStatus(e.target.value);
     };
-    const onChangeSearch = (e) => {
+    const handleSearchName = (data) => {
+        setLoadingSchedule(true);
         setFilterSchedule({
             ...filterSchedule,
-            search: e.target.value
+            search: data
         })
     }
     // handle coming schedule
@@ -75,8 +83,10 @@ function ScheduleCurrent(props) {
                 scheduleHandlerStatus = [...listScheduleSearch];
                 break;
         }
-        setListSchedule(scheduleHandlerStatus);
-        setLoadingSchedule(false);
+        setTimeout(() => {
+            setLoadingSchedule(false);
+            setListSchedule(scheduleHandlerStatus);
+        },400)
     },[props.data, filterSchedule])
     const convertDateStringtoDate = (dateStr) => {
         const dateMomentObject = moment(dateStr, "DD/MM/YYYY");
@@ -160,12 +170,13 @@ function ScheduleCurrent(props) {
                         :
                         <>
                             <Button 
-                                onClick={()=>
-                                    setModalData({
-                                    ...modalData,
-                                    visible: true,
-                                    data: {...record.fullData}
-                                })} 
+                                // onClick={()=>
+                                //     setModalData({
+                                //     ...modalData,
+                                //     visible: true,
+                                //     data: {...record.fullData}
+                                // })} 
+                                onClick={()=>props.onViewSchedule(record.id)}
                                 type="primary" 
                                 style={{marginRight:"5px"}}
                             >
@@ -192,11 +203,14 @@ function ScheduleCurrent(props) {
             ),
 		},		
 	]
+
+    
     return (
         <div>
-            <Card>
-                <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
-                <Input placeholder="Tìm kiếm" onChange={onChangeSearch} value={filterSchedule.search}/>
+            <Card style={{borderRadius:"10px"}}>
+                <ScheduleSearch
+                    searchName={handleSearchName}
+                />
                 <Radio.Group onChange={onChangeStatus} value={status}>
                     <Radio value={1}>Tất cả</Radio>
                     <Radio value={2}>Chưa khám</Radio>

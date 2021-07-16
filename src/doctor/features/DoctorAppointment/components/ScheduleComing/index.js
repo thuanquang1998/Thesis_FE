@@ -2,6 +2,8 @@ import { Badge, Button, Card, Input, Table } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ModalSchedule from '../ModalSchedule';
+import ScheduleSearch from '../ScheduleSearch';
+
 function ScheduleComing(props) {
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
@@ -9,21 +11,32 @@ function ScheduleComing(props) {
         visible: false,
         data: {},
     })
+    const [searchName, setSearchName] = useState(null);
 
     // handle coming schedule
     useEffect(()=> {
         const listData = [...props.data];
         const listUncheck = listData.filter(item=>item.status==="uncheck");
-        const listOutDate = listUncheck.filter(item=> {
+        const listComingDate = listUncheck.filter(item=> {
              // handle time
             const dateFormat = convertDateStringtoDate(item.date);
             const currentDate = new Date();
             const compareDate = moment(dateFormat).isAfter(currentDate);
             return compareDate
         })
-        setListSchedule(listOutDate);
-        setLoadingSchedule(false);
-    },[props.data])
+        let _result = [];
+        if(!searchName) {
+            _result=[...listComingDate];
+        } else {
+            _result = listComingDate.filter(item=> {
+                return item.patient.toLowerCase().includes(searchName.toLowerCase());
+            })
+        }
+        setTimeout(() => {
+            setLoadingSchedule(false);
+            setListSchedule(_result);
+        }, 400);
+    },[props.data, searchName])
     const convertDateStringtoDate = (dateStr) => {
         const dateMomentObject = moment(dateStr, "DD/MM/YYYY");
         const dateObject = dateMomentObject.toDate();
@@ -77,16 +90,38 @@ function ScheduleComing(props) {
                     >
                         Xem lịch
                     </Button>
+                    <Button 
+                        // onClick={()=>{
+                        //     const data = record.fullData;
+                        //     setModalData({
+                        //         ...modalData,
+                        //         visible: true,
+                        //         data: {...data}
+                        //     })
+                        // }} 
+                        onClick={()=>props.cancelSchedule(record)}
+                        type="primary" 
+                        style={{marginRight:"5px"}}
+                    >
+                        Hủy lịch
+                    </Button>
                 </div>
             ),
 		},		
 	]
-    console.log('listSchedule :>> ', listSchedule);
+    const handleCancelSchedule = (data) => {
+        
+    }
+    const handleSearchName = (data) => {
+        setLoadingSchedule(true);
+        setSearchName(data);
+    }
     return (
         <div>
-            <Card>
-                <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
-                <Input placeholder="Tìm kiếm" />
+            <Card style={{borderRadius:"10px"}}>
+                <ScheduleSearch
+                    searchName={handleSearchName}
+                />
                 <Table className="table-striped"
                     columns={columns}                 
                     dataSource={listSchedule}

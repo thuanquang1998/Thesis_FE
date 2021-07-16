@@ -1,44 +1,61 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Steps, Modal } from 'antd'
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Steps, Modal, Spin } from 'antd'
 import React, {useState, useEffect, useRef} from 'react';
 import ReactQuill from 'react-quill' // ES6
 import districtData from '../../../../assets/data/district'
 import provinceData from '../../../../assets/data/province'
 import wardData from '../../../../assets/data/ward'
 function UpdateHospital(props) {
-    const {modalData, handleOk, handleClose} = props;
+    const [form] = Form.useForm();
+    const {modalData, handleOk, handleClose, initData} = props;
     const [about, setAbout] = useState(null);
     const [fileAvatar, setFileAvatar] = useState(null);
-    const fileInput = useRef(null);
+    const [fileBackground, setFileBackground] = useState(null);
+    const fileInputAvatar = useRef(null);
+    const fileInputBackground = useRef(null);
+
 
     const [province, setProvince]= useState("")
     const [district, setDistrict] = useState("")
-
+    const [loadingAbout, setLoadingAbout] = useState(true);
     const handleQuillChange = (data) => {
         setAbout(data);
     }
     const onChangeAvatar = () => {
-        let { current } = fileInput;
+        let { current } = fileInputAvatar;
         let file = current.files;
         setFileAvatar(file[0])
     }
+    const onChangeBackground = () => {
+        let { current } = fileInputBackground;
+        let file = current.files;
+        setFileBackground(file[0])
+    }
     const onHandleSubmit = (data) => {
         // Create a test FormData object
+        const _district = data.address.district.split(" ");
+        const _province = data.address.province.split(" ");
+        _district.splice(0,1);
+        _province.splice(0,1);
+        const addressString = `${data.address.street}, ${data.address.ward}, ${_district.join(" ")}, ${_province.join(" ")}`
         const submitData = new FormData();
-        submitData.append("files", fileAvatar);
+        submitData.append("name", data.name);
+        submitData.append("phone", data.phone);
+        submitData.append("email", data.email);
+        submitData.append("address", addressString);
         submitData.append("about", about);
-        for (const x in data) {
-            submitData.append(`${x}`, data[x]);
-        }
-        // call api update
-        // ===
+        submitData.append("logo", fileAvatar);
+        submitData.append("background", fileBackground);
+        props.updateHospitalInfo(submitData);
     }
-    const updateDoctorProfile = async (data) => {
-        try {
-            console.log("updateDoctorProfile");
-        } catch (error) {
-            console.log('error updateDoctorProfile:>> ', error);
+   
+    useEffect(() => {
+        if(modalData.visible) {
+            setAbout(initData.about);
+            setTimeout(() => {
+                setLoadingAbout(false);
+            }, 300);
         }
-    }
+    }, [modalData])
     return (
         <div>
             <Modal 
@@ -47,13 +64,11 @@ function UpdateHospital(props) {
                 visible={modalData.visible} 
                 onOk={handleOk} 
                 onCancel={handleClose}
-                footer={[
-                    <Button key="back" onClick={handleOk}>
-                    Ok
-                    </Button>
-                ]}
+                footer={null}
             >
+                {loadingAbout?<Spin/>:
                 <Form
+                    form={form}
                     labelCol={{
                         span: 24,
                     }}
@@ -63,27 +78,24 @@ function UpdateHospital(props) {
                     layout="vertical"
                     size="large"
                     onFinish={onHandleSubmit}
-                    // initialValues={initData}
-                    // initialValues={obj}
+                    initialValues={initData||{}}
                 >   
                     <Row gutter={[8,8]}>
                         <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                             <Form.Item name="avatar" label="Ảnh đại diện:" >
                                 <input 
-                                    multiple
                                     type="file" 
                                     accept="image/png, image/jpeg"
-                                    ref={fileInput}
+                                    ref={fileInputAvatar}
                                     onChange={onChangeAvatar}
                                 />
                             </Form.Item>
                             <Form.Item name="background" label="Background:" >
                                 <input 
-                                    multiple
                                     type="file" 
                                     accept="image/png, image/jpeg"
-                                    ref={fileInput}
-                                    onChange={onChangeAvatar}
+                                    ref={fileInputBackground}
+                                    onChange={onChangeBackground}
                                 />
                             </Form.Item>
                             <Form.Item 
@@ -159,13 +171,14 @@ function UpdateHospital(props) {
                     <Form.Item label="Giới thiệu:" className="about">
                         <ReactQuill 
                             theme="snow"
+                            value={about}
                             onChange={handleQuillChange}
                         />
                     </Form.Item>
-                    <Form.Item label="Giới thiệu:" className="about">
-                        <Button type="primary" htmlType="submit">Submit</Button>
+                    <Form.Item style={{textAlign: 'center'}}>
+                        <Button type="primary" htmlType="submit">Cập nhật</Button>
                     </Form.Item>
-                </Form>
+                </Form>}
             </Modal>
         </div>
     );

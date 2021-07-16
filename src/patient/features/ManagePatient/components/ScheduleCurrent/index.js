@@ -306,7 +306,7 @@ function ScheduleCurrent(props) {
                     style = {{overflowX : 'auto'}}
                     rowKey={record => record.id}
                     showSizeChanger={true} 
-                    // loading={loadingPage}
+                    loading={loadingSchedule}
                 />
             </Card>
             <ModalSchedule

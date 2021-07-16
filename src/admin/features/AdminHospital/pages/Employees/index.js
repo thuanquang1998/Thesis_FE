@@ -7,12 +7,18 @@ import adminAPI from '../../../../../api/adminAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingTop from '../../../../components/loadingTop';
+import CreateAgent from '../../components/CreateAgent';
 
 const Employees = () => {
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [listEmployees, setListEmployees] = useState([]);
 
+	// create agent
+	const [modalData, setModalData] = useState({
+        visible: false,
+        data: {},
+    })
 	useEffect(()=> {
 		(async ()=>{
 			try {
@@ -92,6 +98,10 @@ const Employees = () => {
           width: 170,
         },
       ]
+
+	const onCreateAgent = () => {
+
+	}
     return (
         <>
             <SidebarNav/>
@@ -109,7 +119,12 @@ const Employees = () => {
 							</div>
 							<div className="col-sm-5 col">
 								<Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link>
-						    </div>
+								<Button onClick={()=>
+                                    setModalData({
+                                    ...modalData,
+                                    	visible: true,
+                                })}  className="btn btn-primary float-right mt-2">Thêm nhân viên</Button>
+							</div>
 						</div>
 					</div>
                     
@@ -124,6 +139,22 @@ const Employees = () => {
 							pagination={{position:["bottomCenter"]}}
 						/>
 					</Card>
+					<CreateAgent
+						modalData={modalData}
+						handleOk={()=>{
+							setModalData({
+								...modalData,
+								visible: !modalData.visible,
+							})
+						}}
+						handleClose={()=>{
+							setModalData({
+								...modalData,
+								visible: !modalData.visible,
+							})
+						}}
+						loadingCreate={(data)=>setLoadingPage(data)}
+					/>
                 </div>
 				
             </div>

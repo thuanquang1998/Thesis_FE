@@ -27,3 +27,14 @@
     justify-content: space-around;
     margin-bottom: 30px;
 }
+
+.modalUpdateProfile .submitButton {
+    text-align: center;
+}
+
+.updateDoctorRadio .ant-radio-button-checked{
+    background-color: "#00d0f1 !important";
+    border: "none !important";
+    font-weight: "bold !important";
+    color: "white !important";
+}

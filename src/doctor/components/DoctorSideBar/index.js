@@ -32,25 +32,26 @@ const DoctorSidebar = () => {
         }, 500);
         }
     },[loadingPage, isDoctorLoggedIn])
-   
     return(
-        <div className="profile-sidebar">
+        <div className="profile-sidebar" style={{borderRadius:"10px"}}>
             {loading && <LoadingTop/>}
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
-                    <Link to="#" className="booking-doc-img">
+                    <h3 style={{fontWeight:"bold", margin:"0"}}>Trang quản lí bác sĩ</h3>
+
+                    {/* <Link to="#" className="booking-doc-img">
                         <img src={currentDoctor?.doctor.avatar||IMG01} alt="User" />
-                    </Link>
-                    <div className="profile-det-info">
+                    </Link> */}
+                    {/* <div className="profile-det-info">
                         <h3 style={{fontWeight:"bold"}}>Bác sĩ {currentDoctor?.doctor.fullName}</h3>
                         
                         <div className="patient-details">
-                            <h5 className="mb-0">Bệnh viện </h5>
+                            <h5 className="mb-0">{currentDoctor?.doctor.hospital_info.name} </h5>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
-            <div className="dashboard-widget">
+            <div className="dashboard-widget" >
                 
                     
                 <Nav className="dashboard-menu">

@@ -8,8 +8,6 @@ import AppPatient from "./patient/appPatient";
 import Actions from './redux/actions/index';
 
 const AppContainer = function (props) {
-  console.log('props AppContainer:>> ', props);
-  console.log('Actions AppContainer:>> ', Actions);
   if (props) {
     const url = props.location.pathname.split("/")[1];
     return (

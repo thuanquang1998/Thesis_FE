@@ -10,56 +10,90 @@ import 'react-quill/dist/quill.snow.css';
 import { get_hospital_byId } from '../../../../../redux/actions/adminActions'
 import { useHistory } from 'react-router'
 import UpdateHospital from '../../components/UpdateHospital';
+import adminAPI from '../../../../../api/adminAPI';
+import LoadingTop from '../../../../components/loadingTop';
 
 const HospitalInfo = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
-	
-    const dispatch = useDispatch()
-	const hospital = useSelector(state=>state.admin.hospitalById)
-	console.log(hospitalInfo,"lllllllllllllll");
-	useEffect(()=> {
-		dispatch(get_hospital_byId('5ffa9e2e1c8cbb1f801e71c4'))
-	},[])
-	const history = useHistory();
-	console.log(history,"history");
+	const hospitalId = hospitalInfo._id;
   
 	const [showModal, setShowModal] = useState(false)
 	const [initialData, setInitialData] = useState(null);
+	const [loadingPage, setLoadingPage] = useState(true);
+	const [hospitalData, setHospitalData] = useState({});
+	const [initData, setInitData] = useState({
+		// about:""
+	});
 
 	const [modalData, setModalData] = useState({
         visible: false,
         data: {},
     })
-	//**************** handle modal ***********************
-	const handleEditInfo = () => {
-		setShowModal(true)
+
+
+
+
+
+
+	const updateHospitalInfo = async (data) => {
+		setLoadingPage(true);
+		try {
+			const response = await adminAPI.update_hospital_info({data,id:hospitalInfo._id})
+			console.log('response updateHospitalInfo:>> ', response);
+		} catch (error) {
+			console.log('error updateHospitalInfo:>> ', error);
+		}
+
 	}
-	const handleSubmit = () => {
-		console.log('submit modal');
-		setShowModal(false)
+
+
+	const getHospitalInfo = async () => {
+		try {
+			const response = await adminAPI.get_hospital_info(hospitalId);
+			console.log('response getHospitalInfo:>> ', response);
+			if(response.error) throw new Error('error gethospitalInfo');
+			setHospitalData(response.data.data[0]);
+			// handleDAta
+			const _data = {...response.data.data[0]};
+			const addressStr = _data.address.split(",");
+			const new_data = {
+				name: _data.name,
+				email: _data.email,
+				phone: _data.phone,
+				about: _data.about,
+				address: {
+					province: addressStr[3],
+					district: addressStr[2],
+					ward: addressStr[1],
+					street: addressStr[0]
+				}
+			}
+			setInitData({...new_data});
+
+		} catch (error) {
+			console.log('error getHospitalInfo:>> ', error);
+		}
+		setTimeout(() => {
+			setLoadingPage(false);
+		},300)
 	}
-	const handleReturn = () => {
-		setShowModal(false)
-	}
-	//**************** end of handle modal ***********************
-	const onFinishModal=(dataModal)=> {
-		console.log('dataModal: ',dataModal);
-	}
-	const handleChange = (event) => {
-		console.log(event,"aaaaaaaaaaaaa");
-	}
+
+	useEffect(()=> {
+		getHospitalInfo();
+	},[])
     return (
         <>
+			{loadingPage && <LoadingTop/>}
             <SidebarNav/>
             <div className="page-wrapper">
 			    <div className="content container-fluid">
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-7 col-auto">
-								<h3 className="page-title">{`Thông tin ${hospitalInfo.name}`}</h3>
+								<h3 className="page-title">{`Thông tin ${hospitalData.name}`}</h3>
 								<ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
-									<li className="breadcrumb-item active">{`${hospitalInfo.name}`}</li>
+									<li className="breadcrumb-item active">{`${hospitalData.name}`}</li>
 								</ul>
 							</div>
 							<div className="col-sm-5 col">
@@ -75,52 +109,54 @@ const HospitalInfo = () => {
 							<Row gutter={[20,20]}>
 								<Col span={10} style={{textAlign:'center'}}>
 									<div className="img_logo">
-										<img src={hospitalInfo.logo||img_logo} alt=""/>
+										<img src={hospitalData.logo||img_logo} alt=""/>
 									</div>
 									<h4 style={{paddingTop:'15px'}}>Logo bệnh viện</h4>
 								</Col>
 								<Col span={14} style={{textAlign:'center'}}>
 									<div className="img_background">
-										<img src={hospitalInfo.background||img_background} alt=""/>
+										<img src={hospitalData.background||img_background} alt=""/>
 									</div>
 									<h4 style={{paddingTop:'15px'}}>Background bệnh viện</h4>
 								</Col>
 							</Row>
 						</Card>
 						<Card className="card_detail_info" >
-							{hospitalInfo && <Row gutter={[20,20]}>
+							{hospitalData && <Row gutter={[20,20]}>
 								<Col sm={{span:24}} md={{span:10}}>
 									<h4>Thông tin chi tiết:</h4>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bệnh viện</div>
-										<div className="col-sm-8">{hospitalInfo.name}</div>
+										<div className="col-sm-8">{hospitalData.name}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Số điện thoại:</div>
-										<div className="col-sm-8">{hospitalInfo.phone}</div>
+										<div className="col-sm-8">{hospitalData.phone}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Email:</div>
-										<div className="col-sm-8">{hospitalInfo.email}</div>
+										<div className="col-sm-8">{hospitalData.email}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ:</div>
-										<div className="col-sm-8">{hospitalInfo.address}</div>
+										<div className="col-sm-8">{hospitalData.address}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Loại hợp đồng:</div>
-										<div className="col-sm-8">{hospitalInfo.contractType}</div>
+										<div className="col-sm-8">{hospitalData.contractType}</div>
 									</div>
 									<div className="row">
 										<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Quy mô cơ sở y tế:</div>
-										<div className="col-sm-8">{hospitalInfo.scale}</div>
+										<div className="col-sm-8">{hospitalData.scale}</div>
 									</div>
 								</Col>
 								<Col sm={{span:24}} md={{span:14}}>
 									<h4>Giới thiệu:</h4>
-									<div className="info_gioithieu">
-										{hospitalInfo.about}
-									</div>
+									<ReactQuill 
+                                        theme="bubble"
+                                        value={`${hospitalData.about}`}
+                                        readOnly={true}
+                                    />
 								</Col>
 								<UpdateHospital
 									modalData={modalData}
@@ -136,69 +172,9 @@ const HospitalInfo = () => {
 											visible: !modalData.visible,
 										})
 									}}
+									initData={initData}
+									updateHospitalInfo={updateHospitalInfo}
 								/>
-								<Modal
-								visible={showModal}
-								title="Xác nhận thông tin"
-								width={1000}
-								onOk={handleSubmit}
-								onCancel={handleReturn}
-								footer={[
-									<Button key="back" onClick={handleReturn}>
-									Quay lại
-									</Button>,
-									<Button key="submit" type="primary" onClick={handleSubmit}>
-									Xác nhận
-									</Button>,
-								]}
-								>
-									<Form
-										labelCol={{
-										span: 24,
-										}}
-										wrapperCol={{
-										span: 24,
-										}}
-										layout="vertical"
-										size="large"
-										onFinish={onFinishModal}
-										// initialValues={}
-									>   
-										<div className="info-benhnhan">                     
-											<Row gutter={[8,8]}>
-												<Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-													<Form.Item name="name" label="Tên bệnh viện:">
-														<Input className="input" placeholder="Tên bệnh viện"/>
-													</Form.Item>
-													<Form.Item name="phone" label="Số điện thoại:">
-														<Input className="input" placeholder="Số điện thoại"/>
-													</Form.Item>
-												</Col>
-												<Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-													<Form.Item name="email" label="Email:">
-														<Input className="input" placeholder="Email"/>
-													</Form.Item>
-													<Form.Item name="address" label="Địa chỉ:">
-														<Input className="input" placeholder="Địa chỉ"/>
-													</Form.Item>
-												</Col>
-												<Col span={24}>
-													<Form.Item label="Giới thiệu:" className="form-trieuchung">
-														<ReactQuill 
-															theme="snow"
-															onChange={handleChange}
-														/>
-													</Form.Item>
-												</Col>
-												<Col span={24}>
-													<Form.Item>
-														<Button type="primary" htmlType="submit">Xác nhận đặt khám</Button>
-													</Form.Item>
-												</Col>
-											</Row>
-										</div>
-									</Form>
-								</Modal>
 							</Row>}
 						</Card>
 					</div>

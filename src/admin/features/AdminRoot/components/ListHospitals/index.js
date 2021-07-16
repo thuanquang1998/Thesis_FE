@@ -1,9 +1,10 @@
-import { Badge, Button, Card, Modal, Table } from 'antd'
+import { Badge, Button, Card, Modal, Table, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { get_list_hospitals } from '../../../../../redux/actions/adminActions'
 import SidebarNav from '../../../../components/SideBar'
+import moment from 'moment'
 
 const ListHospitals = () => {
     const dispatch = useDispatch()
@@ -55,6 +56,21 @@ const ListHospitals = () => {
         {
           title: 'Trạng thái',
           dataIndex: 'status',
+          render: (text) => {
+            const renderTag = text?<Tag>Đang hoạt động</Tag>:<Tag>Ngừng hoạt động</Tag>
+            return (
+              <p>{renderTag}</p>
+            )
+          }, 
+        },
+        {
+          title: 'Thời hạn hợp đồng',
+          dataIndex: 'dateEnd',
+          render: (text) => {
+            return (
+              <p>{moment(text).format("DD/MM/YYYY")}</p>
+            )
+            }, 
         },
         {
           title: 'Sự kiện',

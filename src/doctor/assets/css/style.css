@@ -7680,3 +7680,12 @@ background: #f9f9f9 url("../images/search-bg.png") no-repeat bottom center;
 			box-shadow:inherit
 		}
 	}
+
+
+/* customer */
+.ant-radio-button-checked {
+	border: none;
+	background-color: #00d0f1;
+	font-weight: bold;
+	color: white;
+}

@@ -70,13 +70,21 @@ const SidebarNav = (props) => {
                     <li className={`${'/admin/hospital/lich-lam-viec' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/hospital/lich-lam-viec"><i className="far fa-calendar-alt"></i>Lịch làm việc</Link>
                     </li>
-                    <li className={`${'/admin/hospital/agent' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/hospital/agent"><i className="far fa-calendar-alt"></i>Agent</Link>
+                  </>
+                )}
+                
+                { accountType === 'agent' && (
+                  <>
+                    <h4 style={{textAlign:"center", color:"white"}}>Nhân viên hỗ trợ</h4>
+                    <li className={`${'/admin/agent/lich-lam-viec' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/agent/lich-lam-viec"><i className="far fa-calendar-alt"></i>Lịch làm việc</Link>
+                    </li>
+                    <li className={`${'/admin/agent/dat-lich' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/agent/dat-lich"><i className="far fa-calendar-alt"></i>Đặt lịch</Link>
                     </li>
                    
                   </>
                 )}
-                
 
 
                 {/* <hr style={{borderTop:"2px solid #ddd"}}/>

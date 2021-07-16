@@ -11,33 +11,60 @@ import ScheduleComing from './components/ScheduleComing';
 import ScheduleCurrent from './components/ScheduleCurrent';
 import ScheduleOutDate from './components/ScheduleOutDate';
 import SchedulePending from './components/SchedulePending';
+import ModalSchedule from './components/ModalSchedule';
+import ReExamination from './components/ReExamination';
+import { compareDates } from '../../../utils';
+import Swal from "sweetalert2";
+import { useSnackbar } from 'notistack';
+import './style.css';
 
 const { TabPane } = Tabs;
+
 const DoctorAppointment = (props) =>{
-    
     const { isDoctorLoggedIn, currentDoctor} = props.doctorData;
+    const doctorId = currentDoctor.doctor._id;
+    const { enqueueSnackbar } = useSnackbar();
+
+
     const [loadingPage, setLoadingPage] = useState(true);
     const [appointment, setAppointment] = useState([]);
     const [reExam, setReExam] = useState({
         defaultTabs: 3,
         currentStatus: 1,
     });
-    setTimeout(() => {
-        const id = currentDoctor.doctor._id;
-        getAppointment(id);    
-    },300000)
-    useEffect(() => {
-        setLoadingPage(true);
-        if(isDoctorLoggedIn) {
-            const id = currentDoctor.doctor._id;
-            getAppointment(id);    
-        }
-    },[isDoctorLoggedIn]);
 
-    const getAppointment = async (id) => {
-        console.log("getAppointment");
+    //state modal xem lich
+    const [modalView, setModalView] = useState({
+        visible: false,
+        data: {},
+    })
+    // state modal huy lich
+    const [modalCancel, setModalCancel] = useState({
+        visible: false,
+        data: {},
+    })
+    // state modal xem ket qua
+    const [modalResult, setModalResult] = useState({
+        visible: false,
+        data: {},
+    })
+    // state modal tai kham
+    const [modalReExam, setModalReExam] = useState({
+        visible: false,
+        data: {},
+    })
+    // check lai cho nay..goi nhieu lan sau 5p
+    // setTimeout(() => {
+    //     getAppointment(doctorId);    
+    // },300000);
+     
+    useEffect(()=> {
+        getAppointment();
+    },[])
+
+    const getAppointment = async () => {
         try {
-            const response = await doctorAPI.get_doctor_appoitmant(id);
+            const response = await doctorAPI.get_doctor_appoitmant(doctorId);
             if(response.error) throw new Error(response.errors[0].message);
             // setAppointment()
             const _data = response.data.map(x=>{
@@ -66,21 +93,16 @@ const DoctorAppointment = (props) =>{
                 }
                 return obj
             })
-            console.log('__data :>> ', _data);
-            // sort time
             _data.sort((a,b)=>{
                 return a.numberSort-b.numberSort
             })
             setAppointment(_data);
-
         } catch (error) {
             console.log('error.message :>> ', error.message);
         }
         setLoadingPage(false)
     }
-    const sortSchedule = (data) => {
-        
-    }
+  
     const changeStatusCurrentSchedule = (data) => {
         setReExam({
             ...reExam,
@@ -89,8 +111,7 @@ const DoctorAppointment = (props) =>{
     }
     const handleReExamSuccess = () => {
         setLoadingPage(true);
-        const id = currentDoctor.doctor._id;
-        getAppointment(id); 
+        getAppointment(); 
         setReExam({
             defaultTabs: 3,
             currentStatus: 2,
@@ -101,7 +122,87 @@ const DoctorAppointment = (props) =>{
         // setLoadingPage(true);	
 		// getScheduleById(id);
     }
+
+    // xem lich
+    const onViewSchedule = (id) => {
+        console.log('id onViewSchedule:>> ', id);
+        // call api
+        setLoadingPage(true);	
+		getScheduleById(id);
+    }
+    const getScheduleById =  async (id) => {
+		try {
+			const response = await doctorAPI.get_appointment_by_id(id);
+			if(response.error) throw new Error("error");
+			setModalView({
+				...modalView,
+				visible: true,
+				data: {...response.data}
+			})
+			setLoadingPage(false)
+		} catch (error) {
+			console.log('error :>> ', error);
+			setLoadingPage(false)
+			enqueueSnackbar('Lịch khám đã bị hủy', {variant: 'error'});
+            getAppointment(); 
+		}
+	}
+
+    // tai kham
    
+    // huy lich
+    const cancelSchedule = (record) => {
+        console.log('record :>> ', record);
+        let currentTime = moment();
+        const check1 = compareDates(new Date(currentTime), new Date(record.dateCheck))
+        const check2 = record.status!=="uncheck"?true:false;
+        const check = check1&&check2;
+
+        if(check) {
+			Swal.fire({
+				icon: "error",
+                title: "Không thể hủy lịch khám này.",
+	 			text: "Chỉ được hủy lịch khám trước 1 ngày."
+			});
+		} else {
+			Swal.fire({
+				icon: "info",
+                title: "Xác nhận hủy lịch khám?",
+				text: "Lịch khám sẽ bị hủy khỏi hệ thống và thông báo sẽ được gửi đến bệnh nhân.",
+				showCancelButton: true,
+				cancelButtonColor: "#3085d6",
+				confirmButtonColor: "#d33",
+				confirmButtonText: "Hủy lịch",
+				cancelButtonText: "Không hủy lịch"
+			})
+			.then((result) => {
+				if (result.value) {
+					cancelScheduleMethod(record.id);
+				} 
+			})
+			.catch((error) => {
+				console.log('error.message :>> ', error.message);
+			});
+		}
+    }
+    const cancelScheduleMethod = async (id) => {
+        console.log('cancelScheduleMethod');
+        // setLoadingPage(true)
+        // try {
+        //     const response = await patientAPI.cancel_schedule(id);
+		// 	if(response.error) throw new Error(response.errors[0].message);
+        //     get_schedule_patient(patientInfo);
+        //     setTimeout(() => {
+        // 		enqueueSnackbar('Xóa lịch khám thành công.', {variant: 'success'});
+        //         setLoadingPage(false)
+		// 	}, 300);
+
+        // } catch (error) {
+		// 	console.log('error.message :>> ', error.message);
+        // 	enqueueSnackbar('Xóa lịch khám không thành công.', {variant: 'error'})
+        //     setLoadingPage(false)
+        // }
+    }
     return(
         <div>
             {loadingPage && <LoadingTop/>}
@@ -131,7 +232,7 @@ const DoctorAppointment = (props) =>{
                         </div>
                         <div className="col-md-7 col-lg-8 col-xl-9">
                             <h2>Quản lí lịch khám</h2>
-                            <Tabs defaultActiveKey={`${reExam.defaultTabs}`} >
+                            <Tabs defaultActiveKey='3' className="tabScheduleDoctor" >
                                 <TabPane tab="Lịch khám quá hạn" key="1">
                                     <ScheduleOutDate data={appointment}/>
                                 </TabPane>
@@ -145,13 +246,58 @@ const DoctorAppointment = (props) =>{
                                         changeStatus={changeStatusCurrentSchedule}
                                         reExamSuccess={handleReExamSuccess}
                                         viewSchedule={viewSchedule}
+
+                                        onViewSchedule={onViewSchedule}
                                     />
                                 </TabPane>
                                 <TabPane tab="Lịch khám sắp diễn ra" key="4">
-                                    <ScheduleComing data={appointment}/>
+                                    <ScheduleComing 
+                                        data={appointment}
+                                        cancelSchedule={cancelSchedule}
+                                    />
                                 </TabPane>
                             </Tabs>
-                        </div>  
+                        </div> 
+                        
+                        
+                        {/* Modal xem lich */}
+                        <ModalSchedule
+                            modalData={modalView}
+                            handleOk={()=>{
+                                setModalView({
+                                    ...modalView,
+                                    visible: !modalView.visible,
+                                })
+                            }}
+                            handleClose={()=>{
+                                setModalView({
+                                    ...modalView,
+                                    visible: !modalView.visible,
+                                })
+                            }}
+                        />
+                        {/* Modal tai kham */}
+                        <ReExamination
+                            modalData={modalReExam}
+                            handleOk={()=>{
+                                setModalReExam({
+                                    ...modalReExam,
+                                    visible: !modalReExam.visible,
+                                })
+                            }}
+                            handleClose={()=>{
+                                setModalReExam({
+                                    ...modalReExam,
+                                    visible: !modalReExam.visible,
+                                })
+                            }}
+                            reExamSuccess = {props.reExamSuccess}
+                        />
+                        {/* Modal xem ket qua */}
+
+                        {/* Modal huy lich */}
+
+
                     </div>
                 </div>
             </div>

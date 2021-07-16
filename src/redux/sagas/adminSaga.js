@@ -134,7 +134,8 @@ function* login_by_email({payload}){
     yield put({type : LOADING_PAGE});
     yield put({type : LOADING_LOGIN});
     try{
-        const response = yield call( adminAPI.login , payload)
+        console.log("123123123123");
+        const response = yield call( adminAPI.login , payload);
         if (response.error){
             SwalAlert('Error', 'Tên đăng nhập không đúng', 'error')
             console.log("Error");
@@ -142,6 +143,7 @@ function* login_by_email({payload}){
         }
         else {
             let data = {};
+            console.log('response :>> ', response);
             switch (response.data.accountType) {
                 case "system-admin":
                     data = {
@@ -150,6 +152,13 @@ function* login_by_email({payload}){
                     }
                     break;
                 case "hospital-admin":
+                    data = {
+                        accountType: response.data.accountType,
+                        adminToken: response.data.token,
+                        hospital: response.data.hospital,
+                    }
+                    break;
+                case "agent":
                     data = {
                         accountType: response.data.accountType,
                         adminToken: response.data.token,

@@ -69,5 +69,23 @@ class doctorsAPI{
                     .then(res => res.data)
                     .catch(err=> err.response.data)
     }
+    // cap nhat thong tin bac si
+    update_doctor_info(data){
+        const tokenObj = localStorage.getItem('currentDoctor');
+        const _token = JSON.parse(tokenObj);
+        return http.put(`doctors/${data.id}/update`, data.data,{ 
+            headers:{ 
+                'x-access-token': _token.doctorToken 
+            }
+        })
+                    .then(res=> res.data)
+                    .catch(err => err.response.data)
+    }
+    // laays thong tin chi tiet bac si
+    get_doctors_by_id(id) {
+        return http.get(`doctors/${id}`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
 }
 export default new doctorsAPI
