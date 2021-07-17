@@ -7,7 +7,7 @@ class doctorsAPI{
     register(data){
         return http.post('users/sign-up',data).then(res=>data).catch(err=> err.response.data)
     }
-    // load tất lịch khám của bác sĩ
+    // get all lịch khám của bác sĩ
     get_doctor_appoitmant(id) {
         const tokenObj = localStorage.getItem('currentDoctor');
         const _token = JSON.parse(tokenObj);
@@ -19,57 +19,69 @@ class doctorsAPI{
         .then(res=> res.data)
         .catch(err => err.response.data)
     }
-    // load lịch khám theo id
+    // get lịch khám by id
     get_appointment_by_id(id) {
         return http.get(`appointment/${id}/get`)
                     .then(res=> res.data)
                     .catch(err => err.response.data)
     }
-    // load lịch làm việc của bác sĩ
-    get_doctor_timework(id) {
-        return http.get(`doctors/${id}/timework`)
-                    .then(res => res.data)
-                    .catch(err=> err.response.data)
-    }
+    // LỊCH LÀM VIỆC BÁC SĨ
+        // get lịch làm việc của bác sĩ
+        get_doctor_timework(id) {
+            return http.get(`doctors/${id}/timework`)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
+        // hủy lịch làm việc của bác sĩ (bao gồm xóa lịch khám, gửi tin nhắn cho bệnh nhân)
+        cancel_schedule_work(data){
+            console.log("111111111111111111111", data)
+            return http.put(`/appointment/doctor_cancel`, data)
+                        .then(res=> res.data)
+                        .catch(err => err.response.data)
+            return null
+        }
 
-    // transfer state schedule
-    // uncheck => checking
-    transfer_schedule_to_checking(id) {
-        return http.put(`appointment/${id}/change_to_checking`)
-                    .then(res => res.data)
-                    .catch(err=> err.response.data)
-    }
-    update_data_checking(data) {
-        return http.put(`/record/update`, data)
-                    .then(res=> res.data)
-                    .catch(err => err.response.data)
-    }
-    // get record by id checking
-    get_record_by_id(id) {
-        return http.get(`record/get_by_appointment_id/${id}`)
-                    .then(res => res.data)
-                    .catch(err=> err.response.data)
-    }
-    // checking => checked
+    // QUẢN LÍ LỊCH KHÁM
+        // khám bệnh: uncheck ==> checking
+        transfer_schedule_to_checking(id) {
+            return http.put(`appointment/${id}/change_to_checking`)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
+        // khám bệnh: cập nhật thông tin phiếu khám
+        update_data_checking(data) {
+            return http.put(`/record/update`, data)
+                        .then(res=> res.data)
+                        .catch(err => err.response.data)
+        }
+        // lấy record của appointment checking: khám bệnh cho checking.
+        get_record_by_id(id) {
+            return http.get(`record/get_by_appointment_id/${id}`)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
+        // hoàn thành khám: checking ==> checked
+        transfer_schedule_to_checked(data) {
+            return http.put(`record/update_and_finish`, data)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
+        // lấy kết quả khám => get checked
+        get_checked_appointment(id) {
+            return http.get(`appointment/${id}/getchecked`)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
+    // DASHBOARD
+        // get dashboard doctors
+        get_dashboard_doctors(id) {
+            return http.get(`doctors/${id}/statistic`)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
 
-    transfer_schedule_to_checked(data) {
-        return http.put(`record/update_and_finish`, data)
-                    .then(res => res.data)
-                    .catch(err=> err.response.data)
-    }
-    // get checked appointment
-    get_checked_appointment(id) {
-        return http.get(`appointment/${id}/getchecked`)
-                    .then(res => res.data)
-                    .catch(err=> err.response.data)
-    }
-    // get dashboard doctors
-    get_dashboard_doctors(id) {
-        return http.get(`doctors/${id}/statistic`)
-                    .then(res => res.data)
-                    .catch(err=> err.response.data)
-    }
-    // cap nhat thong tin bac si
+
+    // cập nhật thông tin bác sĩ
     update_doctor_info(data){
         const tokenObj = localStorage.getItem('currentDoctor');
         const _token = JSON.parse(tokenObj);
@@ -81,7 +93,7 @@ class doctorsAPI{
                     .then(res=> res.data)
                     .catch(err => err.response.data)
     }
-    // laays thong tin chi tiet bac si
+    // get thông tin bác sĩ => getById
     get_doctors_by_id(id) {
         return http.get(`doctors/${id}`)
                     .then(res => res.data)

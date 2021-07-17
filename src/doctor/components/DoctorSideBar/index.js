@@ -7,6 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import IMG01 from '../../assets/images/doctor-thumb-02.jpg';
 import LoadingTop from '../loadingTop';
 
+
 const DoctorSidebar = () => {
     const dispatch = useDispatch();
     const history = useHistory();

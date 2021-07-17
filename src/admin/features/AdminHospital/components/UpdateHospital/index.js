@@ -37,6 +37,7 @@ function UpdateHospital(props) {
         _district.splice(0,1);
         _province.splice(0,1);
         const addressString = `${data.address.street}, ${data.address.ward}, ${_district.join(" ")}, ${_province.join(" ")}`
+        
         const submitData = new FormData();
         submitData.append("name", data.name);
         submitData.append("phone", data.phone);
@@ -185,3 +186,5 @@ function UpdateHospital(props) {
 }
 
 export default UpdateHospital;
+
+

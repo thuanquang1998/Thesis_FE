@@ -22,10 +22,13 @@ function UpdateProfileDoctor(props) {
     const onHandleSubmit = (data) => {
         // Create a test FormData object
         const submitData = new FormData();
+        submitData.append("fullName", data.fullName);
+        submitData.append("phone", data.phone);
+        submitData.append("email", data.email);
+        submitData.append("sex", data.gender);
+        submitData.append("birthday", data.birthday);
+        submitData.append("title", data.title);
         submitData.append("about", about);
-        for (const x in data) {
-            submitData.append(`${x}`, data[x]);
-        }
         submitData.append("image", fileAvatar);
 
         props.handleUpdateProfile(submitData);
