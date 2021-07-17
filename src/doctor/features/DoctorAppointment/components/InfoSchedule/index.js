@@ -6,6 +6,7 @@ import StickyBox from "react-sticky-box";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import './style.css'
 import moment from 'moment';
+import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
 const { Option } = Select;
 const INIT_DATA = {
