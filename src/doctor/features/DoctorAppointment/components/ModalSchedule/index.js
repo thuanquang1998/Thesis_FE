@@ -1,6 +1,8 @@
 import React,{useState} from 'react';
 import {Modal, Button} from 'antd';
 import InfoSchedule from '../InfoSchedule';
+import PdfSchedule from '../PdfSchedule';
+import './style.css';
 function ModalSchedule(props) {
     const {modalData, handleOk, handleClose} = props;
     const {data} = modalData;
@@ -12,9 +14,14 @@ function ModalSchedule(props) {
             onOk={handleOk} 
             onCancel={handleClose}
             footer={[
-                <Button key="back" onClick={handleOk}>
-                  Ok
-                </Button>
+                <div style={{display:'flex', flexWrap: 'nowrap', flexDirection: 'row', float:'right'}}>
+                    <div><PdfSchedule data={data}></PdfSchedule></div>
+                    <div>
+                        <Button key="back" onClick={handleOk}>
+                        Ok
+                        </Button>
+                    </div>
+                </div>
               ]}
         >
             <InfoSchedule data={data}/>
