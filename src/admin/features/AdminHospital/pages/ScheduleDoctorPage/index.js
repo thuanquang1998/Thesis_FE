@@ -10,6 +10,9 @@ import LoadingTop from '../../../../components/loadingTop';
 import SidebarNav from '../../../../components/SideBar';
 import FilterDoctorWork from './FilterDoctorWork';
 import PdfListDoctor from './PdfListDoctor';
+import {useSnackbar} from 'notistack';
+import Swal from "sweetalert2";
+
 
 moment.updateLocale('en', {
         months : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
@@ -41,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ScheduleDoctorPage = ({location}) =>{
+    const {enqueueSnackbar} = useSnackbar();
     const classes = useStyles();
     let formats = {
         dayFormat: (date, culture, localizer) =>
@@ -84,14 +88,23 @@ const ScheduleDoctorPage = ({location}) =>{
     }
 
     const onSubmitFormCreate = async (data) => {
+        setLoadingPage(true);
         const _data = new FormData();
         _data.append("hospital_id",JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
         _data.append("file", fileData);
         try {
             const response = await adminAPI.create_appointment_hospital(_data);
             console.log('response onSubmitFormCreate:>> ', response);
+            if(response.error) throw new Error(response.errors);
+            const notiDate = moment(response.data.upToDate).format('DD/MM/YYYY');
+            const stringNoti = `Lịch đã được cập nhật đến ngày ${notiDate}`;
+            setLoadingPage(false);
+            enqueueSnackbar(stringNoti, {variant: 'success'});
+            setShowModal(false);
         } catch (error) {
             console.log('error onSubmitFormCreate:>> ', error);
+            enqueueSnackbar('Thông tin file không hợp lệ.', {variant: 'error'});
+            setLoadingPage(false);
         }
     }
     
@@ -280,7 +293,6 @@ const ScheduleDoctorPage = ({location}) =>{
                         footer={null}
                     >
                         <Button onClick={()=>{}}>Tải form mẫu</Button>
-                        <h3>Chọn file</h3>
                         <Form
                             onFinish={onSubmitFormCreate}
                         >
