@@ -101,7 +101,7 @@ const CreateDoctor = () => {
             if(response.error) throw new Error(response.errors[0].message);
             enqueueSnackbar('Tạo bác sĩ thành công', {variant: 'success'});
             // reset form
-            history.push('/admin/hospital/nhan-vien')
+            history.push('/admin/hospital/ds-bac-si')
 
         } catch (error) {
             enqueueSnackbar(error.message, {variant: 'error'})
@@ -129,7 +129,7 @@ const CreateDoctor = () => {
                 </div>
 
                 <Card
-                    title={<h4 style={{fontWeight:"600"}}>Thêm mới nhân viên</h4>}
+                    title={<h4 style={{fontWeight:"600"}}>Tạo tài khoản bác sĩ</h4>}
                 >
                     <Form
                         labelCol={{
@@ -235,7 +235,7 @@ const CreateDoctor = () => {
                             />
                         </Form.Item>
                         <Button type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
-                            Save
+                            Thêm
                         </Button>
                     </Form>
                 </Card>

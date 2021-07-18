@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Popover, Select, Modal, Button, Form } from 'antd';
+import { Card, Popover, Select } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import doctorAPI from '../../../../../api/doctorAPI';
@@ -9,7 +9,6 @@ import adminAPI from '../../../../../api/adminAPI';
 import LoadingTop from '../../../../components/loadingTop';
 import SidebarNav from '../../../../components/SideBar';
 import FilterDoctorWork from './FilterDoctorWork';
-import PdfListDoctor from './PdfListDoctor';
 
 moment.updateLocale('en', {
         months : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ScheduleDoctorPage = ({location}) =>{
+const ScheduleDoctorAgent = ({location}) =>{
     const classes = useStyles();
     let formats = {
         dayFormat: (date, culture, localizer) =>
@@ -65,41 +64,18 @@ const ScheduleDoctorPage = ({location}) =>{
         doctor: "",
     });
 
-    const [dataDoctor, setDataDoctor] = useState({id:"60537e1d206e99fe96d8d950"});
     
 
     const [loadingPage, setLoadingPage] = useState(false);
     
     const [events, setEvents] = useState([]);
 
-
-    // them lich lam viec
-	const [showModal, setShowModal] = useState(null);
-    const fileInput = useRef(null);
-    const [fileData, setFileData] = useState(null);
-    const onChangeFile = (data) => {
-        let { current } = fileInput;
-        let file = current.files;
-        setFileData(file[0]);
-    }
-
-    const onSubmitFormCreate = async (data) => {
-        const _data = new FormData();
-        _data.append("hospital_id",JSON.parse(localStorage.getItem('currentAdmin')).hospital.id);
-        _data.append("file", fileData);
-        try {
-            const response = await adminAPI.create_appointment_hospital(_data);
-            console.log('response onSubmitFormCreate:>> ', response);
-        } catch (error) {
-            console.log('error onSubmitFormCreate:>> ', error);
-        }
-    }
     
     useEffect(()=> {
+        // getTimeWorks(dataDoctor.id);
         getListSpec();
         getListDoctor();
     },[])
-
     const getListSpec = async () => {
         console.log('getListSpec');
 		try {
@@ -143,7 +119,6 @@ const ScheduleDoctorPage = ({location}) =>{
             console.log(`error.message`, error.message)
         }
     }
-
     const getTimeWorks = async (id) => {
         try {
             const response = await doctorAPI.get_doctor_timework(id);
@@ -173,7 +148,7 @@ const ScheduleDoctorPage = ({location}) =>{
     }
 
     const handleChangeSpec = (value) => {
-        console.log('value handleChangeSpec:>> ', value);
+
         setLoadDoctor(true);
         let _listDoctor = [];
         if(value==="all") {
@@ -198,7 +173,6 @@ const ScheduleDoctorPage = ({location}) =>{
         console.log('value :>> ', value);
         getTimeWorks(value);
     }
-
     return (
         <div className={classes.root}>
             <SidebarNav/>
@@ -209,11 +183,15 @@ const ScheduleDoctorPage = ({location}) =>{
 						<div className="row header-row" style={{width:"100%", height:"100%"}}>
 							<div className={`col-sm-7 col-auto`}>
 								<h3 className="page-title" style={{paddingTop:"20px"}}>{`Lịch làm việc Bác sĩ`}</h3>
+								<ul className="breadcrumb">
+									<li className="breadcrumb-item active">Lịch làm việc</li>
+									<li className="breadcrumb-item active">{`Lịch làm việc Bác sĩ`}</li>
+								</ul>
 							</div>
                             <div className="col-sm-5 col">
-                                <a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>setShowModal(true)}>
-                                    Thêm lịch
-                                </a>
+                                <p>adfasd</p>
+                                <a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>console.log("thêm lịch")}>
+                                    Thêm lịch</a>
                             </div>
 						</div>
 					</div>
@@ -273,42 +251,11 @@ const ScheduleDoctorPage = ({location}) =>{
                             }}
                         />
                     </Card>
-                    <Modal 
-                        title={<h3>Thêm lịch làm việc</h3>}
-                        visible={showModal} 
-                        onCancel={()=>setShowModal(false)}
-                        footer={null}
-                    >
-                        <Button onClick={()=>{}}>Tải form mẫu</Button>
-                        <h3>Chọn file</h3>
-                        <Form
-                            onFinish={onSubmitFormCreate}
-                        >
-                            <Form.Item 
-                                name="file" 
-                                label="Chọn file:"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Bạn chưa chọn file',
-                                    }
-                                ]}
-                            >
-                                <input 
-                                    type="file" 
-                                    ref={fileInput}
-                                    onChange={onChangeFile}
-                                />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">Gửi</Button>
-                            </Form.Item>
-                        </Form>
-                    </Modal>
+                    
                 </div>
             </div>
         </div>
     )
 }
-export default ScheduleDoctorPage;
+export default ScheduleDoctorAgent;
      

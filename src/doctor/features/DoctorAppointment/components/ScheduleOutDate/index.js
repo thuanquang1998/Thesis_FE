@@ -1,8 +1,10 @@
-import { Badge, Button, Card, Input, Table } from 'antd';
+import { Badge, Button, Card, Input, Table, Tag, Menu, Dropdown } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ModalSchedule from '../ModalSchedule';
 import ScheduleSearch from '../ScheduleSearch';
+import {Link} from 'react-router-dom';
+import { DownOutlined } from '@ant-design/icons';
 
 function ScheduleOutDate(props) {
     const [listSchedule, setListSchedule] = useState([]);
@@ -41,7 +43,29 @@ function ScheduleOutDate(props) {
         const dateObject = dateMomentObject.toDate();
         return dateObject
     }
-   
+    const renderStatus = (status) => {
+        let str = "";
+        let color = "";
+        switch (status) {
+            case 'uncheck':
+                str = 'Chưa khám';
+                color = "red"
+                break;
+            case 'checking':
+                str = 'Đang xử lí'
+                color = "green"
+                break;
+            case 'checked':
+                str = 'Đã khám';
+                color = "blue"
+                break;
+            default:
+                str = 'Chưa khám'
+                color = "red"
+                break;
+        }
+        return <Tag style={{fontSize:"13px"}} color={`${color}`}>{str}</Tag>
+    }
     const columns = [
         {
 			title: 'Bệnh nhân',
@@ -68,30 +92,43 @@ function ScheduleOutDate(props) {
         {
 			title:'Trạng thái',
 			dataIndex:'status',
-            render: (text, record) => (
-                <Badge style={{ backgroundColor: 'red' }}>{record.status==='uncheck'?'Quá hạn':'Chưa khám'}</Badge>
-            )
+            render: (text, record) => {
+                const data = renderStatus(record.status);
+                return data
+            }
 		},
 		{
             title: 'Sự kiện',
-            render: (text, record) => (
-                <div className="actions">
-                    <Button 
-                        onClick={()=>{
-                            const data = record.fullData;
-                            setModalData({
-                                ...modalData,
-                                visible: true,
-                                data: {...data}
-                            })
-                        }} 
-                        type="primary" 
-                        style={{marginRight:"5px"}}
-                    >
-                        Xem lịch
-                    </Button>
-                </div>
-            ),
+            render: (text, record) => {
+                const menuChecked = (
+                    <Menu>
+                      <Menu.Item key="0">
+                        <Link 
+                            className="btn btn-sm bg-info-light"
+                            onClick={()=>{
+                                const data = record.fullData;
+                                setModalData({
+                                    ...modalData,
+                                    visible: true,
+                                    data: {...data}
+                                })
+                            }} 
+                            >
+                            <i className="far fa-eye"></i> Xem lịch
+                        </Link>
+                      </Menu.Item>
+                    </Menu>
+                  );
+                return (
+                    <Dropdown overlay={menuChecked} trigger={['click']}>
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        Sự kiện <DownOutlined />
+                        </a>
+                    </Dropdown>
+                )
+            }
+                
+            // ),
 		},		
 	]
     const handleSearchName = (data) => {

@@ -49,13 +49,16 @@ const SidebarNav = (props) => {
                   <>
                     <h4 style={{textAlign:"center", color:"white"}}>Quản lí bệnh viện</h4>
                     <li className={`${'/admin/hospital' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/hospital"><i className="fa fa-home"></i>Dashboard Bệnh viện</Link> 
+                      <Link to="/admin/hospital"><i className="fa fa-home"></i>Thống kê</Link> 
                     </li>
                     <li className={`${'/admin/hospital/thong-tin' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/hospital/thong-tin"><i className="fa fa-hospital"></i>Thông tin bệnh viện</Link>
                     </li>
-                    <li className={`${'/admin/hospital/nhan-vien' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/hospital/nhan-vien"><i className="fa fa-user"></i>Nhân viên</Link>
+                    <li className={`${'/admin/hospital/ds-bac-si' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/ds-bac-si"><i className="fa fa-user"></i>Danh sách bác sĩ</Link>
+                    </li>
+                    <li className={`${'/admin/hospital/ds-nhan-vien' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/hospital/ds-nhan-vien"><i className="fa fa-user"></i>Danh sách nhân viên</Link>
                     </li>
                     <li className={`${'/admin/hospital/chuyen-khoa' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/hospital/chuyen-khoa"><i className="fas fa-first-aid"></i>Chuyên khoa</Link>
@@ -79,8 +82,14 @@ const SidebarNav = (props) => {
                     <li className={`${'/admin/agent/lich-lam-viec' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/agent/lich-lam-viec"><i className="far fa-calendar-alt"></i>Lịch làm việc</Link>
                     </li>
-                    <li className={`${'/admin/agent/dat-lich' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/agent/dat-lich"><i className="far fa-calendar-alt"></i>Đặt lịch</Link>
+                    <li className={`${'/admin/agent/dat-lich-offline' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/agent/dat-lich-offline"><i className="far fa-calendar-alt"></i>Đặt lịch trực tiếp</Link>
+                    </li>
+                    <li className={`${'/admin/agent/dat-lich-online' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/agent/dat-lich-online"><i className="far fa-calendar-alt"></i>Đặt lịch hộ</Link>
+                    </li>
+                    <li className={`${'/admin/agent/tu-van' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin/agent/tu-van"><i className="far fa-calendar-alt"></i>Danh sách tư vấn</Link>
                     </li>
                    
                   </>

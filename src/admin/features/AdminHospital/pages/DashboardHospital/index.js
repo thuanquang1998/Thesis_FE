@@ -1,7 +1,8 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import SidebarNav from '../../../../components/SideBar'
-import {Row, Col, Card} from 'antd'
+import {Row, Col, Card, DatePicker} from 'antd'
 import { Bar, Line, Pie } from 'react-chartjs-2';
+import moment from 'moment';
 const data = {
 	labels: ['22/7', '23/7', '24/7', '25/7', '26/7', '27/7'],
 	datasets: [
@@ -22,6 +23,7 @@ const data = {
 	  },
 	],
   };
+  
   const dataReview = {
 	labels: ['1 sao', '2 sao', '3 sao', '4 sao', '5 sao'],
 	datasets: [
@@ -104,6 +106,42 @@ const data = {
 	],
   };
 const DashboardHospital = () => {
+	const [loadingPage, setLoadingPage] = useState(true);
+	const [dateRange, setDateRange] = useState({
+		mon: null,
+		sun: null,
+	})
+	useEffect(()=> {
+		const monday =  moment().isoWeekday(1); // Monday
+        const sunday = moment().isoWeekday(7); // Sunday
+		setDateRange({
+			...dateRange,
+			mon: monday,
+			sun: sunday,
+		})
+
+	},[])
+	useEffect(()=> {
+		const startDate = dateRange.mon;
+		const endDate = dateRange.sun;
+		if(!startDate && !endDate) {
+			console.log("call api");
+		}
+	},[dateRange])
+
+	const onChangeRangeDay = (date, dateString) => {
+		console.log('date onChangeRangeDay:>> ', date);
+		const monday =  date.isoWeekday(1); // Monday
+        const sunday = date.isoWeekday(6); // Sunday
+		console.log('monday :>> ', monday);
+		console.log('sunday :>> ', sunday);
+
+
+	}
+
+
+
+
     return (
         <>
             <SidebarNav/>
@@ -111,11 +149,24 @@ const DashboardHospital = () => {
 			    <div className="content container-fluid">
 					<div className="page-header">
 						<div className="row">
-							<div className="col-sm-12">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Trang quản lý cho bệnh viện Hùng Vương</h3>
-								<ul className="breadcrumb">
+							<div className="col-sm-8">
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Thống kê</h3>
+								{/* <ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
-								</ul>
+								</ul> */}
+							</div>
+							<div className="col-sm-4">
+								<div className="page-title" style={{paddingTop:"20px"}}>
+									
+									<p>Thời gian:</p>
+									<p>{`${moment(dateRange.mon).format('DD/MM/YYYY')} - ${moment(dateRange.sun).format('DD/MM/YYYY')}`}</p>
+									<p>Chọn thời gian</p>
+									<DatePicker onChange={onChangeRangeDay} picker="week" placeholder="Chọn ngày"/>
+
+								</div>
+								{/* <ul className="breadcrumb">
+									<li className="breadcrumb-item active">Dashboard</li>
+								</ul> */}
 							</div>
 						</div>
 					</div>

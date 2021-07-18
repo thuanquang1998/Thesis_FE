@@ -30,7 +30,6 @@ function InfoSchedule(props) {
     
     useEffect(()=> {
         const temp = props.data;
-        console.log('temp :>> ', temp);
         const {patientInfo, appointmentInfo} = temp;
         if(temp.examineType) {
             // kham moi
@@ -86,21 +85,34 @@ function InfoSchedule(props) {
                 <Col span={24} style={{textAlign:'center'}}>
                     <p className="titlee">Thông tin lịch khám:</p>
                     <div className="row">
-                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bệnh viện</div>
-                        <div className="col-sm-8 text-sm-left">{appointmentInfo.location.hospitalName}</div>
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Bác sĩ điều trị</div>
+                        <div className="col-sm-8 text-sm-left" >{appointmentInfo.doctorName}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Bệnh viện</div>
+                        <div className="col-sm-8 text-sm-left" >{appointmentInfo.location.hospitalName}</div>
                     </div>
                     <div className="row">
                         <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
-                        <div className="col-sm-8 text-sm-left">{appointmentInfo.location.hospitalAddress}</div>
+                        <div className="col-sm-8 text-sm-left" >{appointmentInfo.location.hospitalAddress}</div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bác sĩ</div>
-                        <div className="col-sm-8 text-sm-left">{appointmentInfo.doctorName}</div>
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Phòng khám</div>
+                        <div className="col-sm-8 text-sm-left" >{appointmentInfo.location.room}</div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Phòng</div>
-                        <div className="col-sm-8 text-sm-left">{appointmentInfo.location.room}</div>
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Ngày khám</div>
+                        <div className="col-sm-8 text-sm-left" >{moment(appointmentInfo.date).format('DD/MM/YYYY')}</div>
                     </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Giờ khám</div>
+                        <div className="col-sm-8 text-sm-left" >{appointmentInfo.time}</div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Loại lịch khám</div>
+                        <div className="col-sm-8 text-sm-left" >{props.data.examineType==="new"?"Khám mới":"Tái khám"}</div>
+                    </div>
+
                 </Col>
             </Row>
         </div>

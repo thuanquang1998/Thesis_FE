@@ -1,11 +1,7 @@
-import React,{useState, useEffect} from 'react';
-import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Card, Tabs, Space } from 'antd';
-import DoctorSidebar from '../../../../components/DoctorSideBar';
-import { Link } from 'react-router-dom';
-import StickyBox from "react-sticky-box";
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Document, Font, Page, PDFDownloadLink, StyleSheet, Text, View } from '@react-pdf/renderer';
+import { Button, Select } from 'antd';
 import moment from 'moment';
-import { PDFDownloadLink, Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import React, { useEffect, useState } from 'react';
 import font from './OpenSansCondensed-Light.ttf';
 
 Font.register({ family: 'Open Sans Condensed Light', src: font, format: "truetype"});
@@ -127,7 +123,7 @@ const MyDoc = (props) => {
     )
 }
 
-export default function PdfSchedule(props){
+export default function PdfListDoctor(props){
     const loadingButton = <Button>Loading document...</Button>
     const downloadButton = <Button>Tải lịch khám</Button>
     return (

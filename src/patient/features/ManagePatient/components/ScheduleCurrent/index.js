@@ -8,7 +8,12 @@ import { useHistory } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
 import doctorAPI from '../../../../../api/doctorAPI';
 import ViewResultSchedule from '../ViewResultSchedule';
+import LoadingTop from '../../../../components/loadingTop';
+import { Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import {Link} from 'react-router-dom';
 const { Option } = Select;
+
 
 function ScheduleCurrent(props) {
     const [form] = Form.useForm();
@@ -110,14 +115,13 @@ function ScheduleCurrent(props) {
         return dateObject
     }
     const onFindDate = (data) => {
-        console.log('data onFindDate:>> ', data);
         setFilterSchedule({
             ...filterSchedule,
             dateRange: {...data}
         })
     }
     const renderStatus = (record) => {
-        const {status} = record;
+        const status = record.status;
         let str = "";
         let color = "";
         switch (status) {
@@ -126,19 +130,19 @@ function ScheduleCurrent(props) {
                 color = "red"
                 break;
             case 'checking':
-                str = 'Đang khám'
-                color = "gold"
+                str = 'Đang xử lí'
+                color = "green"
                 break;
             case 'checked':
                 str = 'Đã khám';
-                color = "green"
+                color = "blue"
                 break;
             default:
                 str = 'Chưa khám'
                 color = "red"
                 break;
         }
-        return <Tag style={{ backgroundColor: `${color}` }}>{str}</Tag>
+        return <Tag style={{fontSize:"13px"}} color={`${color}`}>{str}</Tag>
     }
     const columns = [
         {
@@ -181,62 +185,107 @@ function ScheduleCurrent(props) {
                 return data
             }
 		},
-		{
+        {
             title: 'Sự kiện',
-            render: (text, record) => (
-                <div className="actions">
-                    {record.status==="checked"?
-                        <Button 
-                            onClick={()=>onViewResult(record.id)} 
-                            type="primary" 
-                            style={{marginRight:"5px"}}
-                        >
-                            Xem kết quả
-                        </Button>:
-                        record.status==="checking"?
-                            <Button 
-                                onClick={()=>{
-                                    const data = record.fullData;
-                                    setModalData({
-                                        ...modalData,
-                                        visible: true,
-                                        data: {...data}
-                                    })
-                                }} 
-                                type="primary" 
-                                style={{marginRight:"5px"}}
+            render: (text, record) => {
+                const menuChecked = (
+                    <Menu>
+                      <Menu.Item key="0">
+                        <Link 
+                            className="btn btn-sm bg-info-light"
+                                onClick={()=>onViewResult(record.id)} 
                             >
-                                Xem lịch
-                            </Button>:
-                            <>
-                                <Button onClick={()=>props.changeSchedule(record)} type="primary" style={{marginRight:"5px"}}>
-                                    Đổi lịch
-                                </Button>
-                                <Button onClick={()=>props.cancelSchedule(record)} type="danger" style={{marginRight:"5px"}}>
-                                    Hủy lịch
-                                </Button>
-                                <Button 
-                                    onClick={()=>{
-                                        const data = record.fullData;
-                                        console.log('data :>> ', data);
-                                        setModalData({
-                                            ...modalData,
-                                            visible: true,
-                                            data: {...data}
-                                        })
-                                    }} 
-                                    type="primary" 
-                                    style={{marginRight:"5px"}}
-                                >
-                                    Xem lịch
-                                </Button>
-                            </>
+                            <i className="far fa-eye"></i> Xem kết quả
+                        </Link>
+                      </Menu.Item>
+                    </Menu>
+                  );
+                const menuChecking = (
+                <Menu>
+                    <Menu.Item key="0">
+                        <Link 
+                            className="btn btn-sm bg-info-light"
+                            onClick={()=>{
+                                const data = record.fullData;
+                                setModalData({
+                                    ...modalData,
+                                    visible: true,
+                                    data: {...data}
+                                })
+                            }} 
+                            >
+                            <i className="far fa-eye"></i> Xem lịch
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+                );
+                const menuUnCheck = (
+                <Menu>
+                    <Menu.Item key="0">
+                        <Link 
+                            className="btn btn-sm bg-info-light"
+                            onClick={()=>{
+                                const data = record.fullData;
+                                setModalData({
+                                    ...modalData,
+                                    visible: true,
+                                    data: {...data}
+                                })
+                            }} 
+                            style={{marginBottom:"2px"}}
+                        >
+                            <i className="far fa-eye"></i> Xem lịch
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="1">
+                        <Link 
+                            className="btn btn-sm bg-success-light"
+                            onClick={()=>props.changeSchedule(record)}
+                            style={{marginBottom:"2px"}}
+                        >
+                            <i class="fas fa-exchange-alt"></i> Đổi lịch
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                        <Link 
+                            className="btn btn-sm bg-danger-light"
+                            onClick={()=>props.cancelSchedule(record)}
+                        >
+                            <i className="fas fa-times"></i> Hủy lịch
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+                );
+                return (
+                    <div className="actions">
+                    {record.status==="checked"?
+                       <Dropdown overlay={menuChecked} trigger={['click']}>
+                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            Sự kiện <DownOutlined />
+                            </a>
+                        </Dropdown>
+                        :
+                        record.status==="checking"?
+                            <Dropdown overlay={menuChecking} trigger={['click']}>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                Sự kiện <DownOutlined />
+                                </a>
+                            </Dropdown>
+                            :
+                            <Dropdown overlay={menuUnCheck} trigger={['click']}>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                Sự kiện <DownOutlined />
+                                </a>
+                            </Dropdown>
                     }
                 </div>
-            ),
+                )
+            },
 		},		
 	]
+    
     const onViewResult  = (id) => {
+        setLoadingSchedule(true);
         getCheckedAppointment(id);
     }
     const getCheckedAppointment = async (id) => {
@@ -247,17 +296,23 @@ function ScheduleCurrent(props) {
             // const _data = {
             //     doctorName: response.data.appointmentInfo
             // }
-            setModalResult({
-                ...modalResult,
-                visible: true,
-                data: {...response.data}
-            })
+            setTimeout(() => {
+                setModalResult({
+                    ...modalResult,
+                    visible: true,
+                    data: {...response.data}
+                })
+                setLoadingSchedule(false);
+            }, 300);
+            
         } catch (error) {
             console.log('error :>> ', error);
+            setLoadingSchedule(false);
         }
     }
     return (
         <div>
+            {loadingSchedule && <LoadingTop/>}
             <Card>
                 <h4 style={{fontWeight:"600", marginBottom:"20px"}}>Danh sách lịch khám:</h4>
                 <Form

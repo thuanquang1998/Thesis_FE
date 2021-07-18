@@ -125,8 +125,6 @@ const DoctorAppointment = (props) =>{
 
     // xem lich
     const onViewSchedule = (id) => {
-        console.log('id onViewSchedule:>> ', id);
-        // call api
         setLoadingPage(true);	
 		getScheduleById(id);
     }
@@ -150,59 +148,6 @@ const DoctorAppointment = (props) =>{
 
     // tai kham
    
-    // huy lich
-    const cancelSchedule = (record) => {
-        console.log('record :>> ', record);
-        let currentTime = moment();
-        const check1 = compareDates(new Date(currentTime), new Date(record.dateCheck))
-        const check2 = record.status!=="uncheck"?true:false;
-        const check = check1&&check2;
-
-        if(check) {
-			Swal.fire({
-				icon: "error",
-                title: "Không thể hủy lịch khám này.",
-	 			text: "Chỉ được hủy lịch khám trước 1 ngày."
-			});
-		} else {
-			Swal.fire({
-				icon: "info",
-                title: "Xác nhận hủy lịch khám?",
-				text: "Lịch khám sẽ bị hủy khỏi hệ thống và thông báo sẽ được gửi đến bệnh nhân.",
-				showCancelButton: true,
-				cancelButtonColor: "#3085d6",
-				confirmButtonColor: "#d33",
-				confirmButtonText: "Hủy lịch",
-				cancelButtonText: "Không hủy lịch"
-			})
-			.then((result) => {
-				if (result.value) {
-					cancelScheduleMethod(record.id);
-				} 
-			})
-			.catch((error) => {
-				console.log('error.message :>> ', error.message);
-			});
-		}
-    }
-    const cancelScheduleMethod = async (id) => {
-        console.log('cancelScheduleMethod');
-        // setLoadingPage(true)
-        // try {
-        //     const response = await patientAPI.cancel_schedule(id);
-		// 	if(response.error) throw new Error(response.errors[0].message);
-        //     get_schedule_patient(patientInfo);
-        //     setTimeout(() => {
-        // 		enqueueSnackbar('Xóa lịch khám thành công.', {variant: 'success'});
-        //         setLoadingPage(false)
-		// 	}, 300);
-
-        // } catch (error) {
-		// 	console.log('error.message :>> ', error.message);
-        // 	enqueueSnackbar('Xóa lịch khám không thành công.', {variant: 'error'})
-        //     setLoadingPage(false)
-        // }
-    }
     return(
         <div>
             {loadingPage && <LoadingTop/>}
@@ -237,7 +182,11 @@ const DoctorAppointment = (props) =>{
                                     <ScheduleOutDate data={appointment}/>
                                 </TabPane>
                                 <TabPane tab="Lịch khám đang xử lí" key="2">
-                                    <SchedulePending data={appointment}/>
+                                    <SchedulePending 
+                                        data={appointment}
+                                        viewSchedule={viewSchedule}
+                                        onViewSchedule={onViewSchedule}
+                                    />
                                 </TabPane>
                                 <TabPane tab="Lịch khám hôm nay" key="3">
                                     <ScheduleCurrent {...props}
@@ -246,14 +195,12 @@ const DoctorAppointment = (props) =>{
                                         changeStatus={changeStatusCurrentSchedule}
                                         reExamSuccess={handleReExamSuccess}
                                         viewSchedule={viewSchedule}
-
                                         onViewSchedule={onViewSchedule}
                                     />
                                 </TabPane>
                                 <TabPane tab="Lịch khám sắp diễn ra" key="4">
                                     <ScheduleComing 
                                         data={appointment}
-                                        cancelSchedule={cancelSchedule}
                                     />
                                 </TabPane>
                             </Tabs>

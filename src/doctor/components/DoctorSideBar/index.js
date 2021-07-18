@@ -40,16 +40,6 @@ const DoctorSidebar = () => {
                 <div className="profile-info-widget">
                     <h3 style={{fontWeight:"bold", margin:"0"}}>Trang quản lí bác sĩ</h3>
 
-                    {/* <Link to="#" className="booking-doc-img">
-                        <img src={currentDoctor?.doctor.avatar||IMG01} alt="User" />
-                    </Link> */}
-                    {/* <div className="profile-det-info">
-                        <h3 style={{fontWeight:"bold"}}>Bác sĩ {currentDoctor?.doctor.fullName}</h3>
-                        
-                        <div className="patient-details">
-                            <h5 className="mb-0">{currentDoctor?.doctor.hospital_info.name} </h5>
-                        </div>
-                    </div> */}
                 </div>
             </div>
             <div className="dashboard-widget" >
@@ -60,18 +50,18 @@ const DoctorSidebar = () => {
                     <Nav.Item> 
                         <NavLink to="/bac-si" > 
                             <i className="fas fa-columns"></i>
-                            <span>Dashboard</span>
+                            <span>Thống kê</span>
                         </NavLink>
                     </Nav.Item>
                         
-                    <Nav.Item> 
+                    <Nav.Item > 
                         <NavLink to="/bac-si/thong-tin-tai-khoan">
                             <i className="fas fa-user-cog"></i>
                             <span>Thông tin tài khoản</span>
                         </NavLink> 
                     </Nav.Item> 
 
-                    <Nav.Item> 
+                    <Nav.Item > 
                         <NavLink to="/bac-si/lich-kham" >
                             <i className="fas fa-hourglass-start"></i>
                             <span>Lịch khám</span> 
@@ -90,12 +80,12 @@ const DoctorSidebar = () => {
                             <span>Đánh giá</span>
                         </NavLink>
                     </Nav.Item>
-                    <Nav.Item> 
+                    {/* <Nav.Item> 
                         <NavLink to="/bac-si/doi-mat-khau">
                             <i className="fas fa-lock"></i>
                             <span>Đổi mật khẩu</span>
                         </NavLink>
-                    </Nav.Item>
+                    </Nav.Item> */}
 
                     <Nav.Item> 
                         <NavLink to="/bac-si/dang-xuat"  onClick={handleLogoutDoctor}>

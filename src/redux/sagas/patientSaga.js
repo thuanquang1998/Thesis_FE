@@ -9,6 +9,7 @@ import {
     SET_CURRENT_HOSPITAL
 } from '../actions/patientActions';
 import Swal from 'sweetalert2';
+import {useSnackbar} from 'notistack';
 
 import patientAPI from '../../api/patientApi';
 import adminAPI from '../../api/adminAPI';
@@ -114,13 +115,16 @@ function* confirmBooking (data) {
 }
 
 function* make_appointment({payload}){
+    // const {enqueueSnackbar} = useSnackbar();
+
     try{
         const response = yield call(patientAPI.make_appointment, payload)
         if (response.error){
             SwalAlert('Error', 'Server disconected','error')
         }
         else {
-            SwalAlert('Đặt lịch khám thành công','success')
+            SwalAlert('Đặt lịch khám thành công')
+            // enqueueSnackbar("Đặt lịch khám thành công", 'success')
         }
     }
     catch(err){
@@ -157,3 +161,4 @@ function* set_current_hospital({payload}){
         console.log(err)    
     }
 }
+

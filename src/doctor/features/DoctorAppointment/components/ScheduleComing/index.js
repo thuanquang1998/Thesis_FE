@@ -1,12 +1,18 @@
-import { Badge, Button, Card, Input, Table } from 'antd';
+import { Badge, Button, Card, Input, Table, Tag, Menu, Dropdown } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ModalSchedule from '../ModalSchedule';
 import ScheduleSearch from '../ScheduleSearch';
+import {Link} from 'react-router-dom';
+import { DownOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
+
 
 function ScheduleComing(props) {
     const [listSchedule, setListSchedule] = useState([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
+    const history = useHistory();
+
     const [modalData, setModalData] = useState({
         visible: false,
         data: {},
@@ -42,6 +48,29 @@ function ScheduleComing(props) {
         const dateObject = dateMomentObject.toDate();
         return dateObject
     }
+    const renderStatus = (status) => {
+        let str = "";
+        let color = "";
+        switch (status) {
+            case 'uncheck':
+                str = 'Chưa khám';
+                color = "red"
+                break;
+            case 'checking':
+                str = 'Đang xử lí'
+                color = "green"
+                break;
+            case 'checked':
+                str = 'Đã khám';
+                color = "blue"
+                break;
+            default:
+                str = 'Chưa khám'
+                color = "red"
+                break;
+        }
+        return <Tag style={{fontSize:"13px"}} color={`${color}`}>{str}</Tag>
+    }
     const columns = [
         {
 			title: 'Bệnh nhân',
@@ -68,51 +97,47 @@ function ScheduleComing(props) {
         {
 			title:'Trạng thái',
 			dataIndex:'status',
-            render: (text, record) => (
-                <Badge style={{ backgroundColor: 'red' }}>{record.status==='uncheck'?'Chưa khám':'Chưa khám'}</Badge>
-            )
+            render: (text, record) => {
+                const data = renderStatus(record.status);
+                return data
+            }
 		},
 		{
             title: 'Sự kiện',
-            render: (text, record) => (
-                <div className="actions">
-                    <Button 
-                        onClick={()=>{
-                            const data = record.fullData;
-                            setModalData({
-                                ...modalData,
-                                visible: true,
-                                data: {...data}
-                            })
-                        }} 
-                        type="primary" 
-                        style={{marginRight:"5px"}}
-                    >
-                        Xem lịch
-                    </Button>
-                    
-                    <Button 
-                        // onClick={()=>{
-                        //     const data = record.fullData;
-                        //     setModalData({
-                        //         ...modalData,
-                        //         visible: true,
-                        //         data: {...data}
-                        //     })
-                        // }} 
-                        onClick={()=>props.cancelSchedule(record)}
-                        type="primary" 
-                        style={{marginRight:"5px"}}
-                    >
-                        Hủy lịch
-                    </Button>
-                </div>
-            ),
+            render: (text, record) => {
+                
+                const menuChecking = (
+                    <Menu>
+                        <Menu.Item key="0">
+                            <Button 
+                                style={{width:"100%"}}
+                                className="btn btn-sm bg-info-light"
+                                onClick={()=>{
+                                    const data = record.fullData;
+                                    setModalData({
+                                        ...modalData,
+                                        visible: true,
+                                        data: {...data}
+                                    })
+                                }} 
+                            >
+                                <i className="far fa-eye"></i> Xem lịch
+                            </Button>
+                        </Menu.Item>
+                    </Menu>)
+
+
+                return (
+                    <Dropdown overlay={menuChecking} trigger={['click']}>
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        Sự kiện <DownOutlined />
+                        </a>
+                    </Dropdown>
+                )
+            },
 		},		
 	]
-    const handleCancelSchedule = (data) => {
-        
-    }
+  
     const handleSearchName = (data) => {
         setLoadingSchedule(true);
         setSearchName(data);

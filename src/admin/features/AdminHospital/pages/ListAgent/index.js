@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import LoadingTop from '../../../../components/loadingTop';
 import CreateAgent from '../../components/CreateAgent';
 
-const Employees = () => {
+const ListAgent = () => {
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [listEmployees, setListEmployees] = useState([]);
@@ -20,34 +20,34 @@ const Employees = () => {
         data: {},
     })
 	useEffect(()=> {
-		(async ()=>{
-			try {
-				const response = await adminAPI.get_doctors_of_hospital(hospitalInfo.id);
-				console.log('response :>> ', response);
-				if(response.error) throw new Error(response.errors[0].message);
-				const {data} = response.data;
-				const _data = data.map(item=>{
-					const _item = {
-						name: item.fullName,
-						specialization: item.spec_detail.name,
-						id: item._id,
-						phone: item.phone,
-						email: item.email,
-						typeAccount: 'Bác sĩ'
-					}
-					return _item;
-				})
-				
-				setListEmployees(_data)
-			} catch (error) {
-				console.log(`error.message`, error.message)
-			}
+		setLoadingPage(true);
+		getListAgent();
+	},[])
+	const getListAgent = async () => {
+		try {
+			const response = await adminAPI.get_agents_of_hospital(hospitalInfo.id);
+			console.log('response get_agents_of_hospital:>> ', response);
+			if(response.error) throw new Error(response.errors[0].message);
+			const data = response.data;
+			const _data = data.map(item=>{
+				const _item = {
+					name: item.fullName,
+					id: item._id,
+					phone: item.phone,
+					email: item.email,
+					sex: item.sex==="male"?"Nam":"Nữ"
+				}
+				return _item;
+			})
+			setListEmployees(_data);
 			setTimeout(() => {
 				setLoadingPage(false);
 			}, 300);
-		})();
-		
-	},[])
+		} catch (error) {
+			console.log(`error.message`, error.message);
+			setLoadingPage(false);
+		}
+	}
 
 	
 	const new_columns = [
@@ -64,9 +64,9 @@ const Employees = () => {
           fixed: 'left',
 		},
 		{
-			title:'Chuyên khoa',
-			dataIndex: 'specialization',
-			key:'specialization'
+			title:'Email',
+			dataIndex: 'email',
+			key:'email'
 		},
         {
           title: 'Số điện thoại',
@@ -74,34 +74,12 @@ const Employees = () => {
 		  key:'phone'
         },
         {
-          title: 'Email',
-		  dataIndex: 'email',
-		  key:'email'
-        },
-        {
-          title: 'Loại tài khoản',
-		  dataIndex: 'typeAccount',
-		  key:'typeAccount', 
-		  render: (text) => text==='Bác sĩ'?(<Tag color="green">{text}</Tag>):(<Tag color="purple">{text}</Tag>),
-		//   sorter: (a, b) => 
-        },
-        {
-          title: 'Hành động',
-          key: 'id',
-          render: (text, record) => (
-			<div className="actions">
-				<a href="#0" className="btn btn-sm bg-success-light"><i className="fa fa-pencil-alt"></i>Sửa</a>
-				<a href="#0" className="btn btn-sm bg-danger-light"><i className="fa fa-trash"></i>Xóa</a>
-			</div>
-		),
-          fixed: 'right',
-          width: 170,
+          title: 'Giới tính',
+		  dataIndex: 'sex',
+		  key:'sex'
         },
       ]
 
-	const onCreateAgent = () => {
-
-	}
     return (
         <>
             <SidebarNav/>
@@ -111,19 +89,20 @@ const Employees = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-7 col-auto">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách bác sĩ</h3>
-								<ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
-									<li className="breadcrumb-item active">Danh sách bác sĩ</li>
-								</ul>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách nhân viên</h3>
 							</div>
 							<div className="col-sm-5 col">
-								<Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link>
-								<Button onClick={()=>
-                                    setModalData({
-                                    ...modalData,
-                                    	visible: true,
-                                })}  className="btn btn-primary float-right mt-2">Thêm nhân viên</Button>
+								{/* <Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link> */}
+								<Link 
+									onClick={()=>
+										setModalData({
+										...modalData,
+											visible: true,
+									})}  
+									className="btn btn-primary float-right mt-2"
+								>
+									Thêm nhân viên
+								</Link>
 							</div>
 						</div>
 					</div>
@@ -153,7 +132,9 @@ const Employees = () => {
 								visible: !modalData.visible,
 							})
 						}}
-						loadingCreate={(data)=>setLoadingPage(data)}
+						loadingCreate={(data)=>
+							setLoadingPage(data)
+						}
 					/>
                 </div>
 				
@@ -163,4 +144,4 @@ const Employees = () => {
     )
 }
 
-export default Employees
+export default ListAgent

@@ -11,6 +11,7 @@ function CreateAgent(props) {
 
     const onHandleSubmit = (data) => {
         props.loadingCreate(true);
+        props.createAgent(data);
         createAgentApi(data);
     }
     const createAgentApi = async (data) =>{
@@ -34,11 +35,7 @@ function CreateAgent(props) {
             visible={modalData.visible} 
             onOk={handleOk} 
             onCancel={handleClose}
-            footer={[
-                <Button key="back" onClick={handleOk}>
-                  Ok
-                </Button>
-              ]}
+            footer={null}
         >
              <Form
                 form={form}

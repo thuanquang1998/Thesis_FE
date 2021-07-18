@@ -185,18 +185,18 @@ function PatientSchedule(props) {
                 break;
             case 'checking':
                 str = 'Đang xử lí'
-                color = "gold"
+                color = "green"
                 break;
             case 'checked':
                 str = 'Đã khám';
-                color = "green"
+                color = "blue"
                 break;
             default:
                 str = 'Chưa khám'
                 color = "red"
                 break;
         }
-        return <Tag style={{ backgroundColor: `${color}` }}>{str}</Tag>
+        return <Tag style={{fontSize:"13px"}} color={`${color}`}>{str}</Tag>
     }
     const columns = [
         {

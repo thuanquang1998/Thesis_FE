@@ -44,9 +44,15 @@ class adminAPI{
 
 
     // ADMIN HOSPITAL API
-        // lấy danh sách bác sĩ thuộc bệnh viện => nhân viên
+        // lấy danh sách bác sĩ thuộc bệnh viện 
         get_doctors_of_hospital(id) {
             return http.get(`hospitals/${id}/doctors`)
+                        .then(res=> res.data)
+                        .catch(err => err.response.data)
+        }
+        // lấy danh sách nhân viên thuộc bệnh viện 
+        get_agents_of_hospital(id) {
+            return http.get(`agent/hospital/${id}`)
                         .then(res=> res.data)
                         .catch(err => err.response.data)
         }
@@ -128,6 +134,13 @@ class adminAPI{
         // lấy danh sách đánh giá bác sĩ thuộc bệnh viện
         get_review_hospital(id){
             return http.get(`hospitals/${id}/doctor_rate`)
+                .then(res=>res.data)
+                .catch(err => err.response.data)
+        }
+
+        // lấy danh sách lịch khám bị hủy của bệnh viện 
+        get_list_schedule_cancel(id) {
+            return http.get(`appointment/${id}/get_cancel_appointment`)
                 .then(res=>res.data)
                 .catch(err => err.response.data)
         }

@@ -2,15 +2,17 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, Input, Row, Space, Tabs } from 'antd';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import StickyBox from "react-sticky-box";
 import doctorAPI from '../../../../../api/doctorAPI';
 import DoctorSidebar from '../../../../components/DoctorSideBar';
 import InfoSchedule from '../InfoSchedule';
 import LoadingTop from '../../../../components/loadingTop';
+import Swal from "sweetalert2";
 
 const { TabPane } = Tabs;
 function ViewSchedule(props) {
+    const history = useHistory();
     const location = useLocation();
     const {enqueueSnackbar} = useSnackbar();
     const [form] = Form.useForm();
@@ -57,16 +59,34 @@ function ViewSchedule(props) {
         try {
             const response = await doctorAPI.update_data_checking(data);
             console.log('response checkingUpdateData:>> ', response);
-           
+            if(response.error) throw new Error ('Khong the luu lich kham');
+            setLoadingSubmit(false);
+            Swal.fire({
+				icon: "info",
+				text: "Lưu lịch khám thành công. Đợi kết quả xét nghiệm.",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Khám cho bệnh nhân khác",
+				cancelButtonText: "Đóng"
+			})
+			.then((result) => {
+                if(result.isConfirmed) {
+                    history.push({
+                        pathname: `/bac-si/lich-kham`,
+                    })
+                }
+			})
         } catch (error) {
             console.log('error :>> ', error);
+            // notification
+            enqueueSnackbar('Lỗi kết nối mạng. Thử lại sau ít phút.', 'error');
+            setLoadingSubmit(false);
         }
-        setLoadingSubmit(false);
     }
     const finish_exam_schedule = async (submitData) => {
         try {
             const response = await doctorAPI.transfer_schedule_to_checked(submitData);
-            console.log(' response:>> finish_exam_schedule ', response);
             if(response.error) throw new Error("Can't finish_exam_schedule");
             enqueueSnackbar('Hoàn thành khám', {variant: 'success'})
         } catch (error) {
@@ -240,9 +260,9 @@ function ViewSchedule(props) {
                                                     <Input.TextArea/>
                                                 </Form.Item>
                                             </Row>
-                                            <Col span={24}>
+                                            <Col span={24} style={{display:"flex"}}>
                                                 <Form.Item>
-                                                    <Button type="primary" htmlType="submit" onClick={()=>setStateForm('checking')}>Lưu</Button>
+                                                    <Button type="primary" htmlType="submit" onClick={()=>setStateForm('checking')}>Lưu thông tin</Button>
                                                 </Form.Item>
                                                 <Form.Item>
                                                     <Button type="primary" htmlType="submit" onClick={()=>setStateForm('checked')}>Hoàn thành khám</Button>

@@ -22,7 +22,6 @@ const DetailDoctorPage = (props) => {
     const history = useHistory();
     const patient = useSelector(state=> state.patient);
     const data = history.location.state.data;
-    console.log('data :>> ', data);
     const [reviewData, setReviewData] = useState([]);
     const [loadingReview, setLoadingReview] = useState(true);
     const [loadingPage, setLoadingPage] = useState(true);
@@ -133,6 +132,41 @@ const DetailDoctorPage = (props) => {
             enqueueSnackbar('Đánh giá thành công', {variant: 'success'})
         }
     }
+    const handleBooking = () => {
+        if (patient.isLoggedIn === true) {
+            // history.push(`/patient/${props.data?.id}/datlich`)
+            history.push({
+                pathname: `/dat-kham/${props.data?._id}`,
+                state: {data}
+            })
+        } else {
+            Swal.fire({
+                title: "Thông báo",
+                text: "Bạn muốn đặt khám",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Đăng nhập",
+                cancelButtonText: "Hủy"
+              })
+            .then((result) => {
+                if (result.value) {
+                    history.push({
+                    pathname: `/dat-kham/${props.data?.id}/dang-nhap`,
+                    state: {data},
+                })
+                } 
+            })
+            .catch((error) => {
+                Swal.fire({
+                icon: "error",
+                title: "Opps...",
+                text: `Something went wrong!, ${error.message}`
+                });
+            });
+        }
+    } 
     return (
         <div>
             {loadingPage && <LoadingTop/>}
@@ -188,12 +222,14 @@ const DetailDoctorPage = (props) => {
                                 </ul>
                             </Col>
                             <Col xs={{span:24, offset:8}} sm={{span:4, offset:10}} md={{span:5, offset:0}} style={{width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-                                <Link 
+                                {/* <Link 
                                     to={{
                                         pathname:`/dat-kham/${props.match.params.doctorID}`,
                                         state: {data}
-                                    }}
-                                ><Button type="primary" style={{borderRadius:"20px"}}>Đặt lịch khám</Button></Link>
+                                    }} */}
+                                {/* > */}
+                                <Button onClick={handleBooking} type="primary" style={{borderRadius:"20px"}}>Đặt lịch khám</Button>
+                                {/* </Link> */}
                             </Col>
                         </Row>
                     </Card>

@@ -174,18 +174,18 @@ const Appoinments = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-12">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>{`Thông tin ${hospitalInfo.name}`}</h3>
-								<ul className="breadcrumb">
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách lịch khám</h3>
+								{/* <ul className="breadcrumb">
 									<li className="breadcrumb-item active">Dashboard</li>
 									<li className="breadcrumb-item active">{hospitalInfo.name}</li>
-								</ul>
+								</ul> */}
 							</div>
 						</div>
 					</div>
                     
                     <div className="infobv">
 						<Card 
-							title={<>Danh sách lịch khám <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
+							// title={<>Danh sách lịch khám <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
 						>
 							<FilterDoctorAdmin
 								onSearchName={handleSearchName}

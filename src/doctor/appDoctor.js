@@ -39,7 +39,7 @@ const AppDoctor =  ({history}) => {
                         />
                         <Route exact path='/quan-li/dang-nhap' component={LoginManager}/>
 
-                        <PrivateRouteDoctor component={DoctorDashboard} path="/bac-si/dashboard" exact/>
+                        <PrivateRouteDoctor component={DoctorDashboard} path="/bac-si" exact/>
                         <PrivateRouteDoctor component={DoctorProfile} path="/bac-si/thong-tin-tai-khoan" exact/>
                         <PrivateRouteDoctor component={DoctorAppointment} path="/bac-si/lich-kham" exact/>
                         <PrivateRouteDoctor component={DoctorSchedule} path="/bac-si/lich-lam-viec" exact/>

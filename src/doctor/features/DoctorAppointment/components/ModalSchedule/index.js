@@ -16,9 +16,9 @@ function ModalSchedule(props) {
             footer={[
                 <div style={{display:'flex', flexWrap: 'nowrap', flexDirection: 'row', float:'right'}}>
                     <div><PdfSchedule data={data}></PdfSchedule></div>
-                    <div>
-                        <Button key="back" onClick={handleOk}>
-                        Ok
+                    <div style={{marginLeft:"10px"}}>
+                        <Button type="danger" key="back" onClick={handleOk}>
+                            Đóng
                         </Button>
                     </div>
                 </div>

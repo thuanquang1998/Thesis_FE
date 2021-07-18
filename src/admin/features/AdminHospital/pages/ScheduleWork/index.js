@@ -1,4 +1,4 @@
-import { Badge, Button, Table, Tag, Card } from 'antd'
+import { Badge, Button, Table, Tag, Card, Modal } from 'antd'
 import React, {useState, useEffect} from 'react'
 import SidebarNav from '../../../../components/SideBar'
 import AddEmployee from '../../components/Modal/AddEmployee';
@@ -22,7 +22,7 @@ const ScheduleWork = () => {
 		searchName: "",
 		searchSpec: "",
 	})
-
+	const [modalAdd, setModalAdd] = useState(false);
 	useEffect(()=> {
 		const {searchName, searchSpec} = filter;
 		
@@ -176,7 +176,19 @@ const ScheduleWork = () => {
 						/>
 					</Card>
 
-					
+					<Modal 
+						title="Basic Modal" 
+						visible={modalAdd} 
+						onCancel={()=>{
+							setModalAdd(false);
+							
+						}}
+						footer={null}
+					>
+						<p>Some contents...</p>
+						<p>Some contents...</p>
+						<p>Some contents...</p>
+					</Modal>
                 </div>
 				
             </div>

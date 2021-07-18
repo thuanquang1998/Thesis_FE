@@ -10,7 +10,7 @@ import PrivateRouteAdmin from './components/Route/PrivateRouteAdmin'
 import CreateDoctor from './features/AdminHospital/components/CreateDoctor'
 import Appoinments from './features/AdminHospital/pages/Appoinments'
 import DashboardHospital from './features/AdminHospital/pages/DashboardHospital'
-import Employees from './features/AdminHospital/pages/Employees'
+import DoctorHospital from './features/AdminHospital/pages/DoctorHospital'
 import HospitalInfo from './features/AdminHospital/pages/HospitalInfo'
 import Reviews from './features/AdminHospital/pages/Reviews'
 import ScheduleDoctorPage from './features/AdminHospital/pages/ScheduleDoctorPage'
@@ -23,13 +23,14 @@ import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot'
 import AgentTest from './features/AdminHospital/pages/AgentTest'
 import Agent from './features/AgentHospital'
 import AgentBooking from './features/AgentHospital/page/AgentBooking';
+import ScheduleCancel from './features/AgentHospital/page/ScheduleCancel';
+import ListAgent from './features/AdminHospital/pages/ListAgent';
 
 const AppAdmin =({match})=>{
     const dispatch = useDispatch();
     const admin = useSelector(state=>state.admin);
     const {loadingPage, isAdminLoggedIn, currentAdmin} = admin;
     const accountType = currentAdmin.accountType;
-    
     useEffect(()=> {
 		dispatch(get_specialities_system());
         dispatch(get_list_hospitals());
@@ -66,7 +67,8 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={DashboardHospital} path="/admin/hospital" exact/>
                         <PrivateRouteAdmin component={Appoinments} path="/admin/hospital/lich-kham" exact/>
                         <PrivateRouteAdmin component={HospitalInfo} path="/admin/hospital/thong-tin" exact/>
-                        <PrivateRouteAdmin component={Employees} path="/admin/hospital/nhan-vien" exact/>
+                        <PrivateRouteAdmin component={DoctorHospital} path="/admin/hospital/ds-bac-si" exact/>
+                        <PrivateRouteAdmin component={ListAgent} path="/admin/hospital/ds-nhan-vien" exact/>
                         <PrivateRouteAdmin component={Specialities} path="/admin/hospital/chuyen-khoa" exact/>
                         <PrivateRouteAdmin component={Reviews} path="/admin/hospital/danh-gia" exact/>
                         <PrivateRouteAdmin component={CreateDoctor} path="/admin/hospital/nhan-vien/them" exact/>
@@ -75,7 +77,11 @@ const AppAdmin =({match})=>{
 
                         {/* agent hospital */}
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/agent/lich-lam-viec" exact/>
-                        <PrivateRouteAdmin component={AgentBooking} path="/admin/agent/dat-lich" exact/>
+                        <PrivateRouteAdmin component={AgentBooking} path="/admin/agent/dat-lich-offline" exact/>
+                        <PrivateRouteAdmin component={AgentBooking} path="/admin/agent/dat-lich-online" exact/>
+
+                        <PrivateRouteAdmin component={ScheduleCancel} path="/admin/agent/tu-van" exact/>
+
 
                     </Switch>
                 </div>

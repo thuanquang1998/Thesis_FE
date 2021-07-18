@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Tabs, Input, Radio, Card, Table, Badge, Button, Tag} from 'antd';
+import {Tabs, Input, Radio, Card, Table, Badge, Button, Tag, Menu, Dropdown} from 'antd';
 import moment from 'moment';
 import ModalSchedule from '../ModalSchedule';
 import ReExamination from '../ReExamination';
 import { useHistory } from 'react-router-dom';
 import ScheduleSearch from '../ScheduleSearch';
-
+import {Link} from 'react-router-dom';
+import { DownOutlined } from '@ant-design/icons';
 
 function ScheduleCurrent(props) {
     const {status, changeStatus, viewSchedule} = props;
@@ -103,18 +104,18 @@ function ScheduleCurrent(props) {
                 break;
             case 'checking':
                 str = 'Đang xử lí'
-                color = "gold"
+                color = "green"
                 break;
             case 'checked':
                 str = 'Đã khám';
-                color = "green"
+                color = "blue"
                 break;
             default:
                 str = 'Chưa khám'
                 color = "red"
                 break;
         }
-        return <Tag style={{ backgroundColor: `${color}` }}>{str}</Tag>
+        return <Tag style={{fontSize:"13px"}} color={`${color}`}>{str}</Tag>
     }
    
     const columns = [
@@ -150,10 +151,13 @@ function ScheduleCurrent(props) {
 		},
 		{
             title: 'Sự kiện',
-            render: (text, record) => (
-                <div className="actions">
-                    {record.status==="checked"?
+            render: (text, record) => {
+                const menuChecked = (
+                    <Menu>
+                      <Menu.Item key="0">
                         <Button 
+                            style={{width:"100%"}}
+                            className="btn btn-sm bg-info-light"
                             onClick={()=>{
                                 const data = record;
                                 setModalReExam({
@@ -162,45 +166,84 @@ function ScheduleCurrent(props) {
                                     data: {...data}
                                 })
                             }} 
-                            type="primary" 
-                            style={{marginRight:"5px"}}
-                        >
-                            Tái khám
+                            >
+                            <i className="far fa-eye"></i> Tái khám
                         </Button>
+                      </Menu.Item>
+                    </Menu>
+                  );
+                const menuChecking = (
+                <Menu>
+                    <Menu.Item key="0">
+                        <Button 
+                            style={{width:"100%"}}
+                            className="btn btn-sm bg-info-light"
+                            onClick={()=>props.onViewSchedule(record.id)}
+                        >
+                            <i className="far fa-eye"></i> Xem lịch
+                        </Button>
+                    </Menu.Item>
+                    <Menu.Item key="0">
+                        <Button 
+                            style={{width:"100%"}}
+                            className="btn btn-sm bg-success-light"
+                            onClick={()=>{
+                                const data = record.fullData;
+                                history.push({
+                                    pathname: `/bac-si/lich-kham/${data._id}`,
+                                    state: {
+                                        data: {...data},
+                                    }
+                                })
+                            }} 
+                        >
+                            <i className="far fa-eye"></i> Khám bệnh
+                        </Button>
+                    </Menu.Item>
+                </Menu>
+                );
+                
+                return (<div className="actions">
+                    {record.status==="checked"?
+                        <Dropdown overlay={menuChecked} trigger={['click']}>
+                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            Sự kiện <DownOutlined />
+                            </a>
+                        </Dropdown>
                         :
-                        <>
-                            <Button 
-                                // onClick={()=>
-                                //     setModalData({
-                                //     ...modalData,
-                                //     visible: true,
-                                //     data: {...record.fullData}
-                                // })} 
-                                onClick={()=>props.onViewSchedule(record.id)}
-                                type="primary" 
-                                style={{marginRight:"5px"}}
-                            >
-                                Xem lịch
-                            </Button>
-                            <Button 
-                                onClick={()=>{
-                                    const data = record.fullData;
-                                    history.push({
-                                        pathname: `/bac-si/lich-kham/${data._id}`,
-                                        state: {
-                                            data: {...data},
-                                        }
-                                    })
-                                }} 
-                                type="primary" 
-                                style={{marginRight:"5px"}}
-                            >
-                                Khám bệnh
-                            </Button>
-                        </>
+                        <Dropdown overlay={menuChecking} trigger={['click']}>
+                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            Sự kiện <DownOutlined />
+                            </a>
+                        </Dropdown>
+                        
+                        // <>
+                        //     <Button 
+                        //         onClick={()=>props.onViewSchedule(record.id)}
+                        //         type="primary" 
+                        //         style={{marginRight:"5px"}}
+                        //     >
+                        //         Xem lịch
+                        //     </Button>
+                        //     <Button 
+                        //         onClick={()=>{
+                        //             const data = record.fullData;
+                        //             history.push({
+                        //                 pathname: `/bac-si/lich-kham/${data._id}`,
+                        //                 state: {
+                        //                     data: {...data},
+                        //                 }
+                        //             })
+                        //         }} 
+                        //         type="primary" 
+                        //         style={{marginRight:"5px"}}
+                        //     >
+                        //         Khám bệnh
+                        //     </Button>
+                        // </>
                     }
                 </div>
-            ),
+            )},
 		},		
 	]
 
