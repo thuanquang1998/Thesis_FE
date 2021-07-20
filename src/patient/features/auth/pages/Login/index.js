@@ -30,7 +30,7 @@ const LoginPatient = () => {
         setPhone(data);
         dispatch(getVerifyCode(data));
         setStatePageLogin('status2');
-        SwalAlert( 'Success',`Mã xác thực đã được gửi đến ${_phone}` , 'success')
+        SwalAlert( `Mã xác thực đã được gửi đến ${_phone}` ,'', 'success')
     }
     useEffect(() => {
         if(patient.isLoggedIn) {
@@ -57,14 +57,14 @@ const LoginPatient = () => {
             await dispatch(getVerifySMS(data));
         }
         else{
-            SwalAlert('Error', 'Sai code, mời bạn thử lại','error')
+            SwalAlert( 'Sai code, mời bạn thử lại','','error')
             localStorage.clear()
         }
     };
 
     const reSendPhoneNumber = () => {
         dispatch(getVerifyCode(phone));
-        SwalAlert( 'Success',`Mã xác thực đã được gửi đến ${phone.phone}` , 'success')
+        SwalAlert( `Mã xác thực đã được gửi đến ${phone.phone}` , '','success')
     }
     const changePhoneNumber = () => {
         setStatePageLogin('status1')

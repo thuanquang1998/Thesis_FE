@@ -21,7 +21,6 @@ const DoctorProfile = (props) =>{
     const { enqueueSnackbar} = useSnackbar();
     const [doctorData, setDoctorData ] = useState({});
     const [loadingPage, setLoadingPage] = useState(true);
-    const [validImage, setValidImage] = useState(true);
     const [initData, setInitData] = useState({
         about: "",
     });

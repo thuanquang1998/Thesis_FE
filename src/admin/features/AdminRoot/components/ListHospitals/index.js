@@ -33,7 +33,7 @@ const ListHospitals = () => {
           render: (text) => {
             console.log('text :>> ', text);
             return (
-              <p>54/19 Linh Trung, Thu duc</p>
+              <p>{text}</p>
             )
             }, 
         },

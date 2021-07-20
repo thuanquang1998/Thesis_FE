@@ -30,6 +30,7 @@ const CreateDoctor = () => {
     const [ loadingPage, setLoadingPage ] = useState(false);
     const [ listSpec, setListSpec ] = useState([]);
 
+    const [about, setAbout] = useState("Là một bác sĩ giỏi, tận tâm, có trách nhiệm.")
 
     const [fileAvatar, setFileAvatar] = useState(null);
     const fileInput = useRef(null);
@@ -62,19 +63,14 @@ const CreateDoctor = () => {
         setFileAvatar(file[0])
     }
 
-    const create_hos = async (data) => {
-        try {
-            const response = await adminAPI.create_hospital(data);
-            console.log('response :>> ', response);
-        } catch (error) {
-            console.log('error.message :>> ', error.message);
-        }
+    const onChangeAbout = (value) => {
+        setAbout(value);
     }
     
     const onHandleSubmitForm = (data) => {
         const _submitData = new FormData();
         _submitData.append("image", fileAvatar);
-
+        _submitData.append("about", about);
         const _data = {
             hopitalId: JSON.parse(localStorage.getItem('currentAdmin')).hospital.id,
             fullName: data.fullName,
@@ -83,14 +79,12 @@ const CreateDoctor = () => {
             phone: data.phone,
             specialization:data.specialization,
             email: data.email,
-            about: "Là một bác sĩ giỏi, tận tâm, có trách nhiệm.",
             title: data.title,
         }
 
         for (const x in _data) {
             _submitData.append(`${x}`, _data[x]);
         }
-        console.log('_submitData :>> ', _submitData);
         createDoctor(_submitData)
     }
     const createDoctor = async (data) => {
@@ -144,8 +138,8 @@ const CreateDoctor = () => {
                     >   
                         <Row gutter={[8,8]}>
                             <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-                                <Form.Item name="fullName" label="Tên nhân viên:" rules={[{required: true, message: 'Nhập tên nhân viên!'}]}>
-                                    <Input className="input" placeholder="Tên nhân viên"/>
+                                <Form.Item name="fullName" label="Tên bác sĩ:" rules={[{required: true, message: 'Nhập tên nhân viên!'}]}>
+                                    <Input className="input" placeholder="Tên bác sĩ"/>
                                 </Form.Item>
                                 <Form.Item name="phone" label="Số điện thoại:" rules={[{required: true, message: 'Nhập số điện thoại'}]}>
                                     <Input className="input" placeholder="Số điện thoại liện hệ"/>
@@ -168,18 +162,6 @@ const CreateDoctor = () => {
                                         <Radio.Button value="female">Nữ</Radio.Button>
                                     </Radio.Group>
                                 </Form.Item>
-                                <Form.Item 
-                                    name="birthday" 
-                                    label="Ngày sinh:"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng chọn ngày sinh',
-                                        }
-                                    ]}
-                                >
-                                    <DatePicker/>
-                                </Form.Item>
                             </Col>
                             <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                                 <Form.Item name="avatar" label="Ảnh đại diện:" >
@@ -194,7 +176,7 @@ const CreateDoctor = () => {
                                 <Form.Item name="title" label="Chức danh:" rules={[{required: true, message: 'Nhập chức danh'}]}>
                                     <Input className="input" placeholder="Bác sĩ"/>
                                 </Form.Item>
-                                <Form.Item
+                                {/* <Form.Item
                                     label="Loại tài khoản"
                                     name="typeAccount"
                                     rules={[
@@ -208,7 +190,7 @@ const CreateDoctor = () => {
                                         <Select.Option value="doctor">Bác sĩ</Select.Option>
                                         <Select.Option value="agent">Nhân viên hỗ trợ</Select.Option>
                                     </Select>
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item
                                     label="Chuyên khoa"
                                     name="specialization"
@@ -225,18 +207,32 @@ const CreateDoctor = () => {
                                         ))}
                                     </Select>
                                 </Form.Item>
-                               
-                                </Col>
+                                <Form.Item 
+                                    name="birthday" 
+                                    label="Ngày sinh:"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng chọn ngày sinh',
+                                        }
+                                    ]}
+                                >
+                                    <DatePicker placeholder="Chọn ngày"/>
+                                </Form.Item>
+                            </Col>
                         </Row>
                         <Form.Item label="Giới thiệu:" className="about">
                             <ReactQuill 
                                 theme="snow"
-                                onChange={()=>{}}
+                                onChange={onChangeAbout}
                             />
                         </Form.Item>
-                        <Button type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
-                            Thêm
-                        </Button>
+                        <Col style={{textAlign:'center'}}>
+                            <Button type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
+                                Tạo tài khoản
+                            </Button>
+                        </Col>
+                        
                     </Form>
                 </Card>
             </div>

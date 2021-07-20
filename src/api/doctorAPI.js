@@ -32,9 +32,14 @@ class doctorsAPI{
                         .then(res => res.data)
                         .catch(err=> err.response.data)
         }
+        // get lịch khám có trong ngày bị hủy
+        get_schedule_current_date(data) {
+            return http.get(`appointment/doctor/${data.doctorId}/${data.date}`)
+                        .then(res => res.data)
+                        .catch(err=> err.response.data)
+        }
         // hủy lịch làm việc của bác sĩ (bao gồm xóa lịch khám, gửi tin nhắn cho bệnh nhân)
         cancel_schedule_work(data){
-            console.log("111111111111111111111", data)
             return http.put(`/appointment/doctor_cancel`, data)
                         .then(res=> res.data)
                         .catch(err => err.response.data)

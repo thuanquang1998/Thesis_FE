@@ -4,21 +4,28 @@ import React, {useState, useEffect} from 'react'
 import SidebarNav from '../../../../components/SideBar'
 import AddEmployee from '../../components/Modal/AddEmployee';
 import adminAPI from '../../../../../api/adminAPI';
+import doctorAPI from '../../../../../api/doctorAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingTop from '../../../../components/loadingTop';
-import CreateAgent from '../../components/CreateAgent';
+import UpdateProfileDoctor from '../../../../../doctor/features/DoctorProfileManage/UpdateProfileDoctor';
+import moment from 'moment';
 
 const DoctorHospital = () => {
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [listEmployees, setListEmployees] = useState([]);
 
-	// create agent
-	const [modalData, setModalData] = useState({
+	// update Doctor
+	// const [doctorData, setDoctorData ] = useState({});
+    const [initData, setInitData] = useState({
+        about: "",
+    });
+    const [modalData, setModalData] = useState({
         visible: false,
         data: {},
     })
+	const [about, setAbout] = useState("");
 	useEffect(()=> {
 		(async ()=>{
 			try {
@@ -49,10 +56,60 @@ const DoctorHospital = () => {
 	},[])
 
 
-	const handleUpdateDoctor = (record) => {
-		console.log('record handleUpdateDoctor:>> ', record);
+	const handleUpdateDoctor = async (record) => {
+		setLoadingPage(true)
+		try {
+            const response = await doctorAPI.get_doctors_by_id(record.id);
+            if(response.error) throw new Error("error getDoctorById");
+            const _data = response.data.data[0];
+            // setDoctorData({..._data});
+            const birthday = moment(_data.birthday);
+            const obj = {
+                fullName: _data.fullName,
+                email: _data.email,
+                phone: _data.phone,
+                gender: _data.sex,
+                title: _data.title,
+                about: _data.about,
+                birthday: birthday,
+            }
+            setInitData({...initData,...obj});
+			setTimeout(() => {
+				setModalData({...modalData, visible:true})
+			},300)
+
+        } catch (error) {
+            console.log('error getDoctorById:>> ', error);
+        }
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 300);
 
 	}
+
+	// const handleUpdateProfile = (dataSubmit) => {
+    //     setLoadingPage(true);
+    //     updateDoctorProfileApi(dataSubmit);
+    // }
+    // const updateDoctorProfileApi = async (data) => {
+    //     try {
+    //         const response = await doctorAPI.update_doctor_info({data,id:doctorId});
+    //         if(response.error) throw new Error("error updateDoctor");
+    //         enqueueSnackbar('Cập nhật thành công.', {variant: 'success'});
+    //         getDoctorById(doctorId);
+    //         setTimeout(() => {
+    //             setLoadingPage(false);
+    //             setModalData({
+    //                 ...modalData, 
+    //                 visible:false, 
+    //             })
+    //         },400)
+    //     } catch (error) {
+    //         console.log('error :>> ', error);
+    //         enqueueSnackbar('Cập nhật không thành công', {variant: 'error'});
+    //         setLoadingPage(false);
+    //     }
+    // }
 	const new_columns = [
         {
           title: 'Tên bác sĩ',
@@ -81,27 +138,23 @@ const DoctorHospital = () => {
 		  dataIndex: 'email',
 		  key:'email'
         },
-        // {
-        //   title: 'Loại tài khoản',
-		//   dataIndex: 'typeAccount',
-		//   key:'typeAccount', 
-		//   render: (text) => text==='Bác sĩ'?(<Tag color="green">{text}</Tag>):(<Tag color="purple">{text}</Tag>),
-		// //   sorter: (a, b) => 
-        // },
         {
           title: 'Sự kiện',
           key: 'id',
           render: (text, record) => (
 			<div className="actions">
-				<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>handleUpdateDoctor(record)}><i className="fa fa-pencil-alt"></i>Sửa</a>
-				{/* <a href="#0" className="btn btn-sm bg-danger-light"><i className="fa fa-trash"></i>Xóa</a> */}
+				<a href="#0" 
+					className="btn btn-sm bg-success-light" 
+					onClick={()=>handleUpdateDoctor(record)}
+				>
+				<i className="fa fa-pencil-alt"></i>Cập nhật</a>
 			</div>
 		),
           fixed: 'right',
           width: 170,
         },
       ]
-
+	  console.log('initData 1111:>> ', initData);
     return (
         <>
             <SidebarNav/>
@@ -130,21 +183,26 @@ const DoctorHospital = () => {
 							pagination={{position:["bottomCenter"]}}
 						/>
 					</Card>
-					<CreateAgent
+					<UpdateProfileDoctor
 						modalData={modalData}
-						handleOk={()=>{
-							setModalData({
-								...modalData,
-								visible: !modalData.visible,
-							})
-						}}
+						initData = {initData}
+						// handleOk={()=>{
+						// 	setModalData({
+						// 		...modalData,
+						// 		visible: !modalData.visible,
+						// 	})
+						// }}
 						handleClose={()=>{
+
+							setInitData({});
 							setModalData({
 								...modalData,
 								visible: !modalData.visible,
 							})
+							
 						}}
-						loadingCreate={(data)=>setLoadingPage(data)}
+						handleUpdateProfile={()=>{}}
+						onChangeAbout={(data)=>setInitData({...initData, about:data})}
 					/>
                 </div>
 				

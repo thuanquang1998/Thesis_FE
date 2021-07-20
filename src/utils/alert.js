@@ -4,7 +4,7 @@ export const SwalAlert =(title, message , action)=>{
     const SwalMixin  = Swal.mixin({
         toast :true,
         position: 'top-end',
-        timer:3000,
+        timer:2500,
         timerProgressBar:true
     })
     return SwalMixin.fire(title,message,action)

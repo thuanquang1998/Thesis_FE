@@ -79,7 +79,7 @@ function ProductFilter({filters, onChange}) {
                                 >
                                     <Option value="all-bv">Tất cả</Option>
                                     {listData.hospitals.map(item=>(
-                                        <Option key={item.id} value={item.id}>{item.name}</Option>
+                                        <Option key={item._id} value={item._id}>{item.name}</Option>
                                     ))}
                                 </Select>}
                         </Form.Item>
@@ -110,8 +110,8 @@ function ProductFilter({filters, onChange}) {
                                     ))}
                                 </Select>
                         </Form.Item>
-                        <Form.Item>
-                            <Button
+                        <Form.Item style={{textAlign:'center'}}>
+                            {/* <Button
                                 style={{
                                 margin: '0 8px',
                                 }}
@@ -120,7 +120,7 @@ function ProductFilter({filters, onChange}) {
                                 }}
                             >
                                 Nhập lại
-                            </Button>
+                            </Button> */}
                             <Button htmlType="submit" style={{background: '#20c0f3'}}>
                                 Tìm kiếm
                             </Button>

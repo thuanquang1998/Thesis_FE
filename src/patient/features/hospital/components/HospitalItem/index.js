@@ -3,6 +3,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import {set_current_hospital} from '../../../../../redux/actions/patientActions';
+import ReactQuill from 'react-quill' // ES6
+
 const HospitalItem = (props) => {
     const dispatch = useDispatch();
     const data = props.data;
@@ -44,7 +46,8 @@ const HospitalItem = (props) => {
                 </Col>
                 <Col md={{span:24}} lg={{span:12}} style={{width:"100%", paddingLeft:"25px", borderLeft:"2px solid #31b9f2", display:"block"}}>
                     <h4 style={{position:"relative",left:"40%", color:"#0096d4"}}>Giới thiệu</h4>
-                    <p
+
+                    {/* <p
                         style={{
                             textAlign:"justify",
                             fontSize:'17px',
@@ -54,7 +57,38 @@ const HospitalItem = (props) => {
                             overflow:"hidden",
                             textOverflow:'ellipsis'
                         }}
-                        >{data.about}</p>
+                        dangerouslySetInnerHTML={{__html: data.about}}
+                        >{data.about}</p> */}
+                        <div 
+                            dangerouslySetInnerHTML={{__html: data.about}}
+                            style={{
+                                textAlign:"justify",
+                                fontSize:'17px',
+                                display:'-webkit-box',
+                                WebkitBoxOrient:"vertical",
+                                WebkitLineClamp:"4",
+                                overflow:"hidden",
+                                textOverflow:'ellipsis'
+                            }}
+                        />
+                        {/* <p
+                         style={{
+                            textAlign:"justify",
+                            fontSize:'17px',
+                            display:'-webkit-box',
+                            WebkitBoxOrient:"vertical",
+                            WebkitLineClamp:"4",
+                            overflow:"hidden",
+                            textOverflow:'ellipsis'
+                        }}
+                        >
+                            <ReactQuill 
+                                value={data.about?data.about:'<p>Là một bệnh viện lớn. Với những bác sĩ giàu kinh nghiệm, cơ cở vật chất hiện đại. Thái độ phục vụ tốt.</p>'} 
+                                readOnly={true} 
+                                theme={"bubble"} 
+                            />
+                        </p>
+                         */}
                     <Link 
                         to={{
                             pathname:`/chi-tiet-benh-vien/${data._id}`,

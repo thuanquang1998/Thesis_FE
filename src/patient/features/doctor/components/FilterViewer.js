@@ -36,7 +36,7 @@ function FilterViewer({ data ,filters = {}, onChange = null }) {
     
     useEffect(()=> {
         if(listAllHospitals.length!==0 && listAllSpecials.length!==0 ) {
-            const listBv = listAllHospitals.data.filter(x=>x.id===filters.bv);
+            const listBv = listAllHospitals.data.filter(x=>x._id===filters.bv);
             if (listBv.length!==0) {
                 setNameBv(listBv[0].name)
             } else {

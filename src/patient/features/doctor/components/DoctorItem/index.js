@@ -65,25 +65,28 @@ const DoctorItem = (props) => {
             <div className="profile-widget" style={{minWidth:"280px", maxWidth:"400px", margin:"0 auto"}}>
                 <div className="doc-img">
                     <Link>
-                        {!loadedImage?
+                        {/* {!loadedImage?
                         <img 
                             className="img-fluid" 
                             alt="User" 
                             src={img} 
-                        />:
+                        />: */}
                         <img 
                             className="img-fluid" 
                             alt="User" 
                             src={data.avatar} 
-                            onLoad={() => setLoadedImage(true)}
                         />
-                        }
                         
                     </Link>
                 </div>
                 <div className="pro-content">
                     <h3 className="title">
-                    <Link>
+                    <Link
+                        to={{
+                            pathname:`/danh-sach-bac-si/${props.data?._id}`,
+                            state: {data}
+                        }}
+                    >
                         <p className="chucDanh">{data.title}</p>
                         <p className="tenBs">{data.fullName}</p>
                     </Link> 

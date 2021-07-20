@@ -102,8 +102,8 @@ function ChangeSchedule(props) {
 
     return (
         <Modal 
-            title="Xem lịch khám" 
-            width={1000}
+            title="Đổi lịch khám" 
+            width={600}
             visible={modalData.visible} 
             onOk={handleOk} 
             onCancel={()=>{
@@ -111,11 +111,7 @@ function ChangeSchedule(props) {
                 setListTimeStep([]);
                 handleClose();
             }}
-            footer={[
-                <Button key="back" onClick={handleOk}>
-                  Ok
-                </Button>
-              ]}
+            footer={null}
         >
             {loadingPage?
                 <div>
@@ -190,7 +186,7 @@ function ChangeSchedule(props) {
                     </Col>
                 </Row>
             
-                <Col span={24}>
+                <Col span={24} style={{textAlign:'center', marginTop:"10px"}}>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">Đổi lịch</Button>
                     </Form.Item>

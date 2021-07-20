@@ -13,12 +13,12 @@ const PatientSidebar = () => {
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
     return(
-        <div className="profile-sidebar">
+        <div className="profile-sidebar" style={{borderRadius:"20px !important"}}>
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
-                    <Link to="#" className="booking-doc-img">
+                    {/* <Link to="#" className="booking-doc-img">
                         <img src={`http://localhost:3002/images/avatar/user.png`||IMG01} alt="User" />
-                    </Link>
+                    </Link> */}
                     <div className="profile-det-info">
                         <h3 style={{fontWeight:"bold"}}>{patientInfo.fullName}</h3>
                     </div>

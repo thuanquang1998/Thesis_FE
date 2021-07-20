@@ -22,7 +22,8 @@ import HospitalsPage from './features/AdminRoot/pages/HospitalsPage'
 import SpecialitiesRoot from './features/AdminRoot/pages/SpecialitiesRoot'
 import AgentTest from './features/AdminHospital/pages/AgentTest'
 import Agent from './features/AgentHospital'
-import AgentBooking from './features/AgentHospital/page/AgentBooking';
+import AgentBookingOnline from './features/AgentHospital/page/AgentBookingOnline';
+import AgentBookingOffline from './features/AgentHospital/page/AgentBookingOffline';
 import ScheduleCancel from './features/AgentHospital/page/ScheduleCancel';
 import ListAgent from './features/AdminHospital/pages/ListAgent';
 
@@ -77,8 +78,8 @@ const AppAdmin =({match})=>{
 
                         {/* agent hospital */}
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/agent/lich-lam-viec" exact/>
-                        <PrivateRouteAdmin component={AgentBooking} path="/admin/agent/dat-lich-offline" exact/>
-                        <PrivateRouteAdmin component={AgentBooking} path="/admin/agent/dat-lich-online" exact/>
+                        <PrivateRouteAdmin component={AgentBookingOffline} path="/admin/agent/dat-lich-offline" exact/>
+                        <PrivateRouteAdmin component={AgentBookingOnline} path="/admin/agent/dat-lich-online" exact/>
 
                         <PrivateRouteAdmin component={ScheduleCancel} path="/admin/agent/tu-van" exact/>
 

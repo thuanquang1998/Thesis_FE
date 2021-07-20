@@ -12,10 +12,12 @@ import { useHistory } from 'react-router'
 import UpdateHospital from '../../components/UpdateHospital';
 import adminAPI from '../../../../../api/adminAPI';
 import LoadingTop from '../../../../components/loadingTop';
+import {useSnackbar} from 'notistack';
 
 const HospitalInfo = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const hospitalId = hospitalInfo._id;
+	const {enqueueSnackbar} = useSnackbar();
   
 	const [showModal, setShowModal] = useState(false)
 	const [initialData, setInitialData] = useState(null);
@@ -39,9 +41,17 @@ const HospitalInfo = () => {
 		setLoadingPage(true);
 		try {
 			const response = await adminAPI.update_hospital_info({data,id:hospitalInfo._id})
-			console.log('response updateHospitalInfo:>> ', response);
+			if(response.error) throw new Error('Error updating');
+			enqueueSnackbar("Cập nhật thông tin thành công", {variant: 'success'});
+			setModalData({...modalData, visible:false});
+			getHospitalInfo();
+			setLoadingPage(false);
 		} catch (error) {
 			console.log('error updateHospitalInfo:>> ', error);
+			setLoadingPage(false);
+			enqueueSnackbar("Đã có lỗi xảy ra. Thử lại sau.", {variant: 'error'});
+
+
 		}
 
 	}

@@ -127,16 +127,18 @@ const DetailDoctorPage = (props) => {
             if(response.error) throw new Error('submitReviewApi error');
             enqueueSnackbar('Đánh giá thành công', {variant: 'success'});
             getReviewDoctors(data._id);
+            setLoadingPage(false)
         } catch (error) {
             console.log(`error`, error);
-            enqueueSnackbar('Đánh giá thành công', {variant: 'success'})
+            enqueueSnackbar('Đánh giá thành công.', {variant: 'success'})
+            setLoadingPage(false)
         }
     }
     const handleBooking = () => {
         if (patient.isLoggedIn === true) {
             // history.push(`/patient/${props.data?.id}/datlich`)
             history.push({
-                pathname: `/dat-kham/${props.data?._id}`,
+                pathname: `/dat-kham/${data?._id}`,
                 state: {data}
             })
         } else {
@@ -193,8 +195,24 @@ const DetailDoctorPage = (props) => {
                     <Card className="header-profile">
                         <Row>
                             <Col sm={{span:4, offset:10}} md={{span:4,offset:0}} lg={{span:3}} className="logoDoctor">
-                                <div>
-                                    <img src={doctorInfo.avatar_image||logoDoctor} alt="logo"/>
+                                {/* <div style={{border:"2px solid "}}>
+                                    <img src={doctorInfo.avatar||logoDoctor} alt="logo"/>
+                                </div> */}
+                                <div className="doc-img">
+                                    <Link>
+                                        {/* {!loadedImage?
+                                        <img 
+                                            className="img-fluid" 
+                                            alt="User" 
+                                            src={img} 
+                                        />: */}
+                                        <img 
+                                            className="img-fluid" 
+                                            alt="User" 
+                                            src={doctorInfo.avatar||logoDoctor} 
+                                        />
+                                        
+                                    </Link>
                                 </div>
                             </Col>
                             <Col sm={{span:24}} md={{span:15}} className="infoDoctor">

@@ -68,6 +68,7 @@ function ListDoctorPage(props) {
     const [totalData, setTotalData] = useState([]);
     const [label, setLabel] = useState({});
 
+    
     useEffect( () => {
         setLoadingPage(true);
         let _renderData = [];
@@ -82,7 +83,7 @@ function ListDoctorPage(props) {
             const _bv = bv?bv==='all-bv'?'':bv:'';
             const _ck = ck?ck==='all-ck'?'':ck:'';
             const _data = [...listAllDoctors];
-            
+            console.log('_bv :>> ', _bv);
             // check null Schedule
             const _dataUnNull = _data.filter(x=>x.timeWorkIsNull===false);
 

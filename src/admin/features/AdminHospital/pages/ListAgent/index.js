@@ -1,12 +1,10 @@
-import { Card } from '@material-ui/core'
-import { Badge, Button, Table, Tag } from 'antd'
-import React, {useState, useEffect} from 'react'
-import SidebarNav from '../../../../components/SideBar'
-import AddEmployee from '../../components/Modal/AddEmployee';
-import adminAPI from '../../../../../api/adminAPI';
-import { useDispatch, useSelector } from 'react-redux';
+import { Card } from '@material-ui/core';
+import { Badge, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import adminAPI from '../../../../../api/adminAPI';
 import LoadingTop from '../../../../components/loadingTop';
+import SidebarNav from '../../../../components/SideBar';
 import CreateAgent from '../../components/CreateAgent';
 
 const ListAgent = () => {
@@ -79,6 +77,9 @@ const ListAgent = () => {
 		  key:'sex'
         },
       ]
+	const onCreateAgent = async (data) => {
+
+	}
 
     return (
         <>
@@ -132,9 +133,10 @@ const ListAgent = () => {
 								visible: !modalData.visible,
 							})
 						}}
-						loadingCreate={(data)=>
-							setLoadingPage(data)
-						}
+						createAgent={onCreateAgent}
+						// loadingCreate={(data)=>
+						// 	setLoadingPage(data)
+						// }
 					/>
                 </div>
 				

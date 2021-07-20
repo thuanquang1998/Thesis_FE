@@ -69,7 +69,6 @@ const DoctorSchedule = (props) =>{
     const getTimeWorks = async (id) => {
         try {
             const response = await doctorAPI.get_doctor_timework(id);
-            console.log('response getTimeWorks:>> ', response);
             if(response.error) throw new Error(response.errors[0].message);
             const data = response.data?.data;
 
@@ -109,41 +108,57 @@ const DoctorSchedule = (props) =>{
             ...data,
             doctorId: currentDoctor.doctor._id
         }
-        console.log('_data :>> ', _data);
         try {
-            const response = await doctorAPI.cancel_schedule_work(_data);
-            if(response.error) throw new Error("Can't cancel schedule");
-            const countAppointment = response.data.appointments.length;
-            const date = moment(response.data.timeWork.date).format('DD/MM/YYYY');
+            // call api get lịch có trong ngày bị xóa
+            const response = await doctorAPI.get_schedule_current_date(_data);
+            if(response.error) throw new Error(response.error);
+            
+            const countAppointment = response.data.length;
+            const date = moment(_data.date).format('DD/MM/YYYY');
             let notification = "";
             if(!countAppointment) {
                 notification = `Không có lịch khám bị xóa trong ngày ${date}.`
             } else {
-                notification = `Có ${countAppointment} lịch khám bị xóa trong ngày ${date}. Thông báo hủy lịch khám đã được gửi đến bệnh nhân.`
+                notification = `Có ${countAppointment} lịch khám trong ngày ${date}. Thông báo hủy lịch khám sẽ được gửi đến bệnh nhân.`
             }
             setShowModalCancel(false);
+            setLoadingPage(false);
+            form.resetFields();
             Swal.fire({
-                icon: "success",
-                title: "Xóa lịch làm việc thành công.",
+                icon: "info",
+                title: "Xác nhận hủy ngày làm việc.",
                 text: `${notification}`,
-                confirmButtonColor: "#d33",
-                confirmButtonText: "Đóng",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Hủy lịch",
+                cancelButtonText: "Không hủy"
             })
             .then((result) => {
 				if (result.value) {
-					const id = currentDoctor.doctor._id;
-                    getTimeWorks(id);    
+                    setLoadingPage(true);
+                    cancelApi(_data);
 				} 
 			})
-			.catch((error) => {
-				console.log('error.message :>> ', error.message);
-			});
-            setLoadingPage(false);
         } catch (error) {
             enqueueSnackbar('Hiện không thế xóa lịch làm việc này.', {variant: 'error'});
             setLoadingPage(false);
         }
     }
+    const cancelApi = async (data) => {
+        try {
+            const response = await doctorAPI.cancel_schedule_work(data);
+            if(response.error) throw new Error("Can't cancel schedule");
+            console.log('response :>> ', response);
+            enqueueSnackbar('Xóa lịch làm việc thành công.', {variant: 'success'});
+           	const id = currentDoctor.doctor._id;
+            getTimeWorks(id);  
+        } catch (error) {
+            setLoadingPage(false)
+            enqueueSnackbar('Hiện không thế xóa lịch làm việc này.', {variant: 'error'});
+        }
+    }
+    
     return(
         <div className={classes.root}>
             {loadingPage && <LoadingTop/>}
@@ -227,8 +242,8 @@ const DoctorSchedule = (props) =>{
                                 title="Hủy lịch khám" 
                                 visible={showModalCancel} 
                                 onCancel={()=>{
-                                    setShowModalCancel(false)
                                     form.resetFields();
+                                    setShowModalCancel(false)
                                 }}
                                 footer={null}
                             >
@@ -239,7 +254,6 @@ const DoctorSchedule = (props) =>{
                                     wrapperCol={{ span: 16 }}
                                     onFinish={onCancelSchedule}
                                     initialValues={{}}
-                                    // onFinishFailed={onFinishFailed}
                                 >
                                     <Form.Item
                                         label="Chọn ngày"

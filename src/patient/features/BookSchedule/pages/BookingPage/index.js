@@ -6,6 +6,10 @@ import { make_appointment } from '../../../../../redux/actions/patientActions';
 import BookingConfirm from '../../components/BookingConfirm';
 import BookingForm from '../../components/BookingForm';
 import HeaderProfile from '../../components/HeaderProfile';
+import patientAPI from '../../../../../api/patientApi';
+import { SwalAlert } from '../../../../../utils/alert';
+import LoadingTop from '../../../../components/loadingTop';
+
 import './style.css';
 
 const INIT_DATA = {
@@ -33,6 +37,7 @@ const BookingPage = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
     console.log('doctorData :>> ', doctorData);
+    console.log('doctorID :>> ', doctorID);
     const history = useHistory();
 
     const dispatch = useDispatch()
@@ -47,6 +52,8 @@ const BookingPage = (props) => {
         patientId: patient.currentUser.patientInfo.id,
         doctorName: doctorData.fullName
     })
+
+    const [loadingPage, setLoadingPage] = useState(false);
    
     const handleReturn = () => {
         setShowModal(false)
@@ -60,14 +67,29 @@ const BookingPage = (props) => {
         setShowModal(true)
     }
 
-    const handleSubmit = () => {
-        dispatch(make_appointment(submitData));
-        setShowModal(false);
-        history.push('/');
+    const handleSubmit = async () => {
+        setLoadingPage(true);
+        // dispatch(make_appointment(submitData));
+        try {
+            const response = await patientAPI.make_appointment(submitData);
+            if(response.error) throw new Error("Can't make_appointment");
+            setTimeout(() => {
+                setLoadingPage(false);
+                SwalAlert( `Đặt lịch khám thành công.` ,'', 'success')
+                setShowModal(false);
+                history.push('/quan-li-lich-kham');
+            }, 300);
+        } catch (error) {
+            setTimeout(() => {
+                setLoadingPage(false);
+                SwalAlert( `Lỗi kết nối mạng. Thử lại sau ít phút.` ,'', 'error')
+            }, 300);
+        }
     }
 
     return (
         <div className="patient-datkham">
+            {loadingPage && <LoadingTop/>}
             {/* breadcrumb */}
             <div className="breadcrumb-bar">
                 <div className="container-fluid">

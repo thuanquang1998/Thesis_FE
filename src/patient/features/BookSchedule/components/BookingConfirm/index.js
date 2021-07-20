@@ -8,7 +8,7 @@ function BookingConfirm(props) {
     return (
         <Modal
             visible={showModal}
-            title="Xác nhận thông tin"
+            title={<h3 style={{margin:0, color:"rgb(52, 135, 219)"}}>Xác nhận thông tin</h3>}
             onOk={handleSubmit}
             onCancel={handleReturn}
             footer={[
@@ -19,39 +19,58 @@ function BookingConfirm(props) {
                 Xác nhận
                 </Button>,
             ]}
-            >
+        >
             <Card title="Thông tin bệnh nhân" headStyle={{color:"#3487db", fontSize:"20px"}}>
-                <Row gutter={[8,8]}>
-                    <Col span={7}>
-                        <p><b>Họ tên:</b></p>
-                        <p><b>Ngày sinh:</b></p>
-                        <p><b>Giới tính:</b></p>
-                        <p><b>Điện thoại:</b></p>
-                    </Col>
-                    <Col span={15}>
-                        <p>{data.patientInfo?.name}</p>
-                        <p>{moment(data.patientInfo?.birthday).format('DD/MM/YYYY')}</p>
-                        <p>{data.patientInfo?.gender==='male'?'Nam':"Nữ"}</p>
-                        <p>{data.patientInfo?.phone}</p>
-                    </Col>
-                </Row>
+                {data.bookingFor &&
+                    <>
+                        <div className="row">
+                            <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Người đặt lịch:</div>
+                            <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.bookerInfo?.name}</div>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Số điện thoại người đặt:</div>
+                            <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.bookerInfo?.phone}</div>
+                        </div>
+                    </>
+                }
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bệnh nhân:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.patientInfo?.name}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Ngày sinh:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{moment(data.patientInfo?.birthday).format('DD/MM/YYYY')}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Giới tính:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.patientInfo?.gender==='male'?'Nam':"Nữ"}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Điện thoại:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.patientInfo?.phone}</div>
+                </div>
             </Card>
-            <Card title="Thông tin đăng kí khám" headStyle={{color:"#3487db", fontSize:"20px"}}>
-                <Row gutter={[8,8]}>
-                    
-                    <Col span={7}>
-                        <p><b>Bác sĩ:</b></p>
-                        <p><b>Địa chỉ:</b></p>
-                        <p><b>Ngày khám:</b></p>
-                        <p><b>Giờ khám:</b></p>
-                    </Col>
-                    <Col span={15}>
-                        <p>{data.doctorName}</p>
-                        <p>{data.patientInfo.address}</p>
-                        <p>{moment(data.date).format('DD/MM/YYYY')}</p>
-                        <p>{data.time}</p>
-                    </Col>
-                </Row>
+            <Card title="Thông tin đăng kí khám" headStyle={{color:"#3487db", fontSize:"20px"}} style={{marginTop:"15px"}}>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Tên bác sĩ:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.doctorName}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Địa chỉ:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.patientInfo.address}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Phòng khám:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.room}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Ngày khám:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{moment(data.date).format('DD/MM/YYYY')}</div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Giờ khám:</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.time}</div>
+                </div>
             </Card>
         </Modal>
     );

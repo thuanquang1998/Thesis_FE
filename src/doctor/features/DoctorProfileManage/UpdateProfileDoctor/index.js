@@ -1,16 +1,17 @@
+import { PortraitSharp } from '@material-ui/icons';
 import { Button, Col, DatePicker, Form, Input, Modal, Radio, Row, Spin } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill'; // ES6
 import '../style.css';
 
 function UpdateProfileDoctor(props) {
-    const {modalData, handleOk, handleClose, initData} = props;
+    const [form] = Form.useForm();
+    const {modalData, handleOk, handleClose} = props;
     const [about, setAbout] = useState(null);
     const [fileAvatar, setFileAvatar] = useState(null);
     const fileInput = useRef(null);
     const [loadingAbout, setLoadingAbout] = useState(true);
-
-
+    const [initData, setInitData] = useState({});
     const handleQuillChange = (data) => {
         setAbout(data);
     }
@@ -35,12 +36,14 @@ function UpdateProfileDoctor(props) {
     }
     useEffect(() => {
         if(modalData.visible) {
-            setAbout(initData.about);
+            setAbout(props.initData.about);
+            setInitData({...props.initData})
             setTimeout(() => {
                 setLoadingAbout(false);
             }, 300);
         }
-    }, [modalData])
+    }, [modalData]);
+    console.log('initData :>> ', initData);
     return (
         <div className="modalUpdateProfile">
             <Modal 
@@ -57,12 +60,16 @@ function UpdateProfileDoctor(props) {
                     </p>}
                 width={1000}
                 visible={modalData.visible} 
-                onOk={handleOk} 
-                onCancel={handleClose}
+                // onOk={handleOk} 
+                onCancel={()=>{
+                    handleClose();
+                    setInitData({});
+                }}
                 footer={null}
             >
                 {loadingAbout? <Spin></Spin>:
                  <Form
+                    form={form}
                     labelCol={{
                         span: 24,
                     }}

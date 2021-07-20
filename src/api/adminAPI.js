@@ -50,6 +50,12 @@ class adminAPI{
                         .then(res=> res.data)
                         .catch(err => err.response.data)
         }
+        // lấy danh sách bác sĩ thuộc bệnh viện có lịch khám trong currentDay
+        get_doctors_of_hospital_currentDay(id) {
+            return http.get(`doctors/work_today/${id}`)
+                        .then(res=> res.data)
+                        .catch(err => err.response.data)
+        }
         // lấy danh sách nhân viên thuộc bệnh viện 
         get_agents_of_hospital(id) {
             return http.get(`agent/hospital/${id}`)
@@ -144,6 +150,14 @@ class adminAPI{
                 .then(res=>res.data)
                 .catch(err => err.response.data)
         }
+
+        // dashboard
+            //lấy 4 thông tin ở header
+            get_common_info_hospital(id){
+                // return http.get(`appointment/${id}/get_cancel_appointment`)
+                //     .then(res=>res.data)
+                //     .catch(err => err.response.data)
+            }
 
 
     // AGENT API

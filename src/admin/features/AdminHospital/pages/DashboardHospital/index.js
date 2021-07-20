@@ -108,16 +108,18 @@ const data = {
 const DashboardHospital = () => {
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [dateRange, setDateRange] = useState({
-		mon: null,
-		sun: null,
+		start: null,
+		end: null,
 	})
 	useEffect(()=> {
-		const monday =  moment().isoWeekday(1); // Monday
-        const sunday = moment().isoWeekday(7); // Sunday
+		const chuNhat =  moment().startOf('week'); // Monday
+        const thuBay = moment().endOf('week'); //(7); // Sunday
+		console.log('chuNhat :>> ', chuNhat);
+		console.log('thuBay :>> ', thuBay);
 		setDateRange({
 			...dateRange,
-			mon: monday,
-			sun: sunday,
+			start: chuNhat,
+			end: thuBay,
 		})
 
 	},[])
@@ -126,17 +128,39 @@ const DashboardHospital = () => {
 		const endDate = dateRange.sun;
 		if(!startDate && !endDate) {
 			console.log("call api");
+			// get Data
+
+
+
 		}
 	},[dateRange])
 
 	const onChangeRangeDay = (date, dateString) => {
-		console.log('date onChangeRangeDay:>> ', date);
-		const monday =  date.isoWeekday(1); // Monday
-        const sunday = date.isoWeekday(6); // Sunday
-		console.log('monday :>> ', monday);
-		console.log('sunday :>> ', sunday);
-
-
+		
+		if(date===null) {
+			const chuNhat = moment().startOf('week');
+			const thuBay = moment().endOf('week');
+			const obj = {
+				start: chuNhat,
+				end: thuBay,
+			}
+			setDateRange({
+				...dateRange,
+				...obj
+			})
+		} else {
+			const chuNhat = moment(date).startOf('week');
+			const thuBay = moment(date).endOf('week');
+			const obj = {
+				start: chuNhat,
+				end: thuBay,
+			}
+			setDateRange({
+				...dateRange,
+				...obj
+				
+			})
+		}
 	}
 
 
@@ -156,17 +180,20 @@ const DashboardHospital = () => {
 								</ul> */}
 							</div>
 							<div className="col-sm-4">
-								<div className="page-title" style={{paddingTop:"20px"}}>
-									
-									<p>Thời gian:</p>
-									<p>{`${moment(dateRange.mon).format('DD/MM/YYYY')} - ${moment(dateRange.sun).format('DD/MM/YYYY')}`}</p>
-									<p>Chọn thời gian</p>
-									<DatePicker onChange={onChangeRangeDay} picker="week" placeholder="Chọn ngày"/>
-
+								<div className="page-title" style={{paddingTop:"20px", display:"flex"}}>
+									<div>
+										<p>Thời gian:</p>
+										<p>{`${moment(dateRange.start).format('DD/MM/YYYY')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p>
+									</div>
+									<div>
+										<p>Chọn thời gian</p>
+										<DatePicker 
+											onChange={onChangeRangeDay} 
+											picker="week" 
+											placeholder="Chọn khoảng thời gian"
+										/>
+									</div>
 								</div>
-								{/* <ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
-								</ul> */}
 							</div>
 						</div>
 					</div>

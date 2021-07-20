@@ -170,11 +170,7 @@ const DetailHospitalPage = () => {
                                     </ul> 
                                 </Card> 
                                 <Card title="Giới thiệu" headStyle={{fontSize:"18px", color:"#1890ff"}} className="intro">
-                                    <p style={{fontSize:"17px"}}>Chúng tôi là 1 phòng khám đa khoa tọa lạc tại 26-28, Tăng Bạt Hổ, P.12, Q.5, TPHCM. Với đầy đủ trang thiết bị cận lâm sàng ( X-Quang, Siêu âm, xét nghiệm máu, nội soi...), máy tập vật lý trị liệu, và có cả phòng ốc khang trang cho khách xa nghỉ lại.   
-                                        Với sứ mệnh “y đức trọn niềm tin” Khánh Minh sẽ là nơi đáng tin cậy để chăm sóc sức khỏe cho gia đình bạn và sẵn sàng đồng hành chia sẽ những giải pháp bảo vệ sức khỏe cho cả nhà bạn!!!  
-                                        Cám ơn sự tin tưởng của quí khách, Khánh Minh luôn làm tròn Y Đức!</p>
-                                    <p>{info.about}</p>
-                                    
+                                    <div dangerouslySetInnerHTML={{__html: info.about}}></div>
                                 </Card> 
                         </div>
                         <div className="col-md-12 col-lg-8 col-xl-9">

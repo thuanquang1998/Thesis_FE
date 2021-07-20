@@ -330,12 +330,12 @@ function ScheduleCurrent(props) {
                     <Row gutter={[8,8]} >
                         <Col xs={{span:24}} sm={{span:12}} md={{span:6}}>
                             <Form.Item name="day1" label="Từ ngày:" className="search__form--item">
-                                <DatePicker placeholder="DD/MM/YYYY"/>
+                                <DatePicker placeholder="Chọn ngày"/>
                             </Form.Item>
                         </Col>
                         <Col xs={{span:24}} sm={{span:12}} md={{span:6}}>
                             <Form.Item name="day2" label="Đến ngày:" className="search__form--item">
-                                <DatePicker placeholder="DD/MM/YYYY"/>
+                                <DatePicker placeholder="Chọn ngày"/>
                             </Form.Item>
                         </Col>
                         

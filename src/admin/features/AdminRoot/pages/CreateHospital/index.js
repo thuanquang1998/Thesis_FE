@@ -162,7 +162,15 @@ const CreateHospital = () => {
                             </Col>
                             <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                                 <Form.Item name={["address","province"]} label="Tỉnh/ Thành phố:" rules={[{required: true, message: 'Nhập đầy đủ địa chỉ'}]}>
-                                    <Select className="province" placeholder="Tỉnh/ Thành phố" onChange={(value)=>setProvince(value)}>
+                                    <Select 
+                                        className="province" 
+                                        placeholder="Tỉnh/ Thành phố" 
+                                        onChange={(value)=>setProvince(value)}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }    
+                                        showSearch
+                                    >
                                         {Object.entries(provinceData).map(entry=> {
                                             const [key, value] = entry;
                                             return (
@@ -172,7 +180,15 @@ const CreateHospital = () => {
                                     </Select>
                                 </Form.Item>
                                 <Form.Item name={["address","district"]} label="Quận/ Huyện:" rules={[{required: true, message: 'Nhập đầy đủ địa chỉ'}]}>
-                                    <Select className="province" placeholder="Quận/ Huyện" onChange={(value)=>setDistrict(value)}>
+                                    <Select 
+                                        className="province" 
+                                        placeholder="Quận/ Huyện" 
+                                        onChange={(value)=>setDistrict(value)}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }    
+                                        showSearch
+                                    >
                                         {Object.entries(districtData).filter(item=>
                                             province.includes(item[1].parent_code)
                                         )
@@ -183,7 +199,14 @@ const CreateHospital = () => {
                                     </Select>
                                 </Form.Item>
                                 <Form.Item name={['address','ward']} label="Phường/ Xã:" rules={[{required: true, message: 'Nhập đầy đủ địa chỉ'}]}>
-                                    <Select className="province" placeholder="Phường/ Xã">
+                                    <Select 
+                                        className="province" 
+                                        placeholder="Phường/ Xã"
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }    
+                                        showSearch
+                                    >
                                         {Object.entries(wardData).filter(item=>
                                             
                                             district.includes(item[1].parent_code)
@@ -213,7 +236,15 @@ const CreateHospital = () => {
                                         },
                                     ]}
                                 >
-                                    <Select className="province" placeholder="Loại hợp đồng" onChange={onChangeDistrict}>
+                                    <Select 
+                                        className="province" 
+                                        placeholder="Loại hợp đồng" 
+                                        onChange={onChangeDistrict}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }    
+                                        showSearch
+                                    >
                                         <Select.Option value="tamThoi">Hợp đồng tạm thời</Select.Option>
                                         <Select.Option value="nganHan">Hợp đồng ngắn hạn</Select.Option>
                                         <Select.Option value="daiHan">Hợp đồng dài hạn</Select.Option>
@@ -245,7 +276,15 @@ const CreateHospital = () => {
                                         },
                                     ]}
                                 >
-                                    <Select className="province" placeholder="Loại hợp đồng" onChange={onChangeDistrict}>
+                                    <Select 
+                                        className="province" 
+                                        placeholder="Loại hợp đồng" 
+                                        onChange={onChangeDistrict}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }    
+                                        showSearch
+                                    >
                                         <Select.Option value="typeA">Loại A</Select.Option>
                                         <Select.Option value="typeB">Loại B</Select.Option>
                                         <Select.Option value="typeC">Loại C</Select.Option>
@@ -283,9 +322,12 @@ const CreateHospital = () => {
                                 </Form.Item>  
                             </Col>
                         </Row>
-                        <Button type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
-                            Save
-                        </Button>
+                        <Col style={{textAlign:"center"}}>
+                            <Button type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
+                                Tạo bệnh viện
+                            </Button>
+                        </Col>
+                        
                     </Form>
                 </Card>
             </div>

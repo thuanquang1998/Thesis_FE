@@ -10,11 +10,15 @@ import doctorAPI from '../../../../../api/doctorAPI';
 import patientAPI from '../../../../../api/patientApi';
 import BookingFormAgent from './BookingFormAgent';
 import {useSnackbar} from 'notistack';
+import moment from 'moment';
 const { Option } = Select;
 const {Search} = Input;
 const currentTimeNumber = new Date().getTime();
 
-const AgentBooking = () => {
+
+const AgentBookingOffline = () => {
+    const currentDate = moment().format('DD/MM/YYYY');
+
     const {enqueueSnackbar} = useSnackbar();
     const admin = useSelector(state=>state.admin);
     const hospitalInfo = admin.currentAdmin.hospital;
@@ -39,7 +43,7 @@ const AgentBooking = () => {
     useEffect(()=> {
         // get list _ck
         getListSpec();
-        getListDoctor();
+        getListDoctorCurrent();
     },[]);
     useEffect(()=> {
         if(!loadDoctor && !loadSpec) {
@@ -60,10 +64,10 @@ const AgentBooking = () => {
     }
 
     // thay bang api get Doctor khac
-    const getListDoctor = async () => {
+    const getListDoctorCurrent = async () => {
         setLoadingPage(true);
         try {
-            const response = await adminAPI.get_doctors();
+            const response = await adminAPI.get_doctors_of_hospital_currentDay(hospitalInfo.id);
             if(response.error) throw new Error(response.errors[0].message);
             setListDoctor([...response.data.data]);
             setListDoctorRender([...response.data.data]);
@@ -156,9 +160,9 @@ const AgentBooking = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-12">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Trang quản lý cho bệnh viện Hùng Vương</h3>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Đặt lịch khám cho bệnh nhân</h3>
 								<ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
+									<li className="breadcrumb-item active">Ngày: {currentDate}</li>
 								</ul>
 							</div>
 						</div>
@@ -167,9 +171,9 @@ const AgentBooking = () => {
 					<Row gutter={[36,36]}>
 						
 					</Row>
-                    <Card>
+                    {/* <Card>
                         <h3>Đặt lịch khám cho bệnh nhân</h3>
-                    </Card>
+                    </Card> */}
                     <Card>
                         <h4>Chọn bác sĩ</h4>
                         {/* form chon bac si => get id =>  call api lay thong tin. */}
@@ -216,13 +220,12 @@ const AgentBooking = () => {
                                     listDateValid={listDateValid}
                                     doctorId={currentDoctor}
                                     onSubmitForm={handleCreateSchedule}
+                                    currentDate={currentDate}
                                 />
                             </>
                         }
                     </Card>
-                    <Card>
-                        
-                    </Card>
+                   
                     {/* <BookingFormModal
                         modalData={modalData}
                         handleOk={()=>{
@@ -246,4 +249,4 @@ const AgentBooking = () => {
     )
 }
 
-export default AgentBooking
+export default AgentBookingOffline
