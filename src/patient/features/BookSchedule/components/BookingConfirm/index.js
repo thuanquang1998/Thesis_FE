@@ -5,6 +5,7 @@ import React from 'react';
 
 function BookingConfirm(props) {
     const {handleSubmit, handleReturn, showModal, data} = props;
+    console.log('data :>> ', data);
     return (
         <Modal
             visible={showModal}
@@ -39,7 +40,7 @@ function BookingConfirm(props) {
                 </div>
                 <div className="row">
                     <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Ngày sinh:</div>
-                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{moment(data.patientInfo?.birthday).format('DD/MM/YYYY')}</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{moment(data.patientInfo?.birthDay).format('DD/MM/YYYY')}</div>
                 </div>
                 <div className="row">
                     <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Giới tính:</div>

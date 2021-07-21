@@ -154,9 +154,20 @@ class adminAPI{
         // dashboard
             //lấy 4 thông tin ở header
             get_common_info_hospital(id){
-                // return http.get(`appointment/${id}/get_cancel_appointment`)
-                //     .then(res=>res.data)
-                //     .catch(err => err.response.data)
+                return http.get(`hospitals/${id}/common_info`)
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
+            }
+            //lấy thông tin lịch đã khám, chưa khám, bị hủy
+            get_all_status_schedule(data) {
+                const {id, date_start, date_end} = data;
+                const params = {
+                    date_start: date_start,
+                    date_end: date_end,
+                }
+                return http.get(`hospitals/${id}/detail_appointment`,{params})
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
             }
 
 

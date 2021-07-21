@@ -53,13 +53,20 @@ function ScheduleCurrent(props) {
         const {search, status} = filterSchedule;
         const listData = [...props.data];
         // list Data in today
-        // const listScheduleCurrent = listData.filter(item=>{
-        //     const dateFormat = convertDateStringtoDate(item.date);
-        //     const currentDate = new Date();
-        //     const compareDate = moment(dateFormat).isAfter(currentDate);
-        // })
+        const listScheduleCurrent = listData.filter(item=>{
+            console.log('item.date :>> ', item.date);
+             const dateFormat = convertDateStringtoDate(item.date);
+            const timeString = moment(dateFormat).format('DD/MM/YYYY');
+            const currentString = moment().format('DD/MM/YYYY');
+            console.log('timeString :>> ', timeString, ' currentString :>> ', currentString);
+            const check  = timeString===currentString;
+            // const dateFormat = convertDateStringtoDate(item.date);
+            // const currentDate = new Date();
+            // const compareDate = moment(dateFormat).getTime()=moment(currentDate).getTime();
+            return check
+        })
         // filter Name
-        const listScheduleSearch = listData.filter(item=>{
+        const listScheduleSearch = listScheduleCurrent.filter(item=>{
             const name = item.patient.toUpperCase();
             const searchS = search.toUpperCase();
             return name.includes(searchS)

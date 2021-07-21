@@ -3,6 +3,7 @@ import SidebarNav from '../../../../components/SideBar'
 import {Row, Col, Card, DatePicker} from 'antd'
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import moment from 'moment';
+import adminAPI from '../../../../../api/adminAPI';
 const data = {
 	labels: ['22/7', '23/7', '24/7', '25/7', '26/7', '27/7'],
 	datasets: [
@@ -18,7 +19,7 @@ const data = {
 	  },
 	  {
 		label: 'Số lịch bị hủy',
-		data: [3, 10, 13, 15, 22, 30],
+		data: [3, 10, 13, 15, 22, 35],
 		backgroundColor: 'rgb(75, 192, 192)',
 	  },
 	],
@@ -106,16 +107,24 @@ const data = {
 	],
   };
 const DashboardHospital = () => {
+    const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [dateRange, setDateRange] = useState({
 		start: null,
 		end: null,
 	})
+
+	// header info
+	const [headerInfo, setHeaderInfo] = useState({
+		num_doctor: 0,
+		num_spec: 0,
+		num_appointment: 0,
+		revenue: 0
+	})
 	useEffect(()=> {
+		getHeaderData(hospitalInfo._id)
 		const chuNhat =  moment().startOf('week'); // Monday
         const thuBay = moment().endOf('week'); //(7); // Sunday
-		console.log('chuNhat :>> ', chuNhat);
-		console.log('thuBay :>> ', thuBay);
 		setDateRange({
 			...dateRange,
 			start: chuNhat,
@@ -128,12 +137,43 @@ const DashboardHospital = () => {
 		const endDate = dateRange.sun;
 		if(!startDate && !endDate) {
 			console.log("call api");
+			const _data = {
+				id: hospitalInfo._id,
+				date_start: startDate,
+				date_end: endDate,
+			}
 			// get Data
-
-
+			// getHeaderData(_data);
+			get_status_of_schedule(_data)
 
 		}
 	},[dateRange])
+	
+	const getHeaderData = async (data) => {
+		try {
+			const response = await adminAPI.get_common_info_hospital(data);
+			// console.log('response getHeaderData:>> ', response);
+			if(response.error) throw new Error("error");
+			setHeaderInfo({
+				...headerInfo,
+				num_doctor: response.data.num_doctor,
+				num_spec: response.data.num_spec,
+				num_appointment: response.data.num_appointment,
+				revenue: response.data.revenue
+			})
+		} catch (error) {
+			console.log(`error`, error)
+		}
+	}
+
+	const get_status_of_schedule = async (data) => {
+		try {
+			const response = await adminAPI.get_all_status_schedule(data);
+			console.log('response get_status_of_schedule:>> ', response);
+		} catch (error) {
+			
+		}
+	}
 
 	const onChangeRangeDay = (date, dateString) => {
 		
@@ -207,7 +247,7 @@ const DashboardHospital = () => {
 											<i className="fa fa-user"></i>
 										</span>
 										<div className="dash-count">
-											<h3>168</h3>
+											<h3>{headerInfo.num_doctor}</h3>
 										</div>
 									</div>
 									<div className="dash-widget-info">
@@ -224,10 +264,10 @@ const DashboardHospital = () => {
 								<div className="card-body">
 									<div className="dash-widget-header">
 										<span className="dash-widget-icon text-success">
-											<i className="fe fe-credit-card"></i>
+											<i className="fa fa-credit-card"></i>
 										</span>
 										<div className="dash-count">
-											<h3>10</h3>
+											<h3>{headerInfo.num_spec}</h3>
 										</div>
 									</div>
 									<div className="dash-widget-info">
@@ -245,10 +285,10 @@ const DashboardHospital = () => {
 								<div className="card-body">
 									<div className="dash-widget-header">
 										<span className="dash-widget-icon text-danger border-danger">
-											<i className="fe fe-money"></i>
+											<i className="fa fa-money"></i>
 										</span>
 										<div className="dash-count">
-											<h3>485</h3>
+											<h3>{headerInfo.num_appointment}</h3>
 										</div>
 									</div>
 									<div className="dash-widget-info">
@@ -265,10 +305,10 @@ const DashboardHospital = () => {
 								<div className="card-body">
 									<div className="dash-widget-header">
 										<span className="dash-widget-icon text-warning border-warning">
-											<i className="fe fe-folder"></i>
+											<i className="fa fa-folder"></i>
 										</span>
 										<div className="dash-count">
-											<h3>$62523</h3>
+											<h3>{headerInfo.revenue}</h3>
 										</div>
 									</div>
 									<div className="dash-widget-info">

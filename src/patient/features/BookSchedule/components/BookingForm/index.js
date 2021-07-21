@@ -15,20 +15,7 @@ function BookingForm(props) {
     const currentTimeNumber = new Date().getTime();
     const [listDateValid, setListDateValid] = useState([]);
     const [listTimeStep, setListTimeStep] = useState([]);
-     const temp = moment('2021-05-12T04:47:07.000Z', 'YYYY-MM-DD')
-    const obj = {
-        date: "1/1/2021",
-        time: "7:30-8:00",
-        name: "aaaa",
-        phone:"bbbb",
-        address: {
-            province: "Binh Dinh",
-            district: "Hoai An",
-            ward: "An Tuong Dong",
-            street: "mmm"
-        },
-        birthday: temp,
-    }
+    
     
 
    

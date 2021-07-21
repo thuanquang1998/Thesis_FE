@@ -75,7 +75,7 @@ const Specialities = () => {
 			), 
 		},
 		{
-			title: 'Số bác sĩ',
+			title: 'Trạng thái',
 			render: (text, record) => (            
 				<Tag color="green">Đã kích hoạt</Tag>
 			), 
@@ -84,7 +84,7 @@ const Specialities = () => {
 		title: 'Sự kiện',
 		render: (text, record) => (
 			<div className="actions">
-				<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>handleShow('edit')}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a>
+				{/* <a href="#0" className="btn btn-sm bg-success-light" onClick={()=>handleShow('edit')}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a> */}
 				<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>handleDeleteSpec(record)}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
 			
 			</div>

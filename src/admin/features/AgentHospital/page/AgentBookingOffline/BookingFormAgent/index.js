@@ -97,8 +97,8 @@ function BookingFormAgent(props) {
         >   
             <Row gutter={[8,8]}>
                 <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
-                    <div>Ngày: {props.currentDate}</div>
-                    {/* <Form.Item 
+                    {/* <div>Ngày: {props.currentDate}</div> */}
+                    <Form.Item 
                         name="date" 
                         label="Chọn ngày"
                         rules={[
@@ -119,7 +119,7 @@ function BookingFormAgent(props) {
                                 return (<Select.Option key={idx} value={item.date}>{moment(item.date).format('DD/MM/YYYY')}</Select.Option>)
                             })}
                         </Select>
-                    </Form.Item>  */}
+                    </Form.Item> 
                 </Col>
                 <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
                     <Form.Item 

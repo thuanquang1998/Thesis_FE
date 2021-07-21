@@ -68,9 +68,10 @@ const AgentBookingOffline = () => {
         setLoadingPage(true);
         try {
             const response = await adminAPI.get_doctors_of_hospital_currentDay(hospitalInfo.id);
+            console.log('response get_doctors_of_hospital_currentDay:>> ', response);
             if(response.error) throw new Error(response.errors[0].message);
-            setListDoctor([...response.data.data]);
-            setListDoctorRender([...response.data.data]);
+            setListDoctor([...response.data]);
+            setListDoctorRender([...response.data]);
             setLoadDoctor(false)
         } catch (error) {
             console.log('error.message :>> ', error.message);
@@ -115,8 +116,11 @@ const AgentBookingOffline = () => {
             const _listDateValid = _listDate.filter(x=> {
                 const itemTimeNumber =  new Date(x.date);
                 const _itemTimeNumber = itemTimeNumber.getTime();
+                const timeString = moment(itemTimeNumber).format('DD/MM/YYYY');
+                const currentString = moment().format('DD/MM/YYYY');
+                const check  = timeString===currentString;
                 const diff = _itemTimeNumber*1 - currentTimeNumber*1;
-                return diff>0;
+                return check;
             })
             setListDateValid(_listDateValid);
             setLoadingPage(false);
