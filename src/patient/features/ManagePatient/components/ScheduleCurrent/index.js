@@ -166,8 +166,8 @@ function ScheduleCurrent(props) {
 			sorter: (a, b) => a.specialities.length - b.specialities.length,
 		},
 		{
-			title:'Chuyên khoa',
-			dataIndex: 'speciality',
+			title:'Phòng khám',
+			dataIndex: 'room',
 		},
         {
 			title:'Ngày khám',

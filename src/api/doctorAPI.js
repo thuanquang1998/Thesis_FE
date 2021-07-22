@@ -88,6 +88,7 @@ class doctorsAPI{
 
     // cập nhật thông tin bác sĩ
     update_doctor_info(data){
+        console.log("111111111111111");
         const tokenObj = localStorage.getItem('currentDoctor');
         const _token = JSON.parse(tokenObj);
         return http.put(`doctors/${data.id}/update`, data.data,{ 

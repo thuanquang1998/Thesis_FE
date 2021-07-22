@@ -41,7 +41,34 @@ class adminAPI{
                 .then(res=> res.data)
                 .catch(err=> err.response.data)
         }
-
+        // dashboard
+            //lấy 4 thông tin ở header
+            get_common_info_root(){
+                return http.get(`statistic/common_info`)
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
+            }
+            //lấy thông tin lịch đã khám, chưa khám, bị hủy
+            get_all_status_schedule_root(data) {
+                const {date_start, date_end} = data;
+                const params = {
+                    date_start: date_start,
+                    date_end: date_end,
+                }
+                return http.get(`statistic/detail_appointment`,{
+                        params: {
+                            ...params
+                        }
+                    })
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
+            }
+            // lấy tỉ lệ đánh giá
+            get_review_chart_root (){
+                return http.get(`statistic/ratio_review`)
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
+            }
 
     // ADMIN HOSPITAL API
         // lấy danh sách bác sĩ thuộc bệnh viện 
@@ -85,6 +112,18 @@ class adminAPI{
             const tokenObj = localStorage.getItem('currentAdmin');
             const _token = JSON.parse(tokenObj);
             return http.post('doctors/create',data)
+                        .then(res=> res.data)
+                        .catch(err => err.response.data)
+        }
+         // cập nhật thông tin bác sĩ
+        update_doctor_info_admin(data){
+            const tokenObj = localStorage.getItem('currentAdmin');
+            const _token = JSON.parse(tokenObj);
+            return http.put(`doctors/${data.id}/update`, data.data,{ 
+                headers:{ 
+                    'x-access-token': _token.adminToken 
+                }
+            })
                         .then(res=> res.data)
                         .catch(err => err.response.data)
         }

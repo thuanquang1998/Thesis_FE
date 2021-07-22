@@ -49,7 +49,8 @@ function PatientSchedule(props) {
                     time: appointmentInfo.time,
                     status: x.status,
                     fullData: {...x},
-                    dateCheck: appointmentInfo.date
+                    dateCheck: appointmentInfo.date,
+                    room: appointmentInfo.location.room,
                 }
                 return obj
             })
@@ -62,7 +63,6 @@ function PatientSchedule(props) {
     }
 
     const cancelSchedule = async (record) => {
-        console.log('record :>> ', record);
         let currentTime = moment();
         const check1 = compareDates(new Date(currentTime), new Date(record.dateCheck))
         const check2 = record.status!=="uncheck"?true:false;

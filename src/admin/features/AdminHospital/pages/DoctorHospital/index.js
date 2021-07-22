@@ -96,7 +96,7 @@ const DoctorHospital = () => {
     }
     const updateDoctorProfileApi = async (data) => {
         try {
-            const response = await doctorAPI.update_doctor_info({data,id:currentDoctorId});
+            const response = await adminAPI.update_doctor_info_admin({data,id:currentDoctorId});
             if(response.error) throw new Error("error updateDoctor");
             enqueueSnackbar('Cập nhật thành công.', {variant: 'success'});
             setTimeout(() => {

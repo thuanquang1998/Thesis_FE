@@ -368,7 +368,6 @@ const DashboardHospital = () => {
 							</div>
 							<div className="col-sm-4">
 								<div style={{paddingTop:"20px", display:"flex", justifyContent:"flex-end"}}>
-										{/* <p>Chọn thời gian</p> */}
 										<DatePicker 
 											onChange={onChangeRangeDay} 
 											picker="week" 
