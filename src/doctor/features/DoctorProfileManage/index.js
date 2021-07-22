@@ -83,6 +83,35 @@ const DoctorProfile = (props) =>{
             setLoadingPage(false);
         }
     }
+    const handleUpdateDoctor = async () => {
+		setLoadingPage(true)
+		try {
+            const response = await doctorAPI.get_doctors_by_id(doctorId);
+            if(response.error) throw new Error("error getDoctorById");
+            const _data = response.data.data[0];
+            const birthday = moment(_data.birthday);
+            const obj = {
+                fullName: _data.fullName,
+                email: _data.email,
+                phone: _data.phone,
+                gender: _data.sex,
+                title: _data.title,
+                about: _data.about,
+                birthday: birthday,
+            }
+            setInitData({...obj});
+			setTimeout(() => {
+				setModalData({...modalData, visible:true, data: {...obj}})
+			},300)
+
+        } catch (error) {
+            console.log('error getDoctorById:>> ', error);
+        }
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 300);
+
+	}
     console.log('doctorData :>> ', doctorData);
     return(
         <div>
@@ -119,7 +148,8 @@ const DoctorProfile = (props) =>{
                             <div style={{display: 'flex', justifyContent:"space-between"}}>
                                 <h2>Thông tin cá nhân</h2>
                                 <Button  
-                                    onClick={()=>setModalData({...modalData, visible:true, data: {...doctorData}})}
+                                    // onClick={()=>setModalData({...modalData, visible:true, data: {...doctorData}})}
+                                    onClick={()=>handleUpdateDoctor()}
                                     style={{
                                         backgroundColor: "#00d0f1",
                                         border: "none",

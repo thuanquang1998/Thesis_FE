@@ -1,13 +1,13 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Select, Card, Row } from 'antd';
+import { Col, DatePicker, Form, Input, Radio, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import './style.css'
+import './style.css';
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const {Search} = Input;
 
   
-function FilterDoctorAdmin({filters, onSearchName, onSearchSpec}) {
+function FilterDoctorAdmin({onSearchDoctor, onSearchStatus, onSearchDate, listDoctor, filter}) {
     const [form] = Form.useForm();
     const appState = useSelector(state=>state.app);
     const loadingData = appState.loadingData;
@@ -32,37 +32,39 @@ function FilterDoctorAdmin({filters, onSearchName, onSearchSpec}) {
         <div className="search-input">
             <Row gutter={[36,8]}>
                 <Col xs={{span:24}} sm={{span:16}} md={{span:16}}>
-                    <Search
-                        placeholder="Tìm kiếm theo tên"
-                        allowClear
-                        enterButton="Tìm bác sĩ"
-                        size="large"
-                        onSearch={(e)=>onSearchName(e)}
-                        // defaultValue={}
-                    />
-                </Col>
-                <Col xs={{span:24}} sm={{span:8}} md={{span:8}}>
-                    {loadingPage?
                     <Select
-                        placeholder="Tìm theo chuyên khoa"
-                    >
-                        <Option value="all-ck">Tất cả</Option>
-                    </Select>:
-                    <Select
-                        placeholder="Tìm theo chuyên khoa"
+                        placeholder="Tìm theo bác sĩ"
                         defaultValue=""
-                        onChange={(e)=>onSearchSpec(e)}
+                        onChange={(e)=>onSearchDoctor(e)}
+                        showSearch
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     >
                         <Option value="">Tất cả</Option>
-                        {listData.specialities.map((item,index)=>(
-                            <Option key={index} value={item._id}>{item.name}</Option>
+                        {listDoctor.map((item,index)=>(
+                            <Option key={index} value={item._id}>{item.fullName}</Option>
                         ))}
                     </Select>
-                    }
                     
                 </Col>
-
+                <Col xs={{span:24}} sm={{span:8}} md={{span:8}}>
+                    <RangePicker 
+                        placeholder={["Từ ngày","Đến ngày"]}
+                        onChange={onSearchDate}
+                    />
+                </Col>
             </Row>
+            <Radio.Group 
+                onChange={(e)=>onSearchStatus(e.target.value)}
+                style={{marginTop:"15px"}}
+                value={filter.searchStatus}
+            >
+                <Radio value={1}>Tất cả</Radio>
+                <Radio value={2}>Chưa khám</Radio>
+                <Radio value={3}>Đang khám</Radio>  
+                <Radio value={4}>Đã khám</Radio>
+            </Radio.Group>
         </div>
     );
 }

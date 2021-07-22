@@ -36,14 +36,25 @@ function UpdateProfileDoctor(props) {
     }
     useEffect(() => {
         if(modalData.visible) {
+            console.log("1111111111111111111");
             setAbout(props.initData.about);
-            setInitData({...props.initData})
+            setInitData({...props.initData});
+            form.setFieldsValue({
+                fullName: props.initData.fullName,
+                phone: props.initData.phone,
+                email:props.initData.email,
+                gender: props.initData.gender,
+                birthday: props.initData.birthday,
+                title: props.initData.title,
+                about: props.initData.about,
+            });
             setTimeout(() => {
                 setLoadingAbout(false);
             }, 300);
-        }
+        } 
     }, [modalData]);
-    console.log('initData :>> ', initData);
+    console.log('props.initData :>> ', props.initData);
+    useEffect(() => form.resetFields(), [props.initState]);
     return (
         <div className="modalUpdateProfile">
             <Modal 
@@ -79,7 +90,7 @@ function UpdateProfileDoctor(props) {
                     layout="vertical"
                     size="large"
                     onFinish={onHandleSubmit}
-                    initialValues={initData}
+                    // initialValues={props.initData}
                 >   
                     <Row gutter={[8,8]}>
                         <Col xs={{span:24}} sm={{span:24}} md={{span:12}}>
@@ -177,8 +188,6 @@ function UpdateProfileDoctor(props) {
                             theme="snow"
                             value={about}
                             onChange={handleQuillChange}
-                            // value={`<p>${initData.about}</p>`}
-                            // onChange={(value)=>props.onChangeAbout(value)}
                         />
                     </Form.Item>
                     <Form.Item className="submitButton" style={{textAlign: 'center'}}>

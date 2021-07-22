@@ -165,10 +165,45 @@ class adminAPI{
                     date_start: date_start,
                     date_end: date_end,
                 }
-                return http.get(`hospitals/${id}/detail_appointment`,{params})
+                return http.get(`hospitals/${id}/detail_appointment`,{
+                        params: {
+                            ...params
+                        }
+                    })
                     .then(res=>res.data)
                     .catch(err => err.response.data)
             }
+            // lấy danh sách bác sĩ nổi bật
+            get_typical_doctor(data) {
+                const {id, date_start, date_end} = data;
+                const params = {
+                    date_start: date_start,
+                    date_end: date_end,
+                }
+                return http.get(`hospitals/${id}/doctor/stand_out`,{
+                        params: {
+                            ...params
+                        }
+                    })
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
+            }
+            // lấy danh sách lịch khám theo chuyên khoa
+            get_schedule_in_spec(data) {
+                const {id, date_start, date_end} = data;
+                const params = {
+                    date_start: date_start,
+                    date_end: date_end,
+                }
+                return http.get(`hospitals/${id}/statistic/appointment/spec`,{
+                        params: {
+                            ...params
+                        }
+                    })
+                    .then(res=>res.data)
+                    .catch(err => err.response.data)
+            }
+
 
 
     // AGENT API

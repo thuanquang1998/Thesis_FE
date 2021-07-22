@@ -19,13 +19,17 @@ const Appoinments = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
     const { enqueueSnackbar } = useSnackbar();
 	const [listSchedule, setListSchedule] = useState([]);
+	const [listRender, setListRender] = useState([]);
 	const [loadingPage, setLoadingPage] = useState(true);
-	const [show, setShow] = useState(null);
-	const [viewItem, setViewItem] = useState({});
+	const [listDoctor, setListDoctor] = useState([]);
 
 	const [filter, setFilter] = useState({
-		searchName: "",
-		searchSpec: "",
+		searchDoctor:"",
+		searchDate: {
+			start: null,
+			end: null,
+		},
+		searchStatus: 1,
 	})
 
 	// modal xem lịch
@@ -37,7 +41,73 @@ const Appoinments = () => {
 	useEffect(()=> {
 		const id = hospitalInfo._id;
 		getListSchedule(id);
-	},[])
+		getListDoctor(id);
+	},[]);
+	useEffect(() => {
+		const {searchStatus, searchDate, searchDoctor} = filter;
+		const {start, end} = searchDate;
+		let _resultList = [];
+		if(!searchStatus && !searchDoctor && !start && !end) {
+			_resultList = [...listSchedule];
+		} else {
+			let temp = [...listSchedule];
+			// filter doctor
+			const filterDoctor = temp.filter(item=>item.doctorId.includes(searchDoctor));
+			// filter status
+			let _resultFilterStatus = [];
+			switch (searchStatus) {
+				case 1:
+					_resultFilterStatus = filterDoctor;
+					break;
+				case 2:
+					_resultFilterStatus = filterDoctor.filter(item=>item.status === 'uncheck');
+					break;
+				case 3:
+					_resultFilterStatus = filterDoctor.filter(item=>item.status === 'checking');
+					break;
+				case 4:
+					_resultFilterStatus = filterDoctor.filter(item=>item.status === 'checked');
+					break;
+				default:
+					break;
+			}
+			// filter Date
+			let _resultFilterDate = [];
+			if(!start && !end) {
+				_resultFilterDate = _resultFilterStatus;
+			} else {
+				_resultFilterDate = _resultFilterStatus.filter(item=>{
+					const dateFormat = convertDateStringtoDate(item.date);
+					const checkStart = moment(dateFormat).isAfter(start);
+					const checkEnd = moment(end).isAfter(dateFormat);
+					const check = checkStart && checkEnd;
+					return check;
+				})
+			}
+			_resultList = [..._resultFilterDate]
+		}
+		setTimeout(() => {
+			setListRender(_resultList);
+			setLoadingPage(false)
+		}, 300);
+	}, [filter])
+	const convertDateStringtoDate = (dateStr) => {
+        const dateMomentObject = moment(dateStr, "DD/MM/YYYY");
+        const dateObject = dateMomentObject.toDate();
+        return dateObject
+    }
+
+	const getListDoctor = async (id) => {
+		setLoadingPage(true);
+		try {
+			const response = await adminAPI.get_doctors_of_hospital(id);
+			if(response.error) throw new Error(response.errors[0].message);
+            setListDoctor(response.data.data);
+			setLoadingPage(false)
+		} catch (error) {
+            console.log('error.message :>> ', error.message);
+		}
+	}
 	const getListSchedule = async (id) => {
 		setLoadingPage(true);
 		try {
@@ -55,7 +125,7 @@ const Appoinments = () => {
 					date: moment(appointmentInfo.date).format('DD/MM/YYYY'),
 					time: appointmentInfo.time,
 					status: x.status,
-
+					doctorId:x.doctorId,
 					nameBookerFor: bookerInfo.name || "",
 					phoneBookerFor: bookerInfo.phone || "",
 					bookingFor: x.bookingFor,
@@ -72,6 +142,7 @@ const Appoinments = () => {
 				}
 				return obj
 			}) 
+			setListRender(_data)
             setListSchedule(_data);
 			setLoadingPage(false)
 		} catch (error) {
@@ -102,6 +173,29 @@ const Appoinments = () => {
 		}
 	}
 
+	const renderStatus = (status) => {
+        let str = "";
+        let color = "";
+        switch (status) {
+            case 'uncheck':
+                str = 'Chưa khám';
+                color = "red"
+                break;
+            case 'checking':
+                str = 'Đang xử lí'
+                color = "green"
+                break;
+            case 'checked':
+                str = 'Đã khám';
+                color = "blue"
+                break;
+            default:
+                str = 'Chưa khám'
+                color = "red"
+                break;
+        }
+        return <Tag style={{fontSize:"13px"}} color={`${color}`}>{str}</Tag>
+    }
 	const columns = [	
         {
 			title: 'Bệnh nhân',
@@ -124,10 +218,6 @@ const Appoinments = () => {
 			), 
 			sorter: (a, b) => a.specialities.length - b.specialities.length,
 		},
-		{
-			title:'Chuyên khoa',
-			dataIndex: 'speciality',
-		},
         {
 			title:'Ngày khám',
 			dataIndex:'date',
@@ -139,9 +229,10 @@ const Appoinments = () => {
         {
 			title:'Trạng thái',
 			dataIndex:'status',
-            render: (text, record) => (
-                <Badge style={{ backgroundColor: '#52c41a' }}>{record.status?'Chưa khám':'Đã khám'}</Badge>
-            )
+            render: (text, record) => {
+                const data = renderStatus(record.status);
+                return data
+            }
 		},
 		{
             title: 'Sự kiện',
@@ -157,13 +248,41 @@ const Appoinments = () => {
             ),
 		},		
 	]
-	const handleSearchName  = (data) => {
-		setFilter({...filter, searchName: data});
+	const onSearchStatus  = (data) => {
 		setLoadingPage(true);
+		setFilter({
+			...filter,
+			searchStatus: data
+		})
 	}
-	const handleSearchSpec  = (data) => {
-		setFilter({...filter, searchSpec: data});
+	const onSearchDoctor  = (data) => {
 		setLoadingPage(true);
+		setFilter({
+			...filter,
+			searchDoctor: data
+		})
+	}
+	const onSearchDate  = (data) => {
+		setLoadingPage(true);
+		
+		if(data===null) {
+			setFilter({
+				...filter,
+				searchDate: {
+					start: null,
+					end: null
+				}
+			})
+		} else {
+			setFilter({
+				...filter,
+				searchDate: {
+					start: data[0],
+					end: data[1]
+				}
+			})
+		}
+		
 	}
     return (
         <>
@@ -175,30 +294,28 @@ const Appoinments = () => {
 						<div className="row">
 							<div className="col-sm-12">
 								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách lịch khám</h3>
-								{/* <ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
-									<li className="breadcrumb-item active">{hospitalInfo.name}</li>
-								</ul> */}
 							</div>
 						</div>
 					</div>
                     
                     <div className="infobv">
-						<Card 
-							// title={<>Danh sách lịch khám <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
-						>
+						<Card>
 							<FilterDoctorAdmin
-								onSearchName={handleSearchName}
-								onSearchSpec={handleSearchSpec}
+								listDoctor={listDoctor}
+								onSearchStatus={onSearchStatus}
+								onSearchDate={onSearchDate}
+								onSearchDoctor={onSearchDoctor}
+								filter={filter}
 							/>
 							<Table className="table-striped"
 								columns={columns}                 
-								dataSource={listSchedule}
+								dataSource={listRender}
 								ascend={true}
 								style = {{overflowX : 'auto'}}
 								rowKey={record => record.id}
 								showSizeChanger={true} 
 								loading={loadingPage}
+								pagination={{position:["bottomCenter"]}}
 							/>
 						</Card>
 					</div>
@@ -218,74 +335,7 @@ const Appoinments = () => {
 						})
 					}}
 				/>
-
-				{/* <Modal show={show === 'view'} onHide={handleClose} centered className="modal-xl">
-					<Modal.Header closeButton>
-						<Modal.Title><h5 className="modal-title">Sửa chuyên khoa</h5></Modal.Title>
-					</Modal.Header>
-				<Modal.Body>
-					<Row gutter={[20,20]}>
-						<Col span={12} style={{textAlign:'center'}}>
-							<h4>Thông tin bệnh nhân:</h4>
-							{viewItem.bookingFor &&
-								<div className="row">
-									<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên người đặt dùm</div>
-									<div className="col-sm-8">{viewItem.nameBookerFor}</div>
-								</div>
-							}
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bệnh nhân</div>
-								<div className="col-sm-8">{viewItem.patient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Ngày sinh</div>
-								<div className="col-sm-8">{viewItem.birthday}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
-								<div className="col-sm-8">{viewItem.addressPatient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Số điện thoại liên hệ</div>
-								<div className="col-sm-8">{viewItem.phonePatient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Giới tính</div>
-								<div className="col-sm-8">{viewItem.genderPatient}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Lý do khám</div>
-								<div className="col-sm-8">{viewItem.medicalRecordSumanry}</div>
-							</div>
-						</Col>
-						<Col span={12} style={{textAlign:'center'}}>
-							<h4>Thông tin bệnh viện:</h4>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bệnh viện</div>
-								<div className="col-sm-8">{viewItem.hospital}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Địa chỉ</div>
-								<div className="col-sm-8">{viewItem.addressHospital}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Tên bác sĩ</div>
-								<div className="col-sm-8">{viewItem.doctor}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Chuyên khoa</div>
-								<div className="col-sm-8">{viewItem.speciality}</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-4 text-muted text-sm-right mb-0 mb-sm-3">Phòng khám</div>
-								<div className="col-sm-8">{viewItem.room}</div>
-							</div>
-						</Col>
-					</Row>
-				</Modal.Body>
-			</Modal> */}
             </div>
-
         </>
     )
 }

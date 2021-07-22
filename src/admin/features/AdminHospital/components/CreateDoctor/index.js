@@ -112,12 +112,12 @@ const CreateDoctor = () => {
                 <div className="page-header">
                     <div className="row">
                         <div className="col-sm-7 col-auto">
-                            <h3 className="page-title">Thêm nhân viên</h3>
-                            <ul className="breadcrumb">
+                            <h3 className="page-title" style={{paddingTop:"20px"}}>Tạo tài khoản bác sĩ</h3>
+                            {/* <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/admin">Dashboard</Link></li>
                                 <li className="breadcrumb-item active"><Link to="/admin/cosoyte">Danh sách bệnh viện</Link></li>
                                 <li className="breadcrumb-item active">Tạo mới bệnh viện</li>
-                            </ul>
+                            </ul> */}
                         </div>
                     </div>
                 </div>

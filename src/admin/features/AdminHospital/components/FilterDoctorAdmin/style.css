@@ -4,9 +4,9 @@
     margin-bottom: 30px;
 }
 .search-input .ant-input-group-wrapper {
-    height: 55px !important;
+    height: 50px !important;
     border: 1px solid #ddd;
-    border-radius: 55px ;
+    border-radius: 50px ;
 }
 .search-input .ant-input-wrapper{
     height: 100% !important;
@@ -15,8 +15,8 @@
 .search-input .ant-input-affix-wrapper {
     width: 100% !important;
     height: 100% !important;
-    border-top-left-radius: 55px !important;
-    border-bottom-left-radius: 55px !important;
+    border-top-left-radius: 50px !important;
+    border-bottom-left-radius: 50px !important;
     border: none !important;
 }
 .search-input .ant-input-affix-wrapper input {
@@ -34,8 +34,8 @@
 }
 .search-input .ant-input-group-addon {
     height: 100% !important;
-    border-top-right-radius: 55px !important;
-    border-bottom-right-radius: 55px !important;
+    border-top-right-radius: 50px !important;
+    border-bottom-right-radius: 50px !important;
 }
 .search-input .ant-select-selector {
     border-radius: 25px !important;
@@ -46,4 +46,9 @@
 .ant-input-group-addon button {
     border-radius: 40px !important;
     margin-right: 10px;
+}
+.ant-picker-range {
+    height: 50px !important;
+    border-radius: 25px !important;
+    width: 100% !important;
 }

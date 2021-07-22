@@ -57,120 +57,6 @@ const Reviews = () => {
 			dataIndex:'comment',
 		}
 	]
-	const data = [
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Chưa khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Chưa khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Chưa khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Đã khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Chưa khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Chưa khám',
-		},
-		{
-			patient_name: 'Nguyễn Văn A',
-			doctor_name: 'Tô Ngọc Bình',
-			ratings: 4,
-			description: 'Bác sĩ làm việc tận tâm',
-			time:'29/12/2020',
-			status: 'Chưa khám',
-		},
-	]
     return (
         <>
 			{loadingPage && <LoadingTop/>}
@@ -180,12 +66,7 @@ const Reviews = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-12">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Thông tin bệnh viện Hùng Vương</h3>
-								<ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
-									<li className="breadcrumb-item active">Bệnh viện Hùng Vương</li>
-									<li className="breadcrumb-item active">Đánh giá bác sĩ</li>
-								</ul>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách đánh giá bác sĩ</h3>
 							</div>
 						</div>
 					</div>

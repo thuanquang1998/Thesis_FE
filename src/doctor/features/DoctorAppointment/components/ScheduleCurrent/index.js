@@ -55,7 +55,7 @@ function ScheduleCurrent(props) {
         // list Data in today
         const listScheduleCurrent = listData.filter(item=>{
             console.log('item.date :>> ', item.date);
-             const dateFormat = convertDateStringtoDate(item.date);
+            const dateFormat = convertDateStringtoDate(item.date);
             const timeString = moment(dateFormat).format('DD/MM/YYYY');
             const currentString = moment().format('DD/MM/YYYY');
             console.log('timeString :>> ', timeString, ' currentString :>> ', currentString);

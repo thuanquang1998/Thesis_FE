@@ -1,29 +1,13 @@
 import React,{useState, useEffect} from 'react'
 import SidebarNav from '../../../../components/SideBar'
-import {Row, Col, Card, DatePicker} from 'antd'
+import {Row, Col, Card, DatePicker, Table} from 'antd'
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import adminAPI from '../../../../../api/adminAPI';
-const data = {
-	labels: ['22/7', '23/7', '24/7', '25/7', '26/7', '27/7'],
-	datasets: [
-	  {
-		label: 'Số lịch đã đặt',
-		data: [12, 19, 3, 5, 2, 3],
-		backgroundColor: 'rgb(255, 99, 132)',
-	  },
-	  {
-		label: 'Số lịch đã khám',
-		data: [2, 3, 20, 5, 1, 4],
-		backgroundColor: 'rgb(54, 162, 235)',
-	  },
-	  {
-		label: 'Số lịch bị hủy',
-		data: [3, 10, 13, 15, 22, 35],
-		backgroundColor: 'rgb(75, 192, 192)',
-	  },
-	],
-  };
+import ProgressBar from 'react-customizable-progressbar';
+import HeaderHospital from './HeaderHospital'
+
+
   
   const dataReview = {
 	labels: ['1 sao', '2 sao', '3 sao', '4 sao', '5 sao'],
@@ -80,32 +64,23 @@ const data = {
 	  ],
 	},
   };
-  const data3 = {
-	labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-	datasets: [
-	  {
-		label: '# of Votes',
-		data: [12, 19, 3, 5, 2, 3],
-		backgroundColor: [
-		  'rgba(255, 99, 132, 0.2)',
-		  'rgba(54, 162, 235, 0.2)',
-		  'rgba(255, 206, 86, 0.2)',
-		  'rgba(75, 192, 192, 0.2)',
-		  'rgba(153, 102, 255, 0.2)',
-		  'rgba(255, 159, 64, 0.2)',
-		],
-		borderColor: [
-		  'rgba(255, 99, 132, 1)',
-		  'rgba(54, 162, 235, 1)',
-		  'rgba(255, 206, 86, 1)',
-		  'rgba(75, 192, 192, 1)',
-		  'rgba(153, 102, 255, 1)',
-		  'rgba(255, 159, 64, 1)',
-		],
-		borderWidth: 1,
-	  },
-	],
-  };
+
+const listColor = [
+	"Red",
+	"Lime",
+	"Blue",
+	"Yellow",
+	"Aqua",
+	"Navy",
+	"Teal",
+	"Purple",
+	"Green",
+	"Olive",
+	"Maroon",
+	"#eb4924",
+	"#e12828",
+]
+
 const DashboardHospital = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
@@ -121,6 +96,63 @@ const DashboardHospital = () => {
 		num_appointment: 0,
 		revenue: 0
 	})
+
+	// state for chart 3 status - schedule-checked-cancel
+	const [chartThree, setChartThree] = useState({
+		labels: [],
+		datasets: [
+		  {
+			label: 'Số lịch đã đặt',
+			data: [],
+			backgroundColor: 'rgb(255, 99, 132)',
+		  },
+		  {
+			label: 'Số lịch đã khám',
+			data: [],
+			backgroundColor: 'rgb(54, 162, 235)',
+		  },
+		  {
+			label: 'Số lịch bị hủy',
+			data: [],
+			backgroundColor: 'rgb(75, 192, 192)',
+		  },
+		],
+	})
+	// state for line chart
+	const [lineChart, setLineChart] = useState({
+		labels: [],
+		datasets: [
+		  {
+			label: 'Lịch khám',
+			data: [],
+			fill: false,
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgba(255, 99, 132, 0.2)',
+		  },
+		],
+	})
+
+	// state for circle chart
+	const [specChart, setSpecChart] = useState({
+		labels: [],
+		datasets: [
+		  {
+			label: '# of Votes',
+			data: [],
+			backgroundColor: [
+			 
+			],
+			borderColor: [
+			  
+			],
+			borderWidth: 1,
+		  },
+		],
+	})
+
+	// state for list typical doctor
+	const [listTypicalDoctor, setListTypicalDoctor] = useState([]);
+
 	useEffect(()=> {
 		getHeaderData(hospitalInfo._id)
 		const chuNhat =  moment().startOf('week'); // Monday
@@ -130,21 +162,19 @@ const DashboardHospital = () => {
 			start: chuNhat,
 			end: thuBay,
 		})
-
 	},[])
 	useEffect(()=> {
-		const startDate = dateRange.mon;
-		const endDate = dateRange.sun;
-		if(!startDate && !endDate) {
-			console.log("call api");
+		if(dateRange.start!==null && dateRange.end!==null) {
+			const startDate = moment(dateRange.start).format('YYYY-MM-DD');
+			const endDate = moment(dateRange.end).format('YYYY-MM-DD');
 			const _data = {
 				id: hospitalInfo._id,
 				date_start: startDate,
 				date_end: endDate,
 			}
-			// get Data
-			// getHeaderData(_data);
-			get_status_of_schedule(_data)
+			get_status_of_schedule(_data);
+			get_typical_doctor_api(_data);
+			get_schedule_in_spec_api(_data);
 
 		}
 	},[dateRange])
@@ -169,14 +199,106 @@ const DashboardHospital = () => {
 	const get_status_of_schedule = async (data) => {
 		try {
 			const response = await adminAPI.get_all_status_schedule(data);
-			console.log('response get_status_of_schedule:>> ', response);
+			let temp = {
+				labels: [],
+				datasets: [
+				  {
+					label: 'Số lịch đã đặt',
+					data: [],
+					backgroundColor: 'rgb(255, 99, 132)',
+				  },
+				  {
+					label: 'Số lịch đã khám',
+					data: [],
+					backgroundColor: 'rgb(54, 162, 235)',
+				  },
+				  {
+					label: 'Số lịch bị hủy',
+					data: [],
+					backgroundColor: 'rgb(75, 192, 192)',
+				  },
+				],
+			}
+			let labels = [];
+			let scheduleBooking  = [];
+			let checkedSchedule = [];
+			let cancelSchedule = [];
+			response.data.forEach(item=>{
+				const date = item.title;
+				const _scheduleBooking = item.cancel + item.checked + item.uncheck;
+				const _checkedSchedule = item.checked;
+				const _cancelSchedule = item.cancel;
+				labels.push(date);
+				scheduleBooking.push(_scheduleBooking)
+				checkedSchedule.push(_checkedSchedule)
+				cancelSchedule.push(_cancelSchedule)
+			})
+			temp.labels = [...labels];
+			temp.datasets[0].data = [...scheduleBooking]
+			temp.datasets[1].data = [...checkedSchedule]
+			temp.datasets[2].data = [...cancelSchedule]
+			setChartThree({...temp});
+
+			const _lineChart = {...lineChart};
+			_lineChart.labels = [...labels];
+			_lineChart.datasets[0].data = [...scheduleBooking];
+			setLineChart(_lineChart);
 		} catch (error) {
-			
+			console.log('error :>> ', error);
+		}
+	}
+
+	const get_typical_doctor_api = async (data) => {
+		try {
+			const response = await adminAPI.get_typical_doctor(data);
+			if(response.error) throw new Error("error");
+			console.log('response get_typical_doctor_api:>> ', response);
+			if(response.data.length<5) {
+				setListTypicalDoctor(response.data)
+			} else {
+				const list = [...response.data];
+				list.splice(0,5);
+				setListTypicalDoctor(list)
+			}
+		} catch (error) {
+			console.log('error :>> ', error);
+		}
+	}
+
+	const get_schedule_in_spec_api = async (data) => {
+		try {
+			const response = await adminAPI.get_schedule_in_spec(data);
+			if(response.error) throw new Error("error");
+			let temp = {
+				labels: [],
+				datasets: [
+				  {
+					label: '# of Votes',
+					data: [],
+					backgroundColor: [
+					 
+					],
+					borderColor: [
+					  
+					],
+					borderWidth: 1,
+				  },
+				],
+			};
+			response.data.forEach((item, index) => {
+				temp.labels.push(item.spec_name);
+				temp.datasets[0].data.push(item.num_appointment);
+				temp.datasets[0].backgroundColor.push(listColor[index])
+				temp.datasets[0].borderColor.push(listColor[index])
+			})
+			setSpecChart(temp);
+			if(response.error) throw new Error("error");
+		} catch (error) {
+			console.log('error :>> ', error);
 		}
 	}
 
 	const onChangeRangeDay = (date, dateString) => {
-		
 		if(date===null) {
 			const chuNhat = moment().startOf('week');
 			const thuBay = moment().endOf('week');
@@ -205,7 +327,35 @@ const DashboardHospital = () => {
 
 
 
-
+	const new_columns = [
+        {
+          title: 'Tên bác sĩ',
+		  key:'doctor_name',
+		  dataIndex:'doctor_name',
+		  render: (text, record) => (
+			<div>
+				<i className='fa fa-user' style={{fontSize:'20px', marginRight:'10px'}}></i>
+				<span>{text}</span>
+			</div>
+		),
+          fixed: 'left',
+		},
+		{
+			title:'Chuyên khoa',
+			dataIndex: 'spec_name',
+			key:'spec_name'
+		},
+        {
+          title: 'Số lượt đặt',
+		  dataIndex: 'num_appointment',
+		  key:'num_appointment'
+        },
+        {
+          title: 'Tỉ lệ đánh giá',
+		  dataIndex: 'rate_average',
+		  key:'rate_average'
+        },
+      ]
     return (
         <>
             <SidebarNav/>
@@ -215,127 +365,81 @@ const DashboardHospital = () => {
 						<div className="row">
 							<div className="col-sm-8">
 								<h3 className="page-title" style={{paddingTop:"20px"}}>Thống kê</h3>
-								{/* <ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
-								</ul> */}
 							</div>
 							<div className="col-sm-4">
-								<div className="page-title" style={{paddingTop:"20px", display:"flex"}}>
-									<div>
-										<p>Thời gian:</p>
-										<p>{`${moment(dateRange.start).format('DD/MM/YYYY')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p>
-									</div>
-									<div>
-										<p>Chọn thời gian</p>
+								<div style={{paddingTop:"20px", display:"flex", justifyContent:"flex-end"}}>
+										{/* <p>Chọn thời gian</p> */}
 										<DatePicker 
 											onChange={onChangeRangeDay} 
 											picker="week" 
 											placeholder="Chọn khoảng thời gian"
 										/>
-									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-                    
-					<Row gutter={[36,36]}>
-						<Col xs={{span:24}} sm={{span:12}} lg={{span:6}}>
-							<div className="card">
-								<div className="card-body">
-									<div className="dash-widget-header">
-										<span className="dash-widget-icon text-primary border-primary">
-											<i className="fa fa-user"></i>
-										</span>
-										<div className="dash-count">
-											<h3>{headerInfo.num_doctor}</h3>
-										</div>
-									</div>
-									<div className="dash-widget-info">
-										<h4 className="text-muted">Bác sĩ</h4>
-										<div className="progress progress-sm">
-											<div className="progress-bar bg-primary w-50"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</Col>
-						<Col xs={{span:24}} sm={{span:12}} lg={{span:6}}>
-							<div className="card">
-								<div className="card-body">
-									<div className="dash-widget-header">
-										<span className="dash-widget-icon text-success">
-											<i className="fa fa-credit-card"></i>
-										</span>
-										<div className="dash-count">
-											<h3>{headerInfo.num_spec}</h3>
-										</div>
-									</div>
-									<div className="dash-widget-info">
-										
-										<h4 className="text-muted">Chuyên khoa</h4>
-										<div className="progress progress-sm">
-											<div className="progress-bar bg-success w-50"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</Col>
-						<Col xs={{span:24}} sm={{span:12}} lg={{span:6}}>
-							<div className="card">
-								<div className="card-body">
-									<div className="dash-widget-header">
-										<span className="dash-widget-icon text-danger border-danger">
-											<i className="fa fa-money"></i>
-										</span>
-										<div className="dash-count">
-											<h3>{headerInfo.num_appointment}</h3>
-										</div>
-									</div>
-									<div className="dash-widget-info">
-										<h4 className="text-muted">Lượt đặt khám</h4>
-										<div className="progress progress-sm">
-											<div className="progress-bar bg-danger w-50"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</Col>
-						<Col xs={{span:24}} sm={{span:12}} lg={{span:6}}>
-						<div className="card">
-								<div className="card-body">
-									<div className="dash-widget-header">
-										<span className="dash-widget-icon text-warning border-warning">
-											<i className="fa fa-folder"></i>
-										</span>
-										<div className="dash-count">
-											<h3>{headerInfo.revenue}</h3>
-										</div>
-									</div>
-									<div className="dash-widget-info">
-										<h4 className="text-muted">Doanh thu</h4>
-										<div className="progress progress-sm">
-											<div className="progress-bar bg-warning w-50"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</Col>
-					</Row>
+					<HeaderHospital data={headerInfo}/>
 
 					<Row gutter={[36,36]}>
 						<Col span={12}>
-							<Bar data={data} options={options} />
+							<Card 
+								title={
+									<div style={{display: 'flex', justifyContent:"space-between"}}>
+										<p style={{fontSize:"18px !important", fontWeight:"600", marginBottom:"0"}}>Biểu đồ lịch khám theo trạng thái</p>
+										<p style={{marginBottom:"0"}}>{`${moment(dateRange.start).format('DD')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p>
+									</div>
+								}
+							>
+								<Bar data={chartThree} options={options} />
+							</Card>
 						</Col>
 						<Col span={12}>
-							<Line data={data2} options={options2} />
+							<Card 
+								title={
+									<div style={{display: 'flex', justifyContent:"space-between"}}>
+										<p style={{fontSize:"18px !important", fontWeight:"600",  marginBottom:"0"}}>Biểu đồ tỉ lệ đặt khám theo ngày</p>
+										<p style={{marginBottom:"0"}}>{`${moment(dateRange.start).format('DD')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p>
+									</div>
+								}
+							>
+								<Line data={lineChart} options={options2} />
+							</Card>
 						</Col>
 					</Row>
-					<Row gutter={[36,36]}>
+					<Row gutter={[36,36]} style={{marginTop:"25px"}}>
 						<Col span={12}>
-							<Bar data={dataReview} options={options} />
+							<Card 
+								title={
+									<div style={{display: 'flex', justifyContent:"space-between"}}>
+										<p style={{fontSize:"18px !important", fontWeight:"600", marginBottom:"0"}}>Danh sách bác sĩ nổi bật</p>
+										<p style={{marginBottom:"0"}}>{`${moment(dateRange.start).format('DD')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p>
+									</div>
+								}	
+							>
+								<Table
+									bordered={true}
+									columns={new_columns}
+									dataSource={listTypicalDoctor} 
+									pagination={false}
+									// loading={loadingPage}
+									// pagination={{position:["bottomCenter"]}}
+								/>
+							</Card>
 						</Col>
 						<Col span={12}>
-							<Pie data={data3} />
+							<Card 
+								title={
+									<div style={{display: 'flex', justifyContent:"space-between"}}>
+										<p style={{fontSize:"18px !important", fontWeight:"600", marginBottom:"0"}}>Biểu đồ tỉ lệ đặt khám theo chuyên khoa</p>
+										<p style={{marginBottom:"0"}}>{`${moment(dateRange.start).format('DD')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p>
+									</div>
+								}	
+							>
+								{/* <Line data={lineChart} options={options2} /> */}
+								<Pie data={specChart} />
+
+							</Card>
+							{/* <Bar data={dataReview} options={options} /> */}
 						</Col>
 					</Row>
                 </div>

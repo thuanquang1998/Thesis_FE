@@ -1,23 +1,23 @@
-import { Card } from '@material-ui/core'
-import { Badge, Button, Table, Tag } from 'antd'
-import React, {useState, useEffect} from 'react'
-import SidebarNav from '../../../../components/SideBar'
-import AddEmployee from '../../components/Modal/AddEmployee';
+import { Card } from '@material-ui/core';
+import { Badge, Table } from 'antd';
+import moment from 'moment';
+import { useSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import adminAPI from '../../../../../api/adminAPI';
 import doctorAPI from '../../../../../api/doctorAPI';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import LoadingTop from '../../../../components/loadingTop';
 import UpdateProfileDoctor from '../../../../../doctor/features/DoctorProfileManage/UpdateProfileDoctor';
-import moment from 'moment';
+import LoadingTop from '../../../../components/loadingTop';
+import SidebarNav from '../../../../components/SideBar';
+
 
 const DoctorHospital = () => {
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [listEmployees, setListEmployees] = useState([]);
 
-	// update Doctor
-	// const [doctorData, setDoctorData ] = useState({});
+    const { enqueueSnackbar} = useSnackbar();
+	
     const [initData, setInitData] = useState({
         about: "",
     });
@@ -25,7 +25,8 @@ const DoctorHospital = () => {
         visible: false,
         data: {},
     })
-	const [about, setAbout] = useState("");
+	const [currentDoctorId, setCurrentDoctorId] = useState(null);
+
 	useEffect(()=> {
 		(async ()=>{
 			try {
@@ -66,6 +67,7 @@ const DoctorHospital = () => {
             const birthday = moment(_data.birthday);
             const obj = {
                 fullName: _data.fullName,
+				doctorId: _data._id,
                 email: _data.email,
                 phone: _data.phone,
                 gender: _data.sex,
@@ -73,9 +75,10 @@ const DoctorHospital = () => {
                 about: _data.about,
                 birthday: birthday,
             }
-            setInitData({...initData,...obj});
+			setCurrentDoctorId(obj.doctorId)
+            setInitData({...obj});
 			setTimeout(() => {
-				setModalData({...modalData, visible:true})
+				setModalData({...modalData, visible:true, data: {...obj}})
 			},300)
 
         } catch (error) {
@@ -87,29 +90,29 @@ const DoctorHospital = () => {
 
 	}
 
-	// const handleUpdateProfile = (dataSubmit) => {
-    //     setLoadingPage(true);
-    //     updateDoctorProfileApi(dataSubmit);
-    // }
-    // const updateDoctorProfileApi = async (data) => {
-    //     try {
-    //         const response = await doctorAPI.update_doctor_info({data,id:doctorId});
-    //         if(response.error) throw new Error("error updateDoctor");
-    //         enqueueSnackbar('Cập nhật thành công.', {variant: 'success'});
-    //         getDoctorById(doctorId);
-    //         setTimeout(() => {
-    //             setLoadingPage(false);
-    //             setModalData({
-    //                 ...modalData, 
-    //                 visible:false, 
-    //             })
-    //         },400)
-    //     } catch (error) {
-    //         console.log('error :>> ', error);
-    //         enqueueSnackbar('Cập nhật không thành công', {variant: 'error'});
-    //         setLoadingPage(false);
-    //     }
-    // }
+	const handleUpdateProfile = (dataSubmit) => {
+        setLoadingPage(true);
+        updateDoctorProfileApi(dataSubmit);
+    }
+    const updateDoctorProfileApi = async (data) => {
+        try {
+            const response = await doctorAPI.update_doctor_info({data,id:currentDoctorId});
+            if(response.error) throw new Error("error updateDoctor");
+            enqueueSnackbar('Cập nhật thành công.', {variant: 'success'});
+            setTimeout(() => {
+                setLoadingPage(false);
+                setModalData({
+                    ...modalData, 
+                    visible:false, 
+                })
+            },400)
+        } catch (error) {
+            console.log('error :>> ', error);
+            enqueueSnackbar('Cập nhật không thành công', {variant: 'error'});
+            setLoadingPage(false);
+        }
+    }
+
 	const new_columns = [
         {
           title: 'Tên bác sĩ',
@@ -183,25 +186,18 @@ const DoctorHospital = () => {
 							pagination={{position:["bottomCenter"]}}
 						/>
 					</Card>
+					
 					<UpdateProfileDoctor
 						modalData={modalData}
 						initData = {initData}
-						// handleOk={()=>{
-						// 	setModalData({
-						// 		...modalData,
-						// 		visible: !modalData.visible,
-						// 	})
-						// }}
 						handleClose={()=>{
-
-							setInitData({});
+							setInitData({about: ""});
 							setModalData({
 								...modalData,
 								visible: !modalData.visible,
 							})
-							
 						}}
-						handleUpdateProfile={()=>{}}
+						handleUpdateProfile={handleUpdateProfile}
 						onChangeAbout={(data)=>setInitData({...initData, about:data})}
 					/>
                 </div>

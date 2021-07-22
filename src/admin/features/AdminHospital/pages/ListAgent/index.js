@@ -6,11 +6,14 @@ import adminAPI from '../../../../../api/adminAPI';
 import LoadingTop from '../../../../components/loadingTop';
 import SidebarNav from '../../../../components/SideBar';
 import CreateAgent from '../../components/CreateAgent';
+import { useSnackbar } from 'notistack';
+
 
 const ListAgent = () => {
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [listEmployees, setListEmployees] = useState([]);
+    const { enqueueSnackbar } = useSnackbar();
 
 	// create agent
 	const [modalData, setModalData] = useState({
@@ -78,7 +81,25 @@ const ListAgent = () => {
         },
       ]
 	const onCreateAgent = async (data) => {
-
+		setLoadingPage(true)
+		try {
+            const response = await adminAPI.create_agent(data);
+            if(response.error) throw new Error("error createAgentApi");
+            enqueueSnackbar('Tạo nhân viên thành công', {variant: 'success'});
+			setTimeout(() => {
+				setModalData({
+					...modalData,
+					visible: false,
+				})
+				setLoadingPage(false)
+			}, 300);
+        } catch (error) {
+            console.log('error :>> ', error);
+			setTimeout(() => {
+				enqueueSnackbar('Lỗi kết nối. Thử lại sau ít phút.', {variant: 'error'});
+				setLoadingPage(false)
+			}, 300);
+        }
 	}
 
     return (
@@ -134,9 +155,7 @@ const ListAgent = () => {
 							})
 						}}
 						createAgent={onCreateAgent}
-						// loadingCreate={(data)=>
-						// 	setLoadingPage(data)
-						// }
+						loadingPage={loadingPage}
 					/>
                 </div>
 				

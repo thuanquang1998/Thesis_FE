@@ -198,6 +198,15 @@ function ScheduleCurrent(props) {
                             <i className="far fa-eye"></i> Xem kết quả
                         </Link>
                       </Menu.Item>
+                      <Menu.Item key="1">
+                        <Link 
+                            className="btn btn-sm bg-success-light"
+                            onClick={()=>{}}
+                            style={{marginBottom:"2px"}}
+                        >
+                            <i class="fas fa-exchange-alt"></i> Đánh giá
+                        </Link>
+                    </Menu.Item>
                     </Menu>
                   );
                 const menuChecking = (

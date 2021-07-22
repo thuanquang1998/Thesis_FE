@@ -170,11 +170,7 @@ const Specialities = () => {
 				<div className="page-header">
 					<div className="row">
 						<div className="col-sm-7 col-auto">
-							<h3 className="page-title">Chuyên khoa</h3>
-							<ul className="breadcrumb">
-								<li className="breadcrumb-item"><Link to="/admin">Dashboard</Link></li>
-								<li className="breadcrumb-item active">Chuyên khoa</li>
-							</ul>
+							<h3 className="page-title" style={{paddingTop:"20px"}}>Chuyên khoa</h3>
 						</div>
 						<div className="col-sm-5 col">
 							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>handleShow('create')}>

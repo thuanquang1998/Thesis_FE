@@ -21,7 +21,7 @@ const DetailDoctorPage = (props) => {
 
     const history = useHistory();
     const patient = useSelector(state=> state.patient);
-    const data = history.location.state.data;
+    const doctorData = history.location.state.data;
     const [reviewData, setReviewData] = useState([]);
     const [loadingReview, setLoadingReview] = useState(true);
     const [loadingPage, setLoadingPage] = useState(true);
@@ -40,7 +40,7 @@ const DetailDoctorPage = (props) => {
 
     useEffect(()=> {
         setLoadingPage(true);
-        const id = history.location.state.data._id;
+        const id = doctorData._id;
         getDoctorById(id);
     },[])
     const getDoctorById = async (id) => {
@@ -62,7 +62,7 @@ const DetailDoctorPage = (props) => {
         }
     },[dataReview])
     useEffect(()=> {
-        getReviewDoctors(data._id);
+        getReviewDoctors(doctorData._id);
     },[])
     const getReviewDoctors = async (id) => {
         setLoadingPage(true);
@@ -85,7 +85,7 @@ const DetailDoctorPage = (props) => {
             // call api submit review
             const _data = {
                 ...dataReview,
-                doctorId: data._id,
+                doctorId: doctorData._id,
             }
             console.log('dataReview handleReview:>> ', _data);
             submitReviewApi(_data);
@@ -126,7 +126,7 @@ const DetailDoctorPage = (props) => {
             const response = await patientAPI.create_review(data);
             if(response.error) throw new Error('submitReviewApi error');
             enqueueSnackbar('Đánh giá thành công', {variant: 'success'});
-            getReviewDoctors(data._id);
+            getReviewDoctors(doctorData._id);
             setLoadingPage(false)
         } catch (error) {
             console.log(`error`, error);
@@ -138,8 +138,8 @@ const DetailDoctorPage = (props) => {
         if (patient.isLoggedIn === true) {
             // history.push(`/patient/${props.data?.id}/datlich`)
             history.push({
-                pathname: `/dat-kham/${data?._id}`,
-                state: {data}
+                pathname: `/dat-kham/${doctorData?._id}`,
+                state: {doctorData}
             })
         } else {
             Swal.fire({
@@ -155,8 +155,8 @@ const DetailDoctorPage = (props) => {
             .then((result) => {
                 if (result.value) {
                     history.push({
-                    pathname: `/dat-kham/${props.data?.id}/dang-nhap`,
-                    state: {data},
+                    pathname: `/dat-kham/${doctorData?.id}/dang-nhap`,
+                    state: {doctorData},
                 })
                 } 
             })
@@ -283,7 +283,7 @@ const DetailDoctorPage = (props) => {
                                     
                                             <Rate value={dataReview.star_num===null?0:dataReview.star_num} onChange={(e)=>setDataReview({...dataReview, star_num:e})}/>
                                         
-                                        Bạn đã sử dụng dịch vụ của {data.title} {data.fullName}. Hãy chia sẽ những nhận xét của bạn.
+                                        Bạn đã sử dụng dịch vụ của {doctorData.title} {doctorData.fullName}. Hãy chia sẽ những nhận xét của bạn.
                                         
                                             <TextArea value={dataReview.comment===null?"":dataReview.comment} onChange={(e)=>setDataReview({...dataReview, comment:e.target.value})}></TextArea>
                                         <Button loading={loadingPage} type="primary" onClick={handleReview} disabled={disableButton}>Gửi</Button>

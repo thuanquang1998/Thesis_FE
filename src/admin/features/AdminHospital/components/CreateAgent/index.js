@@ -1,33 +1,16 @@
-import React,{useState} from 'react';
-import {Modal, Button, Input, Form, Radio} from 'antd';
-import { useSnackbar } from 'notistack';
-import adminAPI from '../../../../../api/adminAPI';
+import { Button, Form, Input, Modal, Radio } from 'antd';
+import React, { useEffect } from 'react';
 
 function CreateAgent(props) {
     const [form] = Form.useForm();
-    const {modalData, handleOk, handleClose} = props;
-    const { enqueueSnackbar } = useSnackbar();
+    form.resetFields();
+    const {modalData, handleOk, handleClose, loadingPage} = props;
 
 
     const onHandleSubmit = (data) => {
-        props.loadingCreate(true);
-        // props.createAgent(data);
-        createAgentApi(data);
+        props.createAgent(data);
     }
-    const createAgentApi = async (data) =>{
-        try {
-            const response = await adminAPI.create_agent(data);
-            console.log('response createAgentApi:>> ', response);
-            if(response.error) throw new Error("error createAgentApi");
-            enqueueSnackbar('Tạo nhân viên thành công', {variant: 'success'});
-            props.handleClose();
-            form.resetFields();
-        } catch (error) {
-            console.log('error :>> ', error);
-            enqueueSnackbar('Tạo nhân viên thất bại', {variant: 'error'});
-        }
-        props.loadingCreate(false)
-    }
+    
     return (
         <Modal 
             title="Tạo mới nhân viên" 
@@ -45,22 +28,42 @@ function CreateAgent(props) {
                 form={form}
                 onFinish={onHandleSubmit}
                 initialValues={{}}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
             >
                 <Form.Item
                     name="fullName"
                     label="Họ và tên"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập đầy đủ thông tin',
+                        }
+                    ]}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
                     name="phone"
                     label="Số điện thoại"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập đầy đủ thông tin',
+                        }
+                    ]}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
                     name="email"
                     label="Email"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập đầy đủ thông tin',
+                        }
+                    ]}
                 >
                     <Input/>
                 </Form.Item>
@@ -79,9 +82,9 @@ function CreateAgent(props) {
                         <Radio.Button value="female">Nữ</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">Thêm</Button>
-                </Form.Item>
+                <div style={{textAlign: 'center', marginTop:"20px"}}>
+                    <Button type="primary" htmlType="submit">Hoàn thành</Button>
+                </div>
             </Form>
         </Modal>
     );

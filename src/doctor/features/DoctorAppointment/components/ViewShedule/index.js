@@ -247,7 +247,7 @@ function ViewSchedule(props) {
 
                                                         <Form.Item>
                                                         <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                                            Add sights
+                                                            Thêm
                                                         </Button>
                                                         </Form.Item>
                                                     </>
