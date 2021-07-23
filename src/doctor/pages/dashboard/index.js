@@ -68,8 +68,8 @@ const  DoctorDashboard =()=>{
                                                         trackTransition="0s ease"
                                                     >
                                                     <div className="indicator-volume">
-                                                    <img src={Icon01} className="img-fluid" alt="Patient" />
-                                                                </div>
+                                                        <img src={Icon01} className="img-fluid" alt="Patient" />
+                                                    </div>
                                                             </ProgressBar>
                                                             <div className="dash-widget-info">
                                                                 <h6>Tổng số bệnh nhân</h6>

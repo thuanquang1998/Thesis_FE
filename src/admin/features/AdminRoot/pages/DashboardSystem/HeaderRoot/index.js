@@ -60,6 +60,7 @@ function HeaderRoot(props) {
                                 <div className="indicator-volume">
                                     <img src="" className="img-fluid" alt="Patient" />
                                 </div>
+                                
                             </ProgressBar>
                                 <div className="dash-widget-info">
                                     <h6>Chuyên khoa</h6>

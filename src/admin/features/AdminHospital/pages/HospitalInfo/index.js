@@ -18,9 +18,6 @@ const HospitalInfo = () => {
     const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
 	const hospitalId = hospitalInfo._id;
 	const {enqueueSnackbar} = useSnackbar();
-  
-	const [showModal, setShowModal] = useState(false)
-	const [initialData, setInitialData] = useState(null);
 	const [loadingPage, setLoadingPage] = useState(true);
 	const [hospitalData, setHospitalData] = useState({});
 	const [initData, setInitData] = useState({
@@ -60,7 +57,6 @@ const HospitalInfo = () => {
 	const getHospitalInfo = async () => {
 		try {
 			const response = await adminAPI.get_hospital_info(hospitalId);
-			console.log('response getHospitalInfo:>> ', response);
 			if(response.error) throw new Error('error gethospitalInfo');
 			setHospitalData(response.data.data[0]);
 			// handleDAta

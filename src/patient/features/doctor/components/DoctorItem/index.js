@@ -65,18 +65,11 @@ const DoctorItem = (props) => {
             <div className="profile-widget" style={{minWidth:"280px", maxWidth:"400px", margin:"0 auto"}}>
                 <div className="doc-img">
                     <Link>
-                        {/* {!loadedImage?
-                        <img 
-                            className="img-fluid" 
-                            alt="User" 
-                            src={img} 
-                        />: */}
                         <img 
                             className="img-fluid" 
                             alt="User" 
                             src={data.avatar} 
                         />
-                        
                     </Link>
                 </div>
                 <div className="pro-content">
@@ -92,7 +85,7 @@ const DoctorItem = (props) => {
                     </Link> 
                         <i className="fas fa-check-circle verified"></i>
                     </h3>
-                    <Rate value={3} />
+                    <Rate value={data.rate_average} />
                     <ul className="available-info" style={{height:"110px"}}>
                         <li>
                             <span><img src={departLogo} alt="Nội tiết" style={{height:"15px", width:"15px", display:"inline-block", marginRight:"15px"}}/></span>

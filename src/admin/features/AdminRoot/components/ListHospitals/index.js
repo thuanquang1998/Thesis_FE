@@ -1,25 +1,61 @@
 import { Badge, Button, Card, Modal, Table, Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { get_list_hospitals } from '../../../../../redux/actions/adminActions'
-import SidebarNav from '../../../../components/SideBar'
 import moment from 'moment'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import adminAPI from '../../../../../api/adminAPI'
+import LoadingTop from '../../../../components/loadingTop'
+import SidebarNav from '../../../../components/SideBar'
+import UpdateHospital from '../../../AdminHospital/components/UpdateHospital';
 
 const ListHospitals = () => {
-    const dispatch = useDispatch()
-    const list_hospitals = useSelector(state=>state.admin.list_hospital);
-    console.log('list_hospitals :>> ', list_hospitals);
+    const [loadingPage, setLoadingPage] = useState(true);
     const [listHospitals, setListHospitals] = useState([]);
+    const [currentHospital, setCurrentHospital] = useState({});
+
+    const [modalData, setModalData] = useState({
+      visible: false,
+      data: {},
+    })
+
+
+
+
     useEffect(()=> {
-      dispatch(get_list_hospitals())
+      getListHospital();
     },[])
-    useEffect(()=> {
-      if(list_hospitals && !list_hospitals?.isNull){
-        const list_bv = list_hospitals.data;
-        setListHospitals(list_bv);
+
+    const getListHospital = async () => {
+      setLoadingPage(true);
+      try {
+        const response = await adminAPI.get_list_hospitals();
+        console.log('response getListHospital:>> ', response);
+        if(response.error) throw new Error("Error");
+        setListHospitals(response.data.data);
+        setLoadingPage(false);
+      } catch (error) {
+        setLoadingPage(false);
+        console.log('error :>> ', error);
       }
-    },[list_hospitals])
+    }
+
+    const getInfoHospital = async (data) => {
+      setLoadingPage(true);
+      try {
+        const response = await adminAPI.get_hospital_info(data._id);
+        console.log(`response getInfoHospital`, response);
+        if(response.error) throw new Error("error");
+        setCurrentHospital(response.data);
+        setModalData({...modalData, visible:true})
+        setLoadingPage(false);
+      } catch (error) {
+        console.log('error :>> ', error);
+        setLoadingPage(false);
+      }
+    }
+
+    const updateHospitalInfo = async (data) => {
+      console.log('data updateHospitalInfo:>> ', data);
+    }
 
     const columns = [
         {
@@ -31,7 +67,6 @@ const ListHospitals = () => {
           title: 'Địa chỉ',
           dataIndex: 'address',
           render: (text) => {
-            console.log('text :>> ', text);
             return (
               <p>{text}</p>
             )
@@ -72,39 +107,30 @@ const ListHospitals = () => {
             )
             }, 
         },
-        {
-          title: 'Sự kiện',
-          key: 'id',
-          render: () => {
-            return (
-              <div>
-                <a href={`#/restaurants/edit/{partner.id}`}>
-                  <Button type="primary" style={{marginRight:"15px"}}>Sửa</Button>
-                </a>
-                <a href={`#/restaurants/edit/{partner.id}`}>
-                  <Button type="danger" style={{marginRight:"15px"}}>Xóa</Button>
-                </a>
-              </div>
-            )
-            }, 
-          fixed: 'right',
-          width: 170,
-        },
+        // {
+        //   title: 'Sự kiện',
+        //   key: 'id',
+        //   render: (text, record) => {
+        //     return (
+        //       <div>
+        //           <Button 
+        //             type="primary" 
+        //             style={{marginRight:"15px"}}
+        //             onClick={() => getInfoHospital(record)}
+        //           >
+        //             Cập nhật
+        //           </Button>
+        //       </div>
+        //     )
+        //     }, 
+        //   fixed: 'right',
+        //   width: 170,
+        // },
       ]
-
-    
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const showCreateHos = () => {
-      setIsModalVisible(true)
-    }
-    const handleOk = () => {
-      setIsModalVisible(false);
-    };
-    const handleCancel = () => {
-      setIsModalVisible(false);
-    };
+   
     return (
         <>
+          {loadingPage && <LoadingTop/>}
           <SidebarNav/>
             <div className="page-wrapper">
               <div className="content container-fluid">
@@ -127,26 +153,33 @@ const ListHospitals = () => {
                     </a>
                     }>
                     <Table
-                    bordered={true}
-                    scroll={{ y: 450, x: 2000 }}
-                    // loading={loading}
-                    columns={columns}
-                    pagination={false}
-                    dataSource={listHospitals} 
+                      bordered={true}
+                      scroll={{ y: 450, x: 2000 }}
+                      loading={loadingPage}
+                      columns={columns}
+                      pagination={false}
+                      dataSource={listHospitals} 
                     />
-                    <br />
-                    <div className="d-flex flex-row-reverse">
-                    {/* {renderPaginate()} */}
-                    </div>
-                    <br />
                 </Card>
+                <UpdateHospital
+									modalData={modalData}
+									handleOk={()=>{
+										setModalData({
+											...modalData,
+											visible: !modalData.visible,
+										})
+									}}
+									handleClose={()=>{
+										setModalData({
+											...modalData,
+											visible: !modalData.visible,
+										})
+									}}
+									initData={currentHospital}
+									updateHospitalInfo={updateHospitalInfo}
+								/>
             </div>
           </div>
-          <Modal title="Tạo mới bệnh viện" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-          </Modal>
         </>
     )
 }

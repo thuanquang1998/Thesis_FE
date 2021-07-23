@@ -10,7 +10,6 @@ import wardData from '../../../../assets/data/ward';
 function BookingForm(props) {
     const {submitData, onSubmitForm, doctorId} = props;
     const initData = props.initData||{};
-    console.log('initData :>> ', initData);
     const [dataSubmit, setDataSubmit] = useState({...submitData})
     const currentTimeNumber = new Date().getTime();
     const [listDateValid, setListDateValid] = useState([]);
@@ -108,7 +107,6 @@ function BookingForm(props) {
         }
         onSubmitForm(newData);
     }
-    console.log('setListDateValid :>> ', setListDateValid);
     return (
         <Form
             labelCol={{

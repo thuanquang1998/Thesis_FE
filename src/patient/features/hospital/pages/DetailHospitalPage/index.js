@@ -182,7 +182,7 @@ const DetailHospitalPage = () => {
                             <div >
                                 {renderDoctor.length===0?
                                     <div style={{minHeight:"300px", margin:"0 auto"}}>
-                                        <h3 style={{margin:'0 auto'}}>Bệnh viện hiện không có bác sĩ</h3>
+                                        <h3 style={{margin:'0 auto'}}>Đã tìm thấy: 0 bác sĩ</h3>
                                     </div>
                                     :<DoctorList doctors={renderDoctor}/>
                                 }

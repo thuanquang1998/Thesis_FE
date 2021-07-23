@@ -1,24 +1,23 @@
-import { Button, Card, Col, Rate, Row, Tabs, Form } from 'antd'
-import TextArea from 'antd/lib/input/TextArea'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import ReactQuill from "react-quill"
-import { Link, useHistory, useLocation } from 'react-router-dom'
-import patientAPI from '../../../../../api/patientApi'
-import doctorAPI from '../../../../../api/doctorAPI'
-import logoDoctor from '../../../../assets/img/bsnam.jpg'
-import departLogo from '../../../../assets/img/depart.png'
-import hospitalLogo from '../../../../assets/img/hospital.png'
-import location from '../../../../assets/img/location.png'
-import price from '../../../../assets/img/price.png'
-import Swal from 'sweetalert2';
-import './style.css'
+import { Button, Card, Col, Rate, Row } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import { useSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
+import ReactQuill from "react-quill";
+import { useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import doctorAPI from '../../../../../api/doctorAPI';
+import patientAPI from '../../../../../api/patientApi';
 import LoadingTop from '../../../../../doctor/components/loadingTop';
+import logoDoctor from '../../../../assets/img/bsnam.jpg';
+import departLogo from '../../../../assets/img/depart.png';
+import hospitalLogo from '../../../../assets/img/hospital.png';
+import location from '../../../../assets/img/location.png';
+import price from '../../../../assets/img/price.png';
+import './style.css';
 
 const DetailDoctorPage = (props) => {
     const { enqueueSnackbar } = useSnackbar();
-
     const history = useHistory();
     const patient = useSelector(state=> state.patient);
     const doctorData = history.location.state.data;
@@ -47,7 +46,6 @@ const DetailDoctorPage = (props) => {
         try {
             const response = await doctorAPI.get_doctors_by_id(id);
             if(response.error) throw new Error("Error getDoctorById");
-            console.log('response :>> ', response);
             setDoctorInfo({...response.data.data[0]});
             setLoadingPage(false);
         } catch (error) {
@@ -69,7 +67,6 @@ const DetailDoctorPage = (props) => {
         try {
             const response = await patientAPI.get_doctor_reviews(id);
             if(response.error) throw new Error("Can't get getReviewDoctors")
-            console.log('response getReviewDoctors:>> ', response);
             setReviewData([...response.data]);
             setLoadingReview(false);
             setLoadingPage(false);
@@ -82,12 +79,10 @@ const DetailDoctorPage = (props) => {
     
     const handleReview = () => {
         if (patient.isLoggedIn === true) {
-            // call api submit review
             const _data = {
                 ...dataReview,
                 doctorId: doctorData._id,
             }
-            console.log('dataReview handleReview:>> ', _data);
             submitReviewApi(_data);
             setLoadingPage(true);
             setDataReview({
@@ -139,7 +134,7 @@ const DetailDoctorPage = (props) => {
             // history.push(`/patient/${props.data?.id}/datlich`)
             history.push({
                 pathname: `/dat-kham/${doctorData?._id}`,
-                state: {doctorData}
+                state: {data:{...doctorData}}
             })
         } else {
             Swal.fire({
@@ -181,7 +176,7 @@ const DetailDoctorPage = (props) => {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Trang chủ</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page"><Link to='/danh-sach-bac-si'>Danh sách bác sĩ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">{`${doctorInfo.title} ${doctorInfo.fullName}`}</li>
+                                    <li className="breadcrumb-item active" aria-current="page">{`${doctorInfo.title || ""} ${doctorInfo.fullName || ""}`}</li>
                                 </ol>
                             </nav>
                             <h2 className="breadcrumb-title">{`${doctorInfo.title} ${doctorInfo.fullName}`}</h2>
@@ -270,24 +265,21 @@ const DetailDoctorPage = (props) => {
                                     <h4 style={{display:"none"}}>Chưa có đánh giá </h4>
                                 {reviewData.map((item,index)=>(
                                     <div className="review__item" key={index}>
-                                        <div className="review__item--header">
-                                            <div className="review__header--left"><i class="far fa-user"></i></div>
-                                            <div className="review__header--right">{item.patient_name} <span>đã nhận xét</span></div>
+                                        <div className="review__item--header" style={{display:"flex"}}>
+                                            <div className="review__header--left" style={{paddingRight:"8px"}}><i class="far fa-user"></i></div>
+                                            <div className="review__header--right" style={{fontWeight:"600"}}>{item.patient_name} <span>đã nhận xét</span></div>
                                         </div>
                                         <div className="review__item--rating"><Rate value={item.rate.star_num}/></div>
                                         <div className="review__item--comment"><p>{item.rate.comment}</p></div>
                                     </div>
                                 ))}
                                
-                                <Card>
-                                    
-                                            <Rate value={dataReview.star_num===null?0:dataReview.star_num} onChange={(e)=>setDataReview({...dataReview, star_num:e})}/>
-                                        
+                                    <Card>
                                         Bạn đã sử dụng dịch vụ của {doctorData.title} {doctorData.fullName}. Hãy chia sẽ những nhận xét của bạn.
-                                        
+                                        <Rate value={dataReview.star_num===null?0:dataReview.star_num} onChange={(e)=>setDataReview({...dataReview, star_num:e})}/>
                                             <TextArea value={dataReview.comment===null?"":dataReview.comment} onChange={(e)=>setDataReview({...dataReview, comment:e.target.value})}></TextArea>
-                                        <Button loading={loadingPage} type="primary" onClick={handleReview} disabled={disableButton}>Gửi</Button>
-                                </Card>
+                                        <Button style={{margin:"0 auto", marginTop:"15px"}} loading={loadingPage} type="primary" onClick={handleReview} disabled={disableButton}>Gửi</Button>
+                                    </Card>
                                 </Card>
                             </Col>
                         </Row>

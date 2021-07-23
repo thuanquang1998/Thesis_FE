@@ -36,8 +36,7 @@ const INIT_DATA = {
 const BookingPage = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
-    console.log('doctorData :>> ', doctorData);
-    console.log('doctorID :>> ', doctorID);
+    console.log('doctorData 1111:>> ', doctorData);
     const history = useHistory();
 
     const dispatch = useDispatch()
