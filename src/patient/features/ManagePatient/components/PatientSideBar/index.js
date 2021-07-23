@@ -1,17 +1,24 @@
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
-import { useSelector } from 'react-redux';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import IMG01 from '../../../../assets/images/doctor-thumb-02.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
+import { logoutPatient } from "../../../../../redux/actions/patientActions";
 import './style.css';
 
 
 
 const PatientSidebar = () => {
     const location = useLocation();
+    const dispatch = useDispatch();
     const url = location.pathname;
+    const history = useHistory();
     const patient = useSelector(state=>state.patient)
     const patientInfo = patient.currentUser.patientInfo;
+
+    const handleLogoutPatient = () => {
+        dispatch(logoutPatient());
+        history.push('/');
+      }
     return(
         <div className="profile-sidebar" style={{borderRadius:"20px !important"}}>
             <div className="widget-profile pro-widget-content">
@@ -50,10 +57,10 @@ const PatientSidebar = () => {
                     </Nav.Item> 
 
                     <Nav.Item> 
-                        <NavLink to="/doctor" activeClassName="active">
+                        <Link onClick={handleLogoutPatient}>
                             <i className="fas fa-sign-out-alt"></i>
                             <span>Đăng xuất</span>
-                        </NavLink>
+                        </Link>
                     </Nav.Item> 
                 </Nav> 
             </div>

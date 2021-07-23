@@ -132,7 +132,7 @@ const BookingPage = (props) => {
                      {/* Modal Confirm booking */}
                     <BookingConfirm
                         showModal = {showModal}
-                        data = {submitData}
+                        data = {{...submitData,address:doctorData.hospital_info.address}}
                         handleSubmit = {handleSubmit}
                         handleReturn = {handleReturn}
                     />

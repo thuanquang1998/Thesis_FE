@@ -214,7 +214,7 @@ const DetailDoctorPage = (props) => {
                                 <h3 className="titlee">
                                     {`${doctorInfo.title} ${doctorInfo.fullName}`}
                                 </h3>
-                                <Rate value={3} />
+                                <Rate value={doctorInfo.rate_average||5} />
                                 <ul className="available-info">
                                     <li>
                                         <span><img src={departLogo} alt="Nội tiết"/></span>
@@ -266,7 +266,7 @@ const DetailDoctorPage = (props) => {
                                 {reviewData.map((item,index)=>(
                                     <div className="review__item" key={index}>
                                         <div className="review__item--header" style={{display:"flex"}}>
-                                            <div className="review__header--left" style={{paddingRight:"8px"}}><i class="far fa-user"></i></div>
+                                            <div className="review__header--left" style={{paddingRight:"8px"}}><i className="far fa-user"></i></div>
                                             <div className="review__header--right" style={{fontWeight:"600"}}>{item.patient_name} <span>đã nhận xét</span></div>
                                         </div>
                                         <div className="review__item--rating"><Rate value={item.rate.star_num}/></div>

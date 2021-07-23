@@ -58,7 +58,7 @@ function BookingConfirm(props) {
                 </div>
                 <div className="row">
                     <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Địa chỉ:</div>
-                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.patientInfo.address}</div>
+                    <div className="col-sm-8 text-sm-left" style={{fontWeight:"600"}}>{data.address}</div>
                 </div>
                 <div className="row">
                     <div className="col-sm-4 text-sm-right mb-0 mb-sm-3">Phòng khám:</div>
