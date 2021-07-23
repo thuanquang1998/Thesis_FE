@@ -64,11 +64,9 @@ function PatientSchedule(props) {
 
     const cancelSchedule = async (record) => {
         let currentTime = moment();
-        const check1 = compareDates( new Date(record.dateCheck), new Date(currentTime))
-        // const check2 = record.status!=="uncheck"?true:false;
-        // const check = check1&&check2;
+        const check1 = moment(currentTime).isBefore(record.dateCheck);
 
-        if(check1) {
+        if(!check1) {
 			Swal.fire({
 				icon: "error",
                 title: "Không thể xóa lịch khám này.",
@@ -114,13 +112,9 @@ function PatientSchedule(props) {
     }
 
     const changeSchedule = async (record) => {
-        console.log('record :>> ', record);
-        // check condition
         let currentTime = moment();
-        const  check1 = moment(record.dateCheck).isAfter(currentTime);
-        const check2 = record.status!=="uncheck"?true:false;
-        const check = check1&&check2;
-        if(check) {
+        const  check1 = moment(currentTime).isBefore(record.dateCheck);
+        if(!check1) {
 			Swal.fire({
 				icon: "error",
                 title: "Không thể đổi lịch khám này.",

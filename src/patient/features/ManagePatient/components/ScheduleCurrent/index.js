@@ -337,18 +337,18 @@ function ScheduleCurrent(props) {
                     onFinish={onFindDate}
                 >   
                     <Row gutter={[8,8]} >
-                        <Col xs={{span:24}} sm={{span:12}} md={{span:6}}>
+                        <Col xs={{span:24}} sm={{span:12}} md={{span:8}}>
                             <Form.Item name="day1" label="Từ ngày:" className="search__form--item">
                                 <DatePicker placeholder="Chọn ngày"/>
                             </Form.Item>
                         </Col>
-                        <Col xs={{span:24}} sm={{span:12}} md={{span:6}}>
+                        <Col xs={{span:24}} sm={{span:12}} md={{span:8}}>
                             <Form.Item name="day2" label="Đến ngày:" className="search__form--item">
                                 <DatePicker placeholder="Chọn ngày"/>
                             </Form.Item>
                         </Col>
                         
-                        <Col xs={{span:24}} sm={{span:12}} md={{span:6}}>
+                        <Col xs={{span:24}} sm={{span:12}} md={{span:6}} style={{display:"flex",flexDirection:"column", justifyContent:"flex-end", marginBottom:"5px"}}>
                             <Form.Item  className="search__form--item">
                                 <Button type="primary" htmlType="submit">Tìm kiếm</Button>
                             </Form.Item>
@@ -356,7 +356,7 @@ function ScheduleCurrent(props) {
                     </Row>
                 </Form>
                 {/* <Input placeholder="Tìm kiếm" onChange={onChangeSearch} value={filterSchedule.search}/> */}
-                <Radio.Group onChange={onChangeStatus} value={filterSchedule.status}>
+                <Radio.Group onChange={onChangeStatus} value={filterSchedule.status} style={{marginTop:"10px", marginBottom:"10px"}}>
                     <Radio value={1}>Tất cả</Radio>
                     <Radio value={2}>Chưa khám</Radio>
                     <Radio value={3}>Đang khám</Radio>  
@@ -371,6 +371,7 @@ function ScheduleCurrent(props) {
                     rowKey={record => record.id}
                     showSizeChanger={true} 
                     loading={loadingSchedule}
+                    pagination={{position:["bottomCenter"]}}
                 />
             </Card>
             <ModalSchedule

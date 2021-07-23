@@ -10,16 +10,16 @@ const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 3,
+    slidesToScroll: 3,
     centerPadding: "10px",
     arrows: true,
     responsive: [
       {
           breakpoint: 800,
           settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
+              slidesToShow: 2,
+              slidesToScroll: 2,
               infinite: true,
               centerPadding: "0px",
           }
@@ -27,8 +27,8 @@ const settings = {
       {
           breakpoint: 993,
           settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2,
+              slidesToShow: 3,
+              slidesToScroll: 3,
               infinite: true,
             
           }
@@ -54,6 +54,8 @@ const CardHospital = (props) => {
     )
 }
 const HomeHospital = (props) => {
+  console.log('data CardHospital:>> ', props.data);
+
     return (
         <section className="section section-features">
         <div className="container-fluid">
