@@ -1,6 +1,9 @@
 import React from 'react';
 import ProgressBar from 'react-customizable-progressbar';
 import doctorLogo from '../../../../../assets/img/doctor.png';
+import specLogo from '../../../../../assets/img/spec.png';
+import hospitalLogo from '../../../../../assets/img/hospital.png';
+import appointmentLogo from '../../../../../assets/img/appointment.png'
 
 
 function HeaderRoot(props) {
@@ -28,8 +31,8 @@ function HeaderRoot(props) {
                                     transition="1.5s ease 0.5s"
                                     trackTransition="0s ease"
                                 >
-                                    <div className="indicator-volume" style={{width:"50px", height:"50px", margin: "0 auto"}}>
-                                        <img src={doctorLogo} className="img-fluid" alt="Patient"/>
+                                    <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
+                                        <img src={hospitalLogo} className="img-fluid" alt="Patient"/>
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
@@ -57,8 +60,8 @@ function HeaderRoot(props) {
                                 transition="1.5s ease 0.5s"
                                 trackTransition="0s ease"
                             >
-                                <div className="indicator-volume">
-                                    <img src="" className="img-fluid" alt="Patient" />
+                                <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
+                                    <img src={specLogo} className="img-fluid" alt="Patient" />
                                 </div>
                                 
                             </ProgressBar>
@@ -88,8 +91,8 @@ function HeaderRoot(props) {
                                     transition="1.5s ease 0.5s"
                                     trackTransition="0s ease"
                                 >
-                                    <div className="indicator-volume">
-                                        <img src="" className="img-fluid" alt="Patient" />
+                                    <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
+                                        <img src={doctorLogo} className="img-fluid" alt="Patient" />
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
@@ -117,8 +120,8 @@ function HeaderRoot(props) {
                                     transition="1.5s ease 0.5s"
                                     trackTransition="0s ease"
                                 >
-                                    <div className="indicator-volume">
-                                        <img src="" className="img-fluid" alt="Patient" />
+                                    <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
+                                        <img src={appointmentLogo} className="img-fluid" alt="Patient" />
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">

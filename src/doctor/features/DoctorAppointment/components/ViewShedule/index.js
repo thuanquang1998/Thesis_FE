@@ -89,6 +89,29 @@ function ViewSchedule(props) {
             const response = await doctorAPI.transfer_schedule_to_checked(submitData);
             if(response.error) throw new Error("Can't finish_exam_schedule");
             enqueueSnackbar('Hoàn thành khám', {variant: 'success'})
+            setLoadingSubmit(false);
+            history.push({
+                pathname: `/bac-si/lich-kham`,
+            })
+            // Swal.fire({
+			// 	icon: "info",
+			// 	text: "Lưu hồ sơ thành công.",
+			// 	showCancelButton: true,
+			// 	confirmButtonColor: "#3085d6",
+			// 	cancelButtonColor: "#d33",
+			// 	confirmButtonText: "Khám cho bệnh nhân khác",
+			// 	cancelButtonText: "Tái khám"
+			// })
+			// .then((result) => {
+            //     if(result.isConfirmed) {
+            //         console.log("11111111111111");
+            //         // history.push({
+            //         //     pathname: `/bac-si/lich-kham`,
+            //         // })
+            //     } else {
+            //         console.log("22222222222");
+            //     }
+			// })
         } catch (error) {
             console.log('error finish_exam_schedule:>> ', error);
             enqueueSnackbar('Đã có lỗi xảy ra, mời thử lại', {variant: 'error'})

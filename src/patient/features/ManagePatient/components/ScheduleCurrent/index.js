@@ -201,7 +201,7 @@ function ScheduleCurrent(props) {
                       <Menu.Item key="1">
                         <Link 
                             className="btn btn-sm bg-success-light"
-                            onClick={()=>{}}
+                            onClick={()=> history.push(`/danh-sach-bac-si/${record.fullData.doctorId}`)}
                             style={{marginBottom:"2px"}}
                         >
                             <i class="fas fa-exchange-alt"></i> Đánh giá

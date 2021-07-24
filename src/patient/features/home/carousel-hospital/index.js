@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 import iconHospital from '../../../assets/img/icon_hospital.jpg';
-import {Link} from 'react-router-dom'
+import logoBv from '../../../assets/img/logobv.jpg';
 import './style.css';
 
 const settings = {
@@ -39,6 +40,7 @@ const settings = {
 
 const CardHospital = (props) => {
     const {data} = props;
+    const [imageError, setImageError] = useState(false);
     return (
         <Link 
           to={{
@@ -47,7 +49,12 @@ const CardHospital = (props) => {
           }}
         >
            <div className="feature-item text-center" style={{textAlign: 'center'}}>
-                <img src={props.data && props.data.logo} className="img-fluid" alt="Feature" />
+                <img
+                  src={imageError?props.data.logo:logoBv} 
+                  onError={()=>setImageError(true)} 
+                  // src={props.data && props.data.logo} 
+                  className="img-fluid" alt="Feature" 
+                />
                 <p>{props.data && props.data.name}</p>
             </div>
         </Link>

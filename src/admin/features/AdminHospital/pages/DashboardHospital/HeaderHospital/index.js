@@ -1,6 +1,9 @@
 import React from 'react';
 import ProgressBar from 'react-customizable-progressbar';
 import doctorLogo from '../../../../../assets/img/doctor.png';
+import specLogo from '../../../../../assets/img/spec.png';
+import appointmentLogo from '../../../../../assets/img/appointment.png'
+import revenueLogo from '../../../../../assets/img/revenue.png'
 
 
 function HeaderHospital(props) {
@@ -28,7 +31,7 @@ function HeaderHospital(props) {
                                     transition="1.5s ease 0.5s"
                                     trackTransition="0s ease"
                                 >
-                                    <div className="indicator-volume" style={{width:"50px", height:"50px", margin: "0 auto"}}>
+                                    <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
                                         <img src={doctorLogo} className="img-fluid" alt="Patient"/>
                                     </div>
                                 </ProgressBar>
@@ -57,8 +60,8 @@ function HeaderHospital(props) {
                                 transition="1.5s ease 0.5s"
                                 trackTransition="0s ease"
                             >
-                                <div className="indicator-volume">
-                                    <img src="" className="img-fluid" alt="Patient" />
+                                <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
+                                    <img src={specLogo} className="img-fluid" alt="Patient" />
                                 </div>
                             </ProgressBar>
                                 <div className="dash-widget-info">
@@ -87,8 +90,8 @@ function HeaderHospital(props) {
                                     transition="1.5s ease 0.5s"
                                     trackTransition="0s ease"
                                 >
-                                    <div className="indicator-volume">
-                                        <img src="" className="img-fluid" alt="Patient" />
+                                    <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}} >
+                                        <img src={appointmentLogo} className="img-fluid" alt="Patient" />
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
@@ -108,16 +111,14 @@ function HeaderHospital(props) {
                                     strokeWidth={16}
                                     strokeColor="yellow"
                                     strokeLinecap="square"
-                                    trackStrokeWidth={8}
-                                    trackStrokeColor="#e6e6e6"
-                                    trackStrokeLinecap="square"
+                                    trackStrokeWidspecLogoecap="square"
                                     pointerRadius={0}
                                     initialAnimation={true}
                                     transition="1.5s ease 0.5s"
                                     trackTransition="0s ease"
                                 >
-                                    <div className="indicator-volume">
-                                        <img src="" className="img-fluid" alt="Patient" />
+                                    <div className="indicator-volume" style={{width:"40px", height:"40px", margin: "0 auto"}}>
+                                        <img src={revenueLogo} className="img-fluid" alt="Patient" />
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">

@@ -105,5 +105,18 @@ class doctorsAPI{
                     .then(res => res.data)
                     .catch(err=> err.response.data)
     }
+    // lấy danh sách header dashboard  
+    get_doctors_static_header(id) {
+        return http.get(`doctors/${id}/statistic`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+    // lấy tỉ lệ review doctor  
+    get_doctors_static_review(id) {
+        return http.get(`doctors/${id}/statistic/ratio_review`)
+                    .then(res => res.data)
+                    .catch(err=> err.response.data)
+    }
+
 }
 export default new doctorsAPI

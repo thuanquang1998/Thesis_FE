@@ -173,7 +173,7 @@ function ScheduleCurrent(props) {
                                     data: {...data}
                                 })
                             }} 
-                            >
+                        >
                             <i className="far fa-eye"></i> Tái khám
                         </Button>
                       </Menu.Item>

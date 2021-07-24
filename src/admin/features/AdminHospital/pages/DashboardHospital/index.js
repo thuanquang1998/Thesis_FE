@@ -1,11 +1,13 @@
-import React,{useState, useEffect} from 'react'
-import SidebarNav from '../../../../components/SideBar'
-import {Row, Col, Card, DatePicker, Table} from 'antd'
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Card, Col, DatePicker, Row, Table } from 'antd';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import adminAPI from '../../../../../api/adminAPI';
-import ProgressBar from 'react-customizable-progressbar';
-import HeaderHospital from './HeaderHospital'
+import SidebarNav from '../../../../components/SideBar';
+import HeaderHospital from './HeaderHospital';
+import maleLogo from '../../../../assets/img/male_logo.png';
+import femaleLogo from '../../../../assets/img/female_logo.png';
+
 
 
   
@@ -335,6 +337,7 @@ const DashboardHospital = () => {
 		  render: (text, record) => (
 			<div>
 				<i className='fa fa-user' style={{fontSize:'20px', marginRight:'10px'}}></i>
+				<img src={record} alt="" />
 				<span>{text}</span>
 			</div>
 		),

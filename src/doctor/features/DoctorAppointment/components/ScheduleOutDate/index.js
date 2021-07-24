@@ -21,8 +21,12 @@ function ScheduleOutDate(props) {
         const listUncheck = listData.filter(item=>item.status==="uncheck");
         const listOutDate = listUncheck.filter(item=> {
             const dateFormat = convertDateStringtoDate(item.date);
-            const currentDate = new Date();
+            const currentDate = moment();
+            console.log('date :>> ', dateFormat,"      ", currentDate);
+            
             const compareDate = moment(currentDate).isAfter(dateFormat);
+            console.log('compareDate :>> ', compareDate);
+          
             return compareDate
         })
         let _result = [];

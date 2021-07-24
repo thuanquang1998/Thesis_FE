@@ -50,7 +50,21 @@ function BookingFormAgent(props) {
             _listTimeSlot = _dateChoosed[0].timeSlot.filter(x=>x.booked<_dateChoosed[0].max);
             room_temp = _dateChoosed[0].location;
         }
-        setListTimeStep(_listTimeSlot);
+        
+        const listResult = _listTimeSlot.filter(item=>{
+            const timeStart = item.time.split("-")[0];
+            const numberTime = 1*(timeStart.split(":")[0]+timeStart.split(":")[1]);
+            const currentTime = moment().format('hh:mm');
+            const numberCurrentTime = 1*(currentTime.split(":")[0]+currentTime.split(":")[1]);
+            const check = numberTime-numberCurrentTime;
+            if(check>=30) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+
+        setListTimeStep(listResult);
         setDataSubmit({
             ...dataSubmit, 
             date: value,
@@ -305,7 +319,7 @@ function BookingFormAgent(props) {
                             <Input.TextArea prefix={<PlusCircleOutlined />}/>
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
+                    <Col span={24} style={{textAlign:'center'}}>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">Xác nhận đặt khám</Button>
                         </Form.Item>

@@ -54,6 +54,7 @@ const AgentBookingOffline = () => {
         setLoadingPage(true);
         try {
             const response = await adminAPI.get_spec_of_hospital(hospitalInfo.id);
+            console.log('response getListSpec:>> ', response);
             if(response.error) throw new Error(response.errors[0].message);
             setListSpec(response.data);
             setLoadSpec(false)
@@ -100,6 +101,7 @@ const AgentBookingOffline = () => {
         setLoadDateWork(true);
     }
     const changeDoctor = (value) => {
+        setLoadingPage(true);
         setLoadDateWork(true);
         setCurrentDoctor(value);
         // call api
@@ -122,12 +124,14 @@ const AgentBookingOffline = () => {
                 const diff = _itemTimeNumber*1 - currentTimeNumber*1;
                 return check;
             })
-            setListDateValid(_listDateValid);
-            setLoadingPage(false);
-            setLoadDateWork(false);
+            setTimeout(() => {
+                setListDateValid(_listDateValid);
+                setLoadingPage(false);
+                setLoadDateWork(false);
+            }, 300);
         } catch (error) {
-            console.log('error :>> ', error);
             setLoadDateWork(false);
+            setLoadingPage(false);
         }
     }
     const handleCreateSchedule = (data) => {
@@ -142,13 +146,12 @@ const AgentBookingOffline = () => {
         try {
             const response = await adminAPI.create_appointment_agent(data);
             if(response.error) throw new Error("error");
-            console.log('response agent_add_appointment:>> ', response);
 			enqueueSnackbar('Tạo lịch khám thành công', {variant: 'success'});
-            setLoadingPage(false);
-
-            // reset form.....
-
-
+            setTimeout(() => {
+                setLoadingPage(false);
+                setLoadDateWork(true);
+                setCurrentDoctor(null);
+            }, 300);
         } catch (error) {
 			enqueueSnackbar('Tạo lịch khám không thành công.', {variant: 'error'});
             setLoadingPage(false);
@@ -156,7 +159,6 @@ const AgentBookingOffline = () => {
     }
     return (
         <>
-            {/* {loadingPage && <div><h1>aaaaaaaaaaaaaaaa</h1></div>} */}
             {loadingPage && <LoadingTop/>}
             <SidebarNav/>
             <div className="page-wrapper">

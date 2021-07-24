@@ -20,7 +20,11 @@ const DetailDoctorPage = (props) => {
     const { enqueueSnackbar } = useSnackbar();
     const history = useHistory();
     const patient = useSelector(state=> state.patient);
-    const doctorData = history.location.state.data;
+    // const doctorData = history.location.state.data;
+
+    console.log('history :>> ', history);
+    const doctorId = history.location.pathname.split('/')[2];
+
     const [reviewData, setReviewData] = useState([]);
     const [loadingReview, setLoadingReview] = useState(true);
     const [loadingPage, setLoadingPage] = useState(true);
@@ -39,8 +43,8 @@ const DetailDoctorPage = (props) => {
 
     useEffect(()=> {
         setLoadingPage(true);
-        const id = doctorData._id;
-        getDoctorById(id);
+        // const id = doctorData._id;
+        getDoctorById(doctorId);
     },[])
     const getDoctorById = async (id) => {
         try {
@@ -60,7 +64,7 @@ const DetailDoctorPage = (props) => {
         }
     },[dataReview])
     useEffect(()=> {
-        getReviewDoctors(doctorData._id);
+        getReviewDoctors(doctorId);
     },[])
     const getReviewDoctors = async (id) => {
         setLoadingPage(true);
@@ -81,7 +85,7 @@ const DetailDoctorPage = (props) => {
         if (patient.isLoggedIn === true) {
             const _data = {
                 ...dataReview,
-                doctorId: doctorData._id,
+                doctorId: doctorId,
             }
             submitReviewApi(_data);
             setLoadingPage(true);
@@ -121,7 +125,7 @@ const DetailDoctorPage = (props) => {
             const response = await patientAPI.create_review(data);
             if(response.error) throw new Error('submitReviewApi error');
             enqueueSnackbar('Đánh giá thành công', {variant: 'success'});
-            getReviewDoctors(doctorData._id);
+            getReviewDoctors(doctorId);
             setLoadingPage(false)
         } catch (error) {
             console.log(`error`, error);
@@ -133,8 +137,8 @@ const DetailDoctorPage = (props) => {
         if (patient.isLoggedIn === true) {
             // history.push(`/patient/${props.data?.id}/datlich`)
             history.push({
-                pathname: `/dat-kham/${doctorData?._id}`,
-                state: {data:{...doctorData}}
+                pathname: `/dat-kham/${doctorId}`,
+                state: {data:{...doctorInfo}}
             })
         } else {
             Swal.fire({
@@ -150,8 +154,8 @@ const DetailDoctorPage = (props) => {
             .then((result) => {
                 if (result.value) {
                     history.push({
-                    pathname: `/dat-kham/${doctorData?.id}/dang-nhap`,
-                    state: {doctorData},
+                    pathname: `/dat-kham/${doctorId}/dang-nhap`,
+                    state: {doctorInfo},
                 })
                 } 
             })
@@ -275,7 +279,7 @@ const DetailDoctorPage = (props) => {
                                 ))}
                                
                                     <Card>
-                                        Bạn đã sử dụng dịch vụ của {doctorData.title} {doctorData.fullName}. Hãy chia sẽ những nhận xét của bạn.
+                                        Bạn đã sử dụng dịch vụ của {doctorInfo.title} {doctorInfo.fullName}. Hãy chia sẽ những nhận xét của bạn.
                                         <Rate value={dataReview.star_num===null?0:dataReview.star_num} onChange={(e)=>setDataReview({...dataReview, star_num:e})}/>
                                             <TextArea value={dataReview.comment===null?"":dataReview.comment} onChange={(e)=>setDataReview({...dataReview, comment:e.target.value})}></TextArea>
                                         <Button style={{margin:"0 auto", marginTop:"15px"}} loading={loadingPage} type="primary" onClick={handleReview} disabled={disableButton}>Gửi</Button>

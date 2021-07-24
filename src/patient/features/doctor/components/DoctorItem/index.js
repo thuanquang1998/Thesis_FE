@@ -23,6 +23,7 @@ const DoctorItem = (props) => {
     const dispatch = useDispatch();
 
     const [loadedImage, setLoadedImage] = useState(false);
+    const [imageError, setImageError] = useState(false);
 
     const handleBooking = () => {
         if (patient.isLoggedIn === true) {
@@ -68,7 +69,8 @@ const DoctorItem = (props) => {
                         <img 
                             className="img-fluid" 
                             alt="User" 
-                            src={data.avatar} 
+                            src={imageError?img:data.avatar} 
+                            onError={()=>setImageError(true)}
                         />
                     </Link>
                 </div>
