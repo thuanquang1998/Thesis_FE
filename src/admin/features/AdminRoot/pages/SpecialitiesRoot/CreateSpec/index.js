@@ -27,16 +27,15 @@ function CreateSpec(props) {
     }
     return (
         <Modal 
-            title="Xem lịch khám" 
-            width={1000}
+            title={
+                <p style={{fontSize:"18px !important", fontWeight:"600", marginBottom:"0"}}>Tạo chuyên khoa</p>
+            } 
+            width={800}
             visible={modalData.visible} 
             onOk={handleOk} 
             onCancel={handleClose}
-            footer={[
-                <Button key="back" onClick={handleOk}>
-                  Ok
-                </Button>
-              ]}
+            footer={null}
+            centered
         >
             <Form
                 form={form}
@@ -46,12 +45,24 @@ function CreateSpec(props) {
                 <Form.Item
                     name="name"
                     label="Tên chuyên khoa"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập tên chuyên khoa',
+                        }
+                    ]}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
                     name="image"
                     label="Logo chuyên khoa"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng chọn logo chuyên khoa',
+                        }
+                    ]}
                 >
                     <input 
                         // multiple
@@ -61,9 +72,9 @@ function CreateSpec(props) {
                         onChange={onChangeAvatar}
                     />
                 </Form.Item>
-                <Form.Item>
+                <div style={{textAlign: 'center', margin:"20px"}}>
                     <Button type="primary" htmlType="submit">Thêm</Button>
-                </Form.Item>
+                </div>
             </Form>
         </Modal>
     );

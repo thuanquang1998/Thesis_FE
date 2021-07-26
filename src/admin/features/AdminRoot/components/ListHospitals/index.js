@@ -146,7 +146,7 @@ const ListHospitals = () => {
                     </div>
                 </div>
                 <Card 
-                    title={<>Danh sách bệnh viện <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
+                    title={<>Danh sách bệnh viện <Badge count={listHospitals.length} style={{ backgroundColor: '#52c41a' }} /></>}
                     extra={
                     <a href="/admin/root/benh-vien/them-benh-vien">
                         <Button type="primary">Tạo mới bệnh viện</Button>

@@ -1,10 +1,8 @@
-import React, { useState, useEffect} from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom'
-import { logout_doctor } from "../../../redux/actions/doctorActions";
+import React, { useEffect, useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
-import IMG01 from '../../assets/images/doctor-thumb-02.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link,NavLink, useHistory } from 'react-router-dom';
+import { logout_doctor } from "../../../redux/actions/doctorActions";
 import LoadingTop from '../loadingTop';
 
 
@@ -12,11 +10,9 @@ const DoctorSidebar = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const doctor = useSelector(state=> state.doctor);
-    const {currentDoctor, loadingLogin, isDoctorLoggedIn, loadingLogout, loadingPage} = doctor;
+    const {isDoctorLoggedIn, loadingPage} = doctor;
     const url = window.location.pathname;
-    const [doctorData, setDoctorsData] = useState({});
-    
-    const [userName, setUserName] = useState('');
+    console.log(`url`, url)
     const [loading, setLoading] = useState(false);
 
     const handleLogoutDoctor = () => {
@@ -43,50 +39,35 @@ const DoctorSidebar = () => {
                 </div>
             </div>
             <div className="dashboard-widget" >
-                
-                    
                 <Nav className="dashboard-menu">
-
-                    <Nav.Item> 
-                        <NavLink to="/bac-si" > 
-                            <i className="fas fa-columns"></i>
-                            <span>Thống kê</span>
-                        </NavLink>
-                    </Nav.Item>
-                        
+                    <Link to="/bac-si" className={`nav-item ${url==='/bac-si'?'active':''}`}>
+                        <i className="fas fa-columns"></i>
+                        <span>Thống kê</span> 
+                    </Link>
                     <Nav.Item > 
-                        <NavLink to="/bac-si/thong-tin-tai-khoan">
+                        <NavLink to="/bac-si/thong-tin-tai-khoan" activeClassName="active">
                             <i className="fas fa-user-cog"></i>
                             <span>Thông tin tài khoản</span>
                         </NavLink> 
                     </Nav.Item> 
-
                     <Nav.Item > 
-                        <NavLink to="/bac-si/lich-kham" >
+                        <NavLink to="/bac-si/lich-kham" activeClassName="active">
                             <i className="fas fa-hourglass-start"></i>
-                            <span>Lịch khám</span> 
+                            <span>Quản lí lịch khám</span> 
                         </NavLink>
                     </Nav.Item> 
-
                     <Nav.Item> 
-                        <NavLink to="/bac-si/lich-lam-viec"  >
+                        <NavLink to="/bac-si/lich-lam-viec"  activeClassName="active">
                             <i className="fas fa-calendar-check"></i>
-                            <span>Lịch làm việc</span> 
+                            <span>Quản lí lịch làm việc</span> 
                         </NavLink>
                     </Nav.Item>
                     <Nav.Item> 
-                        <NavLink to="/bac-si/danh-gia">
+                        <NavLink to="/bac-si/danh-gia" activeClassName="active">
                             <i className="fas fa-lock"></i>
-                            <span>Đánh giá</span>
+                            <span>Danh sách đánh giá.</span>
                         </NavLink>
                     </Nav.Item>
-                    {/* <Nav.Item> 
-                        <NavLink to="/bac-si/doi-mat-khau">
-                            <i className="fas fa-lock"></i>
-                            <span>Đổi mật khẩu</span>
-                        </NavLink>
-                    </Nav.Item> */}
-
                     <Nav.Item> 
                         <NavLink to="/bac-si/dang-xuat"  onClick={handleLogoutDoctor}>
                             <i className="fas fa-sign-out-alt"></i>

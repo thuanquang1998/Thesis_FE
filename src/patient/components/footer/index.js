@@ -149,7 +149,7 @@ const Footer = (props) => {
                 >
                     <Grid item xs={9}>
                         <div className="copyright-text">
-                            <p className="mb-0">&copy; 2021 YouMed. All Rights Reserved</p>
+                            <p className="mb-0">&copy; 2021 BKCare</p>
                         </div>
                     </Grid>
                     <Grid item>

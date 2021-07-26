@@ -122,7 +122,7 @@ const DoctorProfile = (props) =>{
                         <div className="col-md-12 col-12">
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/bac-si">Trang chủ</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page">Thông tin tài khoản</li>
                                 </ol>
                             </nav>

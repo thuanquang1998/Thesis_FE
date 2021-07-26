@@ -153,6 +153,7 @@ function ScheduleOutDate(props) {
                     rowKey={record => record.id}
                     showSizeChanger={true} 
                     loading={loadingSchedule}
+                    pagination={{position:["bottomCenter"]}}
                 />
             </Card>
             <ModalSchedule

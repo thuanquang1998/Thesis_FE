@@ -157,12 +157,11 @@ const DoctorAppointment = (props) =>{
                         <div className="col-md-12 col-12">
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
-                                            set
-                                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    <li className="breadcrumb-item"><Link to="/bac-si">Trang chủ</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Quản lí lịch khám</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">Dashboard</h2>
+                            <h2 className="breadcrumb-title">Quản lí lịch khám</h2>
                         </div>
                     </div>
                 </div>

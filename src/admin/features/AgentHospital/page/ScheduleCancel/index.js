@@ -121,10 +121,7 @@ const ScheduleCancel = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-12">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Trang quản lý cho bệnh viện Hùng Vương</h3>
-								<ul className="breadcrumb">
-									<li className="breadcrumb-item active">Dashboard</li>
-								</ul>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách bệnh nhân cần hỗ trợ</h3>
 							</div>
 						</div>
 					</div>

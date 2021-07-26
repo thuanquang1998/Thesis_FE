@@ -231,7 +231,7 @@ const ScheduleDoctorPage = ({location}) =>{
 						</div>
 					</div>
                     <Card>
-                        <h4>Tìm bác sĩ</h4>
+                        <h4 style={{fontWeight:"600"}}>Tìm bác sĩ</h4>
                         <FilterDoctorWork
                             filter={filter}
                             loadData={{
@@ -244,7 +244,7 @@ const ScheduleDoctorPage = ({location}) =>{
                             changeDoctor={handleChangeDoctor}
                             valueDoctor={valueDoctor}
                         />
-                        <h4>Lịch làm việc bác sĩ</h4>
+                        <h4 style={{fontWeight:"600"}}>Lịch làm việc bác sĩ</h4>
                         <Calendar
                             localizer={localizer}
                             events={events}
@@ -287,18 +287,19 @@ const ScheduleDoctorPage = ({location}) =>{
                         />
                     </Card>
                     <Modal 
-                        title={<h3>Thêm lịch làm việc</h3>}
+                        title={<h3 style={{fontWeight: "bold", marginBottom:"0"}}>Thêm lịch làm việc</h3>}
                         visible={showModal} 
                         onCancel={()=>setShowModal(false)}
                         footer={null}
+                        centered
                     >
-                        <Button onClick={()=>{}}>Tải form mẫu</Button>
+                        {/* <Button onClick={()=>{}}>Tải form mẫu</Button> */}
                         <Form
                             onFinish={onSubmitFormCreate}
                         >
                             <Form.Item 
                                 name="file" 
-                                label="Chọn file:"
+                                label="Chọn file lịch làm việc:"
                                 rules={[
                                     {
                                         required: true,
@@ -312,9 +313,9 @@ const ScheduleDoctorPage = ({location}) =>{
                                     onChange={onChangeFile}
                                 />
                             </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">Gửi</Button>
-                            </Form.Item>
+                            <div style={{textAlign: 'center'}}>
+                                <Button type="primary" htmlType="submit">Tạo lịch</Button>
+                            </div>
                         </Form>
                     </Modal>
                 </div>

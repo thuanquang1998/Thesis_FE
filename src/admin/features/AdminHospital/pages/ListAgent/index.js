@@ -91,6 +91,7 @@ const ListAgent = () => {
 					...modalData,
 					visible: false,
 				})
+				getListAgent();
 				setLoadingPage(false)
 			}, 300);
         } catch (error) {
@@ -130,7 +131,7 @@ const ListAgent = () => {
 					</div>
                     
                     <Card 
-						title={<>Danh sách nhân viên <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
+						title={<>Danh sách nhân viên <Badge count={listEmployees.length} style={{ backgroundColor: '#52c41a' }} /></>}
 					>
 						<Table
 							bordered={true}

@@ -114,11 +114,11 @@ const DoctorDashboard = (props) => {
                         <div className="col-md-12 col-12">
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    <li className="breadcrumb-item"><Link to="/bac-si">Trang chủ</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Thống kê</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">Dashboard</h2>
+                            <h2 className="breadcrumb-title">Thống kê</h2>
                         </div>
                     </div>
                 </div>

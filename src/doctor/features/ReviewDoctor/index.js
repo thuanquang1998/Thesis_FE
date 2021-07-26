@@ -108,11 +108,11 @@ const ReviewDoctor = (props) =>{
                         <div className="col-md-12 col-12">
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    <li className="breadcrumb-item"><Link to="/bac-si">Trang chủ</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Danh sách đánh giá.</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">ReviewDoctor</h2>
+                            <h2 className="breadcrumb-title">Danh sách đánh giá.</h2>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@ const ReviewDoctor = (props) =>{
                             </StickyBox>
                         </div>
                         <div className="col-md-7 col-lg-8 col-xl-9">
-                            <h2>Đánh giá bác sĩ</h2>
+                            <h2>Danh sách đánh giá</h2>
                             <Card>
                                 <ScheduleSearch
                                     searchName={handleSearchName}
@@ -139,6 +139,7 @@ const ReviewDoctor = (props) =>{
                                     rowKey={record => record.id}
                                     showSizeChanger={true} 
                                     loading={loadingPage}
+                                    pagination={{position:["bottomCenter"]}}
                                 />
                             </Card>
                         </div>  

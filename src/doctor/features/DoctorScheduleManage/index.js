@@ -168,11 +168,11 @@ const DoctorSchedule = (props) =>{
                         <div className="col-md-12 col-12">
                             <nav aria-label="breadcrumb" className="page-breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/home">Trang chủ</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    <li className="breadcrumb-item"><Link to="/bac-si">Trang chủ</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Quản lí lịch làm việc</li>
                                 </ol>
                             </nav>
-                            <h2 className="breadcrumb-title">Dashboard</h2>
+                            <h2 className="breadcrumb-title">Quản lí lịch làm việc</h2>
                         </div>
                     </div>
                 </div>
@@ -239,13 +239,16 @@ const DoctorSchedule = (props) =>{
                                 />
                             </Card>
                             <Modal 
-                                title="Hủy lịch khám" 
+                                title={
+                                    <p style={{fontSize:"18px !important", fontWeight:"600", marginBottom:"0"}}>Hủy lịch khám</p>
+                                }
                                 visible={showModalCancel} 
                                 onCancel={()=>{
                                     form.resetFields();
                                     setShowModalCancel(false)
                                 }}
                                 footer={null}
+                                centered
                             >
                                 <Form
                                     form={form}
@@ -263,7 +266,7 @@ const DoctorSchedule = (props) =>{
                                     <Select 
                                         className="province"
                                         placeholder="Chọn này" 
-                                        style={{ width: 200, border:"none" }} 
+                                        style={{ border:"none" }} 
                                         className="chooseDay"
                                         onChange={()=>{}}
                                     >
@@ -280,11 +283,9 @@ const DoctorSchedule = (props) =>{
                                     >
                                         <Input.TextArea />
                                     </Form.Item>
-                                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                        <Button type="primary" htmlType="submit">
-                                        Gửi
-                                        </Button>
-                                    </Form.Item>
+                                    <div style={{textAlign: 'center', marginTop:"15px"}}>
+                                        <Button type="primary" htmlType="submit">Gửi</Button>
+                                    </div>
                                 </Form>
                             </Modal>
                         </div>  

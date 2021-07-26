@@ -117,8 +117,8 @@ const Specialities = () => {
 				showCancelButton: true,
 				cancelButtonColor: "#3085d6",
 				confirmButtonColor: "#d33",
-				confirmButtonText: "Xóa",
-				cancelButtonText: "Hủy"
+				confirmButtonText: "Xóa chuyên khoa",
+				cancelButtonText: "Không xóa"
 			})
 			.then((result) => {
 				if (result.value) {
@@ -193,13 +193,14 @@ const Specialities = () => {
 						rowKey={record => record.id}
 						showSizeChanger={true} 
 						loading={loadingPage}
+						pagination={{position:["bottomCenter"]}}
 					/>
 				</Card>
 			</div> 
 			{/* Create Modal */}
 			<Modal show={show === 'create'} onHide={handleClose} centered>
 				<Modal.Header closeButton>
-					<Modal.Title><h5 className="modal-title">Thêm chuyên khoa</h5></Modal.Title>
+					<Modal.Title><h5 className="modal-title" style={{fontWeight:"600"}}>Thêm chuyên khoa</h5></Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 				 <Form
@@ -215,7 +216,7 @@ const Specialities = () => {
                     >   
                         <Row gutter={[8,8]}>
 							<Form.Item
-								label="Chuyên khoa"
+								label="Chọn chuyên khoa"
 								name="specialization"
 								rules={[
 									{
@@ -231,11 +232,11 @@ const Specialities = () => {
 								</Select>
 							</Form.Item>
                         </Row>
-							<Form.Item>
-								<Button loading={loadingPage} type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"30px"}}>
+							<div style={{textAlign: 'center'}}>
+								<Button loading={loadingPage} type="primary" htmlType="submit" style={{background:"#00d0f1 !important", marginTop:"10px"}}>
 									Lưu
 								</Button>
-							</Form.Item>
+							</div>
                     </Form>
 				</Modal.Body>
 			</Modal>

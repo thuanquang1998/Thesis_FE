@@ -83,10 +83,10 @@ const Header = (props) => {
     <div>
         <div className="header__admin">
           <div className="header-left">
-            <Link to="/admin/dashboard" className="logo">
+            <Link to="/admin" className="logo">
               <img src={bkLogo} alt="Logo" width="200" height="100%"/>
             </Link>
-            <Link to="/admin/dashboard" className="logo logo-small">
+            <Link to="/admin" className="logo logo-small">
               <img src={bkLogo} alt="Logo" width="30" height="50" />
             </Link>
           </div>

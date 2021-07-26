@@ -127,6 +127,7 @@ const SpecialitiesRoot = () => {
 						rowKey={record => record.id}
 						showSizeChanger={true} 
 						loading={loadingPage}
+						pagination={{position:["bottomCenter"]}}
 					/>
 				</Card>
 				<CreateSpec

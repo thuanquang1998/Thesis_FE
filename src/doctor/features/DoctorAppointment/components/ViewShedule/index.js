@@ -157,7 +157,7 @@ function ViewSchedule(props) {
                             </StickyBox>
                         </div>
                         <div className="col-md-7 col-lg-8 col-xl-9">
-                            <h2>Thông tin lịch khám</h2>
+                            <h2>Trang khám bệnh</h2>
                             <Tabs defaultActiveKey="2" >
                                 <TabPane tab="Thông tin" key="1">
                                     <InfoSchedule data={location.state.data}/>

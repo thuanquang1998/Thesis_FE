@@ -33,8 +33,8 @@ const SidebarNav = (props) => {
                 { accountType === 'system-admin' && (
                   <>
                     <h4 style={{textAlign:"center", color:"white"}}>Quản lí hệ thống</h4>
-                    <li className={`${'/admin/root' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/root"><i className="fa fa-home"></i>Dashboard</Link>
+                    <li className={`${'/admin' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin"><i className="fa fa-home"></i>Dashboard</Link>
                     </li>
                     <li className={`${'/admin/root/benh-vien' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/root/benh-vien"><i className="fa fa-hospital"></i>Cơ sở y tế</Link>
@@ -48,8 +48,8 @@ const SidebarNav = (props) => {
                 { accountType === 'hospital-admin' && (
                   <>
                     <h4 style={{textAlign:"center", color:"white"}}>Quản lí bệnh viện</h4>
-                    <li className={`${'/admin/hospital' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/hospital"><i className="fa fa-home"></i>Thống kê</Link> 
+                    <li className={`${'/admin' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin"><i className="fa fa-home"></i>Thống kê</Link> 
                     </li>
                     <li className={`${'/admin/hospital/thong-tin' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/hospital/thong-tin"><i className="fa fa-hospital"></i>Thông tin bệnh viện</Link>
@@ -79,8 +79,8 @@ const SidebarNav = (props) => {
                 { accountType === 'agent' && (
                   <>
                     <h4 style={{textAlign:"center", color:"white"}}>Nhân viên hỗ trợ</h4>
-                    <li className={`${'/admin/agent/lich-lam-viec' === pathname ? 'active' : '' }`}>
-                      <Link to="/admin/agent/lich-lam-viec"><i className="far fa-calendar-alt"></i>Lịch làm việc</Link>
+                    <li className={`${'/admin' === pathname ? 'active' : '' }`}>
+                      <Link to="/admin"><i className="far fa-calendar-alt"></i>Lịch làm việc</Link>
                     </li>
                     <li className={`${'/admin/agent/dat-lich-offline' === pathname ? 'active' : '' }`}>
                       <Link to="/admin/agent/dat-lich-offline"><i className="far fa-calendar-alt"></i>Đặt lịch trực tiếp</Link>

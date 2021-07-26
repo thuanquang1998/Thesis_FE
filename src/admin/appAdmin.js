@@ -50,7 +50,7 @@ const AppAdmin =({match})=>{
                                         <DashboardSystem/>:
                                         (accountType==='hospital-admin'?
                                             <DashboardHospital/>:
-                                            <Agent/>
+                                            <ScheduleDoctorPage/>
                                         )
                                     )
                                 :<Redirect to='/admin/dang-nhap'/>
@@ -59,13 +59,13 @@ const AppAdmin =({match})=>{
                         <Route exact path='/admin/dang-nhap' component={Login}/>
 
                         {/* admin root */}
-                        <PrivateRouteAdmin component={DashboardSystem} path="/admin/root" exact/>
+                        <PrivateRouteAdmin component={DashboardSystem} path="/admin" exact/>
                         <PrivateRouteAdmin component={HospitalsPage} path="/admin/root/benh-vien" exact/>
                         <PrivateRouteAdmin component={SpecialitiesRoot} path="/admin/root/chuyen-khoa" exact/>
                         <PrivateRouteAdmin component={CreateHospital} path="/admin/root/benh-vien/them-benh-vien" exact/>
 
                         {/* admin hospital */}
-                        <PrivateRouteAdmin component={DashboardHospital} path="/admin/hospital" exact/>
+                        <PrivateRouteAdmin component={DashboardHospital} path="/admin" exact/>
                         <PrivateRouteAdmin component={Appoinments} path="/admin/hospital/lich-kham" exact/>
                         <PrivateRouteAdmin component={HospitalInfo} path="/admin/hospital/thong-tin" exact/>
                         <PrivateRouteAdmin component={DoctorHospital} path="/admin/hospital/ds-bac-si" exact/>
@@ -77,7 +77,7 @@ const AppAdmin =({match})=>{
                         <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/hospital/lich-lam-viec/:id" exact/>
 
                         {/* agent hospital */}
-                        <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin/agent/lich-lam-viec" exact/>
+                        <PrivateRouteAdmin component={ScheduleDoctorPage} path="/admin" exact/>
                         <PrivateRouteAdmin component={AgentBookingOffline} path="/admin/agent/dat-lich-offline" exact/>
                         <PrivateRouteAdmin component={AgentBookingOnline} path="/admin/agent/dat-lich-online" exact/>
 

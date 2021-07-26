@@ -156,6 +156,7 @@ function ScheduleComing(props) {
                     rowKey={record => record.id}
                     showSizeChanger={true} 
                     loading={loadingSchedule}
+                    pagination={{position:["bottomCenter"]}}
                 />
             </Card>
             <ModalSchedule

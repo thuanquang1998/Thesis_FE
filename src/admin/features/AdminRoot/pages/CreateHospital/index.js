@@ -278,7 +278,7 @@ const CreateHospital = () => {
                                 >
                                     <Select 
                                         className="province" 
-                                        placeholder="Loại hợp đồng" 
+                                        placeholder="Chọn quy mô" 
                                         onChange={onChangeDistrict}
                                         filterOption={(input, option) =>
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
