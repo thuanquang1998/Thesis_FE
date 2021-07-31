@@ -12,7 +12,7 @@ import FilterDoctorWork from './FilterDoctorWork';
 import PdfListDoctor from './PdfListDoctor';
 import {useSnackbar} from 'notistack';
 import Swal from "sweetalert2";
-
+import { CSVLink, CSVDownload } from "react-csv";
 
 moment.updateLocale('en', {
         months : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
@@ -315,6 +315,7 @@ const ScheduleDoctorPage = ({location}) =>{
                             </Form.Item>
                             <div style={{textAlign: 'center'}}>
                                 <Button type="primary" htmlType="submit">Tạo lịch</Button>
+                                <Button><CSVLink data={listDoctor} filename="lichkham.csv">Xuất lịch</CSVLink></Button>
                             </div>
                         </Form>
                     </Modal>
