@@ -46,7 +46,7 @@ const DoctorItem = (props) => {
             .then((result) => {
                 if (result.value) {
                     history.push({
-                    pathname: `/dat-kham/${props.data?.id}/dang-nhap`,
+                    pathname: `/dat-kham/${props.data?._id}/dang-nhap`,
                     state: {data},
                 })
                 } 

@@ -17,7 +17,6 @@ const LoginPatient = () => {
     const [statePageLogin, setStatePageLogin] = useState("status1");
     const [phone, setPhone] = useState({});
     const [loadingLogin, setLoadingLogin] = useState(false);
-    
     // history.location.pathname==="/patient/login" (dang nhap lan dau), then => history.push('/patient)
     // else then => history.push({
             //     pathname: `/patient/${props.data?.id}/datlich`,

@@ -53,7 +53,9 @@ const DetailHospitalPage = () => {
         limit: 6
     });
 
-
+    useEffect(()=> {
+        window.scrollTo(0,0);
+    },[])
 
     useEffect(()=>{
         const {search, sort, page, limit} = filter;

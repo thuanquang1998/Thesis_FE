@@ -42,6 +42,7 @@ const DetailDoctorPage = (props) => {
 
 
     useEffect(()=> {
+        window.scrollTo(0,0);
         setLoadingPage(true);
         // const id = doctorData._id;
         getDoctorById(doctorId);
@@ -50,7 +51,7 @@ const DetailDoctorPage = (props) => {
         try {
             const response = await doctorAPI.get_doctors_by_id(id);
             if(response.error) throw new Error("Error getDoctorById");
-            setDoctorInfo({...response.data.data[0]});
+            setDoctorInfo({...response.data.data[0],id:response.data.data[0]._id});
             setLoadingPage(false);
         } catch (error) {
             setLoadingPage(false);
@@ -155,7 +156,7 @@ const DetailDoctorPage = (props) => {
                 if (result.value) {
                     history.push({
                     pathname: `/dat-kham/${doctorId}/dang-nhap`,
-                    state: {doctorInfo},
+                    state: {data:{...doctorInfo}},
                 })
                 } 
             })
@@ -168,6 +169,7 @@ const DetailDoctorPage = (props) => {
             });
         }
     } 
+    console.log('doctorInfo :>> ', doctorInfo);
     return (
         <div>
             {loadingPage && <LoadingTop/>}
