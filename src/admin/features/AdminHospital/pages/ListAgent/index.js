@@ -1,5 +1,4 @@
-import { Card } from '@material-ui/core';
-import { Badge, Table } from 'antd';
+import { Badge, Table, Card, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import adminAPI from '../../../../../api/adminAPI';
@@ -7,7 +6,8 @@ import LoadingTop from '../../../../components/loadingTop';
 import SidebarNav from '../../../../components/SideBar';
 import CreateAgent from '../../components/CreateAgent';
 import { useSnackbar } from 'notistack';
-
+import './style.css'
+const { Search } = Input;
 
 const ListAgent = () => {
 	const hospitalInfo = JSON.parse(localStorage.getItem('currentAdmin')).hospital;
@@ -20,10 +20,11 @@ const ListAgent = () => {
         visible: false,
         data: {},
     })
+	const [searchName, setSearchName] = useState(null);
 	useEffect(()=> {
-		setLoadingPage(true);
+		// setLoadingPage(true);
 		getListAgent();
-	},[])
+	},[searchName])
 	const getListAgent = async () => {
 		try {
 			const response = await adminAPI.get_agents_of_hospital(hospitalInfo.id);
@@ -40,7 +41,15 @@ const ListAgent = () => {
 				}
 				return _item;
 			})
-			setListEmployees(_data);
+			let filterName = [];
+			if(!searchName) {
+				filterName = _data;
+			} else {
+				filterName = _data.filter(item=>{
+					return item.name.toLowerCase().includes(searchName.toLowerCase())
+				})
+			}
+			setListEmployees(filterName);
 			setTimeout(() => {
 				setLoadingPage(false);
 			}, 300);
@@ -50,7 +59,10 @@ const ListAgent = () => {
 		}
 	}
 
-	
+	const onSearch = (value) => {
+		setLoadingPage(true);
+		setSearchName(value);
+	}
 	const new_columns = [
         {
           title: 'Tên nhân viên',
@@ -112,10 +124,9 @@ const ListAgent = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-7 col-auto">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách nhân viên</h3>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách nhân viên <Badge count={listEmployees.length} style={{ backgroundColor: '#52c41a' }} /></h3>
 							</div>
 							<div className="col-sm-5 col">
-								{/* <Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link> */}
 								<Link 
 									onClick={()=>
 										setModalData({
@@ -130,9 +141,16 @@ const ListAgent = () => {
 						</div>
 					</div>
                     
-                    <Card 
-						title={<>Danh sách nhân viên <Badge count={listEmployees.length} style={{ backgroundColor: '#52c41a' }} /></>}
-					>
+					<Card>
+						<div className="search-input">
+							<Search
+								placeholder="Tìm theo tên nhân viên"
+								allowClear
+								enterButton="Tìm kiếm"
+								size="large"
+								onSearch={onSearch}
+							/>
+						</div>
 						<Table
 							bordered={true}
 							columns={new_columns}

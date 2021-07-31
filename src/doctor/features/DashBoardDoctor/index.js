@@ -54,7 +54,7 @@ const DoctorDashboard = (props) => {
         try {
             const response = await doctorAPI.get_doctors_static_header(id);
             setHeaderInfo({
-                currentNum: response.data.num_appoinment_checked_today + response.data.num_appoinment_today + response.data.num_appoinment_uncheck_today,
+                currentNum: response.data.num_appoinment_today,
                 tomorrowNum: response.data.num_appoinment_tomorrow,
                 reviewNum: response.data.num_rating,
             })
@@ -216,16 +216,17 @@ const DoctorDashboard = (props) => {
                                 </Col> */}
                             </Row>
                             <Card 
-                                style={{width:"600px", height:"600px"}}
 								title={
 									<div style={{display: 'flex', justifyContent:"space-between"}}>
 										<p style={{fontSize:"18px !important", fontWeight:"600", marginBottom:"0"}}>Biểu đồ tỉ lệ đánh giá của bệnh nhân</p>
-										{/* <p style={{marginBottom:"0"}}>{`${moment(dateRange.start).format('DD')} - ${moment(dateRange.end).format('DD/MM/YYYY')}`}</p> */}
 									</div>
 								}	
 							>
-								{/* <Line data={lineChart} options={options2} /> */}
-								<Pie data={reviewChart} />
+								<Pie data={reviewChart}  
+                                    width={"400px"}
+                                    height={"400px"}
+                                    options={{ maintainAspectRatio: false }}
+                                />
 
 							</Card>
                             {/* <ListScheduleDashboard/> */}

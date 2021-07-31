@@ -1,5 +1,4 @@
-import { Card } from '@material-ui/core';
-import { Badge, Table } from 'antd';
+import { Badge, Table, Card, Input } from 'antd';
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +8,8 @@ import doctorAPI from '../../../../../api/doctorAPI';
 import UpdateProfileDoctor from '../../../../../doctor/features/DoctorProfileManage/UpdateProfileDoctor';
 import LoadingTop from '../../../../components/loadingTop';
 import SidebarNav from '../../../../components/SideBar';
+import './style.css'
+const { Search } = Input;
 
 
 const DoctorHospital = () => {
@@ -27,6 +28,8 @@ const DoctorHospital = () => {
     })
 	const [currentDoctorId, setCurrentDoctorId] = useState(null);
 
+	const [searchName, setSearchName] = useState(null);
+
 	useEffect(()=> {
 		(async ()=>{
 			try {
@@ -44,8 +47,17 @@ const DoctorHospital = () => {
 					}
 					return _item;
 				})
+
+				let filterName = [];
+				if(!searchName) {
+					filterName = _data;
+				} else {
+					filterName = _data.filter(item=>{
+						return item.name.toLowerCase().includes(searchName.toLowerCase())
+					})
+				}
 				
-				setListEmployees(_data)
+				setListEmployees(filterName)
 			} catch (error) {
 				console.log(`error.message`, error.message)
 			}
@@ -53,8 +65,7 @@ const DoctorHospital = () => {
 				setLoadingPage(false);
 			}, 300);
 		})();
-		
-	},[])
+	},[searchName])
 
 
 	const handleUpdateDoctor = async (record) => {
@@ -113,6 +124,11 @@ const DoctorHospital = () => {
         }
     }
 
+	const onSearch = (value) => {
+		setLoadingPage(true);
+		setSearchName(value);
+	}
+
 	const new_columns = [
         {
           title: 'Tên bác sĩ',
@@ -157,7 +173,6 @@ const DoctorHospital = () => {
           width: 170,
         },
       ]
-	  console.log('initData 1111:>> ', initData);
     return (
         <>
             <SidebarNav/>
@@ -167,7 +182,7 @@ const DoctorHospital = () => {
 					<div className="page-header">
 						<div className="row">
 							<div className="col-sm-7 col-auto">
-								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách bác sĩ</h3>
+								<h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách bác sĩ <Badge count={listEmployees.length} style={{ backgroundColor: '#52c41a' }} /></h3>
 							</div>
 							<div className="col-sm-5 col">
 								<Link className="btn btn-primary float-right mt-2" to="/admin/hospital/nhan-vien/them">Thêm bác sĩ</Link>
@@ -175,9 +190,16 @@ const DoctorHospital = () => {
 						</div>
 					</div>
                     
-                    <Card 
-						title={<>Danh sách nhân viên <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
-					>
+					<Card>
+						<div className="search-input">
+							<Search
+								placeholder="Tìm theo tên bác sĩ"
+								allowClear
+								enterButton="Tìm kiếm"
+								size="large"
+								onSearch={onSearch}
+							/>
+						</div>
 						<Table
 							bordered={true}
 							columns={new_columns}

@@ -92,7 +92,7 @@ const ListHospitals = () => {
           title: 'Trạng thái',
           dataIndex: 'status',
           render: (text) => {
-            const renderTag = text?<Tag>Đang hoạt động</Tag>:<Tag>Ngừng hoạt động</Tag>
+            const renderTag = text?<Tag color="green">Đang hoạt động</Tag>:<Tag>Ngừng hoạt động</Tag>
             return (
               <p>{renderTag}</p>
             )
@@ -136,22 +136,15 @@ const ListHospitals = () => {
               <div className="content container-fluid">
                 <div className="page-header">
                     <div className="row">
-                        <div className="col-sm-7 col-auto">
-                            <h3 className="page-title">Danh sách bệnh viện</h3>
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/admin">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Danh sách bệnh viện</li>
-                            </ul>
-                        </div>
+                      <div className="col-sm-7 col-auto">
+                        <h3 className="page-title" style={{paddingTop:"20px"}}>Danh sách bệnh viện <Badge count={listHospitals.length} style={{ backgroundColor: '#52c41a' }} /></h3>
+                      </div>
+                      <div className="col-sm-5 col">
+                        <Link className="btn btn-primary float-right mt-2" to="/admin/root/benh-vien/them-benh-vien">Tạo mới bệnh viện</Link>
+                      </div>
                     </div>
                 </div>
-                <Card 
-                    title={<>Danh sách bệnh viện <Badge count={listHospitals.length} style={{ backgroundColor: '#52c41a' }} /></>}
-                    extra={
-                    <a href="/admin/root/benh-vien/them-benh-vien">
-                        <Button type="primary">Tạo mới bệnh viện</Button>
-                    </a>
-                    }>
+                <Card>
                     <Table
                       bordered={true}
                       scroll={{ y: 450, x: 2000 }}

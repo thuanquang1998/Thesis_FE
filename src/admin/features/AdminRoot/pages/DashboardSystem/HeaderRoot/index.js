@@ -4,7 +4,7 @@ import doctorLogo from '../../../../../assets/img/doctor.png';
 import specLogo from '../../../../../assets/img/spec.png';
 import hospitalLogo from '../../../../../assets/img/hospital.png';
 import appointmentLogo from '../../../../../assets/img/appointment.png'
-
+import {Link} from 'react-router-dom'
 
 function HeaderRoot(props) {
     return (
@@ -36,7 +36,10 @@ function HeaderRoot(props) {
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Bệnh viện</h6>
+                                    <Link
+                                        style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}
+                                        to="/admin/root/benh-vien"
+                                    >Bệnh viện</Link>
                                     <h3>{props.data.num_hospital}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>
@@ -66,7 +69,10 @@ function HeaderRoot(props) {
                                 
                             </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Chuyên khoa</h6>
+                                    <Link
+                                        style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}
+                                        to="/admin/root/chuyen-khoa"
+                                    >Chuyên khoa</Link>
                                     <h3>{props.data.num_spec}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>
@@ -96,7 +102,7 @@ function HeaderRoot(props) {
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Bác sĩ</h6>
+                                    <h6 style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}>Bác sĩ</h6>
                                     <h3>{props.data.num_doctor}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>
@@ -125,7 +131,7 @@ function HeaderRoot(props) {
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Bệnh nhân</h6>
+                                    <h6 style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}>Bệnh nhân</h6>
                                     <h3>{props.data.num_user}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>

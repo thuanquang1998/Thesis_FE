@@ -5,67 +5,30 @@ import { Bar, Line, Pie } from 'react-chartjs-2';
 import adminAPI from '../../../../../api/adminAPI';
 import SidebarNav from '../../../../components/SideBar';
 import HeaderHospital from './HeaderHospital';
-import maleLogo from '../../../../assets/img/male_logo.png';
-import femaleLogo from '../../../../assets/img/female_logo.png';
 
-
-
-  
-  const dataReview = {
-	labels: ['1 sao', '2 sao', '3 sao', '4 sao', '5 sao'],
-	datasets: [
-	  {
-		label: 'Đánh giá',
-		data: [12, 4, 3, 15, 42, 3],
-		backgroundColor: 'rgb(255, 99, 132)',
-	  },
-	],
-  };
-  const options = {
-	scales: {
-	  yAxes: [
-		{
-		  ticks: {
-			beginAtZero: true,
-		  },
+const options = {
+scales: {
+	yAxes: [
+	{
+		ticks: {
+		beginAtZero: true,
 		},
-	  ],
 	},
-  };
-
-  const dataDefault = [
-	  {
-		date: "1/1",
-		schedule: "10",
-		scheduleChecked: "8",
-		scheduleCancel: "1"
-	  }
-  ]
-
-  const data2 = {
-	labels: ['22/7', '23/7', '24/7', '25/7', '26/7', '27/7'],
-	datasets: [
-	  {
-		label: 'Lịch khám',
-		data: [12, 19, 3, 5, 2, 3],
-		fill: false,
-		backgroundColor: 'rgb(255, 99, 132)',
-		borderColor: 'rgba(255, 99, 132, 0.2)',
-	  },
 	],
-  };
-  
-  const options2 = {
-	scales: {
-	  yAxes: [
-		{
-		  ticks: {
-			beginAtZero: true,
-		  },
+},
+};
+
+const options2 = {
+scales: {
+	yAxes: [
+	{
+		ticks: {
+		beginAtZero: true,
 		},
-	  ],
 	},
-  };
+	],
+},
+};
 
 const listColor = [
 	"Red",
@@ -437,11 +400,13 @@ const DashboardHospital = () => {
 									</div>
 								}	
 							>
-								{/* <Line data={lineChart} options={options2} /> */}
-								<Pie data={specChart} />
-
+								<Pie 
+									data={specChart} 
+									width={"350px"}
+									height={"350px"}
+									options={{ maintainAspectRatio: false }}
+								/>
 							</Card>
-							{/* <Bar data={dataReview} options={options} /> */}
 						</Col>
 					</Row>
                 </div>

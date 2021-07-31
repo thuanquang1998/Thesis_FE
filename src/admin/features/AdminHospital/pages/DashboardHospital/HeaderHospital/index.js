@@ -4,7 +4,7 @@ import doctorLogo from '../../../../../assets/img/doctor.png';
 import specLogo from '../../../../../assets/img/spec.png';
 import appointmentLogo from '../../../../../assets/img/appointment.png'
 import revenueLogo from '../../../../../assets/img/revenue.png'
-
+import {Link} from 'react-router-dom';
 
 function HeaderHospital(props) {
     return (
@@ -36,7 +36,10 @@ function HeaderHospital(props) {
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Bác sĩ</h6>
+                                    <Link
+                                        style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}
+                                        to="/admin/hospital/ds-bac-si"
+                                    >Bác sĩ</Link>
                                     <h3>{props.data.num_doctor}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>
@@ -65,7 +68,10 @@ function HeaderHospital(props) {
                                 </div>
                             </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Chuyên khoa</h6>
+                                    <Link
+                                        style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}
+                                        to="/admin/hospital/chuyen-khoa"
+                                    >Chuyên khoa</Link>
                                     <h3>{props.data.num_spec}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>
@@ -95,7 +101,10 @@ function HeaderHospital(props) {
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Lượt đặt khám</h6>
+                                    <Link
+                                        style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}
+                                        to="/admin/hospital/lich-kham"
+                                    >Lượt đặt khám</Link>
                                     <h3>{props.data.num_appointment}</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>
@@ -122,7 +131,10 @@ function HeaderHospital(props) {
                                     </div>
                                 </ProgressBar>
                                 <div className="dash-widget-info">
-                                    <h6>Doanh thu</h6>
+                                    <Link
+                                        style={{fontSize:"18px", fontWeight:"600", color:"#272b41"}}
+                                        to="/admin/hospital/lich-kham"
+                                    >Doanh thu</Link>
                                     <h3>{props.data.revenue} VND</h3>
                                     <p className="text-muted">Tổng số</p>
                                 </div>

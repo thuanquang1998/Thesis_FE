@@ -58,14 +58,23 @@ const SpecialitiesRoot = () => {
 			), 
 		},
 		{
-		title: 'Sự kiện',
-		render: (text, record) => (
-			<div className="actions">
-				<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>{}}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a>
-				<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>{}}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
-			</div>
-		),
-		},		
+			title: 'Trạng thái',
+			dataIndex: 'status',
+			render: (text) => {
+			  return (
+				<Tag color="green">Đã kích hoạt</Tag>
+			  )
+			}, 
+		  },
+		// {
+		// title: 'Sự kiện',
+		// render: (text, record) => (
+		// 	<div className="actions">
+		// 		<a href="#0" className="btn btn-sm bg-success-light" onClick={()=>{}}><i className="fa fa-pencil-alt" style={{paddingRight:'5px'}}></i>Sửa</a>
+		// 		<a href="#0" className="btn btn-sm bg-danger-light" onClick={()=>{}}><i className="fa fa-trash" style={{paddingRight:'5px'}}></i>Xóa</a>
+		// 	</div>
+		// ),
+		// },		
       ]	
 
 	const submitCreateSpec = async (data) => {
@@ -100,11 +109,7 @@ const SpecialitiesRoot = () => {
 				<div className="page-header">
 					<div className="row">
 						<div className="col-sm-7 col-auto">
-							<h3 className="page-title">Chuyên khoa</h3>
-							<ul className="breadcrumb">
-								<li className="breadcrumb-item"><Link to="/admin">Dashboard</Link></li>
-								<li className="breadcrumb-item active">Chuyên khoa</li>
-							</ul>
+							<h3 className="page-title" style={{paddingTop:"20px"}}>Chuyên khoa <Badge count={specSystem.length} style={{ backgroundColor: '#52c41a' }} /></h3>
 						</div>
 						<div className="col-sm-5 col">
 							<a href="#0" className="btn btn-primary float-right mt-2" onClick={()=>setModalData({...modalData, visible:true})}>
@@ -112,13 +117,7 @@ const SpecialitiesRoot = () => {
 						</div>
 					</div>
 				</div>
-				<Card 
-					title={<>Danh sách chuyên khoa <Badge count="10" style={{ backgroundColor: '#52c41a' }} /></>}
-					extra={
-					<a href="/admin/cosoyte/them-ck">
-						<Button type="primary">Tạo mới chuyên khoa</Button>
-					</a>
-				}>
+				<Card>
 					<Table className="table-striped"
 						columns={new_columns}                 
 						dataSource={specSystem}
