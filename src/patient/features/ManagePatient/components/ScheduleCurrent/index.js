@@ -66,6 +66,7 @@ function ScheduleCurrent(props) {
                 scheduleHandlerStatus = validDate.filter(item=>{
                     const currentDate = new Date();
                     const date = new Date(item.fullData.appointmentInfo.date);
+                    date.setHours(23);
                     const compareDate1 = moment(date).isAfter(currentDate);
                     return compareDate1
                 })
@@ -81,7 +82,10 @@ function ScheduleCurrent(props) {
                 scheduleHandlerStatus = validDate1.filter(item=>{
                     const currentDate = new Date();
                     const date = new Date(item.fullData.appointmentInfo.date);
+                    date.setHours(23);
                     const compareDate1 = moment(currentDate).isAfter(date);
+                    // const compareDate1 = currentDate.getTime()-date.getTime();
+                    const checkDate = compareDate1 > 0 ? true : false;
                     return compareDate1
                 })
                 break;
