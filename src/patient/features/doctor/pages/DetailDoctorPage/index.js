@@ -22,7 +22,6 @@ const DetailDoctorPage = (props) => {
     const patient = useSelector(state=> state.patient);
     // const doctorData = history.location.state.data;
 
-    console.log('history :>> ', history);
     const doctorId = history.location.pathname.split('/')[2];
 
     const [reviewData, setReviewData] = useState([]);
@@ -124,13 +123,22 @@ const DetailDoctorPage = (props) => {
     const submitReviewApi = async (data) => {
         try {
             const response = await patientAPI.create_review(data);
-            if(response.error) throw new Error('submitReviewApi error');
+            console.log('response :>> ', response);
+            if(response.error) {
+                if(response.errors[0].message === "You not axamine yet") throw "You not axamine yet"
+                 throw "Server Disconnect"
+            } 
+            
             enqueueSnackbar('Đánh giá thành công', {variant: 'success'});
             getReviewDoctors(doctorId);
             setLoadingPage(false)
         } catch (error) {
             console.log(`error`, error);
-            enqueueSnackbar('Đánh giá thành công.', {variant: 'success'})
+            if(error==="You not axamine yet"){ 
+                enqueueSnackbar('Bạn chưa khám bệnh với bác sĩ này. Không thể đánh giá.', {variant: 'error'})
+            } else {
+                enqueueSnackbar('Lỗi kết nối mạng. Thử lại sau.', {variant: 'error'})
+            }
             setLoadingPage(false)
         }
     }
@@ -169,7 +177,6 @@ const DetailDoctorPage = (props) => {
             });
         }
     } 
-    console.log('doctorInfo :>> ', doctorInfo);
     return (
         <div>
             {loadingPage && <LoadingTop/>}

@@ -27,6 +27,7 @@ function PatientSchedule(props) {
         data: {},
     })
     useEffect(() => {
+        window.scrollTo(0,0);
         get_schedule_patient(patientInfo);
     }, [])
 

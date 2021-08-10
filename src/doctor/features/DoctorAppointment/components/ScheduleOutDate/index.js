@@ -52,19 +52,19 @@ function ScheduleOutDate(props) {
         let color = "";
         switch (status) {
             case 'uncheck':
-                str = 'Chưa khám';
+                str = 'Quá hạn';
                 color = "red"
                 break;
-            case 'checking':
-                str = 'Đang xử lí'
-                color = "green"
-                break;
-            case 'checked':
-                str = 'Đã khám';
-                color = "blue"
-                break;
+            // case 'checking':
+            //     str = 'Đang xử lí'
+            //     color = "green"
+            //     break;
+            // case 'checked':
+            //     str = 'Đã khám';
+            //     color = "blue"
+            //     break;
             default:
-                str = 'Chưa khám'
+                str = 'Quá hạn'
                 color = "red"
                 break;
         }

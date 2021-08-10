@@ -32,6 +32,7 @@ const LoginPatient = () => {
         SwalAlert( `Mã xác thực đã được gửi đến ${_phone}` ,'', 'success')
     }
     useEffect(() => {
+        window.scrollTo(0,0);
         if(patient.isLoggedIn) {
             // history.push('/patient')
             if (history.location.pathname==="/dang-nhap") {

@@ -36,7 +36,6 @@ const INIT_DATA = {
 const BookingPage = (props) => {
     const {doctorID} = props.match.params;
     const doctorData = props.location.state.data;
-    console.log('doctorData 1111:>> ', doctorData);
     const history = useHistory();
 
     const dispatch = useDispatch()
@@ -60,8 +59,6 @@ const BookingPage = (props) => {
 
     // onHandleSubmitForm
     const onHandleSubmitForm = (data) => {
-        console.log('data :>> ', data);
-        // showModal, showÌno
         setSubmitData(data);
         setShowModal(true)
     }
@@ -71,7 +68,12 @@ const BookingPage = (props) => {
         // dispatch(make_appointment(submitData));
         try {
             const response = await patientAPI.make_appointment(submitData);
-            if(response.error) throw new Error("Can't make_appointment");
+            console.log('response :>> ', response);
+            if(response.error) {
+                if(response.errors[0].message==="Appointment already existed in day") 
+                    throw "Appointment already existed in day"
+                throw new Error("Can't make_appointment");
+            }
             setTimeout(() => {
                 setLoadingPage(false);
                 SwalAlert( `Đặt lịch khám thành công.` ,'', 'success')
@@ -81,7 +83,11 @@ const BookingPage = (props) => {
         } catch (error) {
             setTimeout(() => {
                 setLoadingPage(false);
-                SwalAlert( `Lỗi kết nối mạng. Thử lại sau ít phút.` ,'', 'error')
+                if(error === "Appointment already existed in day") {
+                    SwalAlert( `Chỉ được đặt tối đa 1 lịch trong 1 ngày với 1 bác sĩ.` ,'', 'error')
+                } else {
+                    SwalAlert( `Lỗi kết nối mạng. Thử lại sau ít phút.` ,'', 'error')
+                }
             }, 300);
         }
     }

@@ -5,7 +5,6 @@ import React from 'react';
 
 function BookingConfirm(props) {
     const {handleSubmit, handleReturn, showModal, data} = props;
-    console.log('data :>> ', data);
     return (
         <Modal
             visible={showModal}

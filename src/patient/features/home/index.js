@@ -75,6 +75,7 @@ const Home = () => {
         }
     }
     useEffect(() => {
+        window.scrollTo(0,0);
         getListHospital()
         getListDoctors()
         getListSpec()

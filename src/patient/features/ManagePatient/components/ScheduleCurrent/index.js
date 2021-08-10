@@ -79,7 +79,7 @@ function ScheduleCurrent(props) {
                 break;
             case 5:
                 const validDate1 = scheduleHandlerStatus.filter(item=>item.status==='uncheck');
-                scheduleHandlerStatus = validDate1.filter(item=>{
+                let _scheduleHandlerStatus = validDate1.filter(item=>{
                     const currentDate = new Date();
                     const date = new Date(item.fullData.appointmentInfo.date);
                     date.setHours(23);
@@ -87,6 +87,12 @@ function ScheduleCurrent(props) {
                     // const compareDate1 = currentDate.getTime()-date.getTime();
                     const checkDate = compareDate1 > 0 ? true : false;
                     return compareDate1
+                })
+                scheduleHandlerStatus =  _scheduleHandlerStatus.map(item=>{
+                    return {
+                        ...item,
+                        status: "outDate"
+                    }
                 })
                 break;
             default:
@@ -142,7 +148,7 @@ function ScheduleCurrent(props) {
                 color = "blue"
                 break;
             default:
-                str = 'Chưa khám'
+                str = 'Quá hạn'
                 color = "red"
                 break;
         }
@@ -213,6 +219,25 @@ function ScheduleCurrent(props) {
                     </Menu.Item>
                     </Menu>
                   );
+                 const menuOutDate = (
+                    <Menu>
+                        <Menu.Item key="0">
+                            <Link 
+                                className="btn btn-sm bg-info-light"
+                                onClick={()=>{
+                                    const data = record.fullData;
+                                    setModalData({
+                                        ...modalData,
+                                        visible: true,
+                                        data: {...data}
+                                    })
+                                }} 
+                                >
+                                <i className="far fa-eye"></i> Xem lịch
+                            </Link>
+                        </Menu.Item>
+                    </Menu>
+                  );
                 const menuChecking = (
                 <Menu>
                     <Menu.Item key="0">
@@ -280,6 +305,13 @@ function ScheduleCurrent(props) {
                         :
                         record.status==="checking"?
                             <Dropdown overlay={menuChecking} trigger={['click']}>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                Sự kiện <DownOutlined />
+                                </a>
+                            </Dropdown>
+                            :
+                            record.status==="outDate"?
+                            <Dropdown overlay={menuOutDate} trigger={['click']}>
                                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                 Sự kiện <DownOutlined />
                                 </a>
